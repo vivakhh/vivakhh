@@ -12,4 +12,5 @@ jobs:
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE }}'
+          channelId: live
           projectId: pill-sajangnim
