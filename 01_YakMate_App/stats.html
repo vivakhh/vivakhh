@@ -3,142 +3,138 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>YakMate | 건강 기록</title>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Space+Grotesk:wght@500;700&family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
-<style>
-:root {
-    --primary-container: #00e5ff;
-    --background: #0b0e14;
-    --surface-container: #1d2026;
-    --surface-high: #272a31;
-    --on-surface: #e1e2eb;
-    --glass: rgba(29, 32, 38, 0.7);
-    --gold: #D4AF37;
-}
+    <title>YakMate | 건강 약속</title>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Space+Grotesk:wght@500;700&family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link rel="stylesheet" href="global.css">
+    <style>
+        body {
+            background: var(--bg-main);
+            color: var(--on-bg);
+            padding-bottom: 140px;
+        }
 
-body.light-mode {
-    --background: #fdfdfd;
-    --on-surface: #1a1d23;
-    --surface-container: #ffffff;
-    --surface-high: #f0f2f5;
-    --glass: rgba(255, 255, 255, 0.9);
-    --gold: #8d6e63;
-    --primary-container: #7c4dff;
-}
+        .header {
+            padding: 32px 24px;
+            background: transparent;
+            z-index: 100;
+        }
 
-* { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
-body { 
-    font-family: 'Manrope', 'Noto Sans KR', sans-serif; 
-    background: var(--background); 
-    color: var(--on-surface);
-    min-height: 100vh;
-    padding-bottom: 120px;
-}
+        .header-title {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--on-card);
+            letter-spacing: -1px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
 
-.header { padding: 32px 24px; position: sticky; top: 0; background: rgba(11, 14, 20, 0.8); backdrop-filter: blur(20px); z-index: 100; }
-.header-title { font-size: 24px; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 12px; }
+        .tab-group {
+            display: flex;
+            background: var(--bg-card);
+            border-radius: 24px;
+            padding: 8px;
+            margin-bottom: 32px;
+            position: relative;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+        }
 
-.content { padding: 0 24px; }
+        .tab {
+            flex: 1;
+            padding: 16px 0;
+            text-align: center;
+            font-size: 15px;
+            font-weight: 800;
+            border-radius: 18px;
+            cursor: pointer;
+            position: relative;
+            z-index: 2;
+            transition: color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            color: var(--text-dim);
+        }
 
-.tab-group { 
-    display: flex; 
-    background: var(--surface-container); 
-    border-radius: 20px; 
-    padding: 6px; 
-    margin-bottom: 32px; 
-    position: relative;
-    border: 1px solid rgba(255, 255, 255, 0.05); 
-}
-.tab { 
-    flex: 1; 
-    padding: 14px 0; 
-    text-align: center; 
-    font-size: 15px; 
-    font-weight: 700; 
-    border-radius: 16px; 
-    cursor: pointer; 
-    position: relative;
-    z-index: 2;
-    transition: color 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
-    color: rgba(255, 255, 255, 0.3); 
-}
-.tab.active { color: #fff; }
-body.light-mode .tab { color: rgba(0, 0, 0, 0.3); }
-body.light-mode .tab.active { color: #000; }
-.tab-pill {
-    position: absolute;
-    top: 6px;
-    left: 6px;
-    height: calc(100% - 12px);
-    width: calc(33.333% - 8px);
-    background: var(--primary-container);
-    border-radius: 14px;
-    z-index: 1;
-    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 8px 20px rgba(0, 229, 255, 0.2);
-}
-body.light-mode .tab.active { color: #fff; }
-body.light-mode .tab-pill { background: var(--primary-container); }
-body.light-mode .summary-card { background: linear-gradient(135deg, rgba(124,77,255,0.08) 0%, rgba(124,77,255,0.04) 100%); border-color: rgba(124,77,255,0.15); }
-body.light-mode .summary-title { color: #1a1d23; opacity: 0.6; }
-body.light-mode .stat-card { background: #fff; border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-body.light-mode .stat-label { color: #1a1d23; }
-body.light-mode .bar-label { color: rgba(0,0,0,0.4); }
-body.light-mode .bar-pct { color: #1a1d23; }
-body.light-mode .bar-bg { background: rgba(0,0,0,0.05); }
-body.light-mode .bottom-nav { background: rgba(255,255,255,0.9); border: 1px solid rgba(0,0,0,0.05); }
-body.light-mode .nav-item { color: rgba(0,0,0,0.3); }
-body.light-mode .nav-item.active { color: #7c4dff; }
-body.light-mode .header { background: rgba(253,253,253,0.8); }
-body.light-mode .header-title { color: #1a1d23; }
-body.light-mode .summary-card { background: linear-gradient(135deg, rgba(124,77,255,0.08) 0%, rgba(124,77,255,0.04) 100%); border-color: rgba(124,77,255,0.15); }
-body.light-mode .summary-title { color: #1a1d23; opacity: 0.6; }
-body.light-mode .stat-card { background: #fff; border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-body.light-mode .stat-label { color: #1a1d23; }
-body.light-mode .bar-label { color: rgba(0,0,0,0.4); }
-body.light-mode .bar-pct { color: #1a1d23; }
-body.light-mode .bar-bg { background: rgba(0,0,0,0.05); }
-body.light-mode .bottom-nav { background: rgba(255,255,255,0.9); border: 1px solid rgba(0,0,0,0.05); }
-body.light-mode .nav-item { color: rgba(0,0,0,0.3); }
-body.light-mode .nav-item.active { color: #7c4dff; }
-body.light-mode .header { background: rgba(253,253,253,0.8); }
-body.light-mode .header-title { color: #1a1d23; }
+        .tab.active {
+            color: #fff;
+        }
 
-.summary-card { 
-    background: linear-gradient(135deg, rgba(0, 229, 255, 0.1) 0%, rgba(124, 77, 255, 0.1) 100%); 
-    border-radius: 32px; 
-    padding: 32px; 
-    color: var(--on-surface); 
-    margin-bottom: 24px;
-    border: 1px solid rgba(0, 229, 255, 0.1);
-    position: relative;
-    overflow: hidden;
-}
-.summary-title { font-size: 14px; font-weight: 600; opacity: 0.6; margin-bottom: 24px; letter-spacing: 0.5px; }
-.summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; position: relative; z-index: 1; }
-.summary-num { font-size: 32px; font-weight: 800; font-family: 'Space Grotesk', sans-serif; color: var(--primary-container); }
-.summary-desc { font-size: 12px; opacity: 0.5; margin-top: 6px; font-weight: 600; }
-.summary-grid > div { text-align: center; }
+        .tab-pill {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            height: calc(100% - 16px);
+            width: calc(33.333% - 10.66px);
+            background: var(--primary);
+            border-radius: 16px;
+            z-index: 1;
+            transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            box-shadow: 0 8px 20px var(--primary-glow);
+        }
 
-.stat-card { 
-    background: var(--surface-container); 
-    border-radius: 32px; 
-    padding: 32px; 
-    margin-bottom: 24px; 
-    border: 1px solid rgba(255, 255, 255, 0.03); 
-}
-.stat-label { font-size: 15px; color: var(--on-surface); margin-bottom: 24px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
-.stat-label::before { content: ''; display: block; width: 4px; height: 16px; background: var(--primary-container); border-radius: 2px; }
+        .summary-card {
+            background: var(--bg-card);
+            border-radius: 40px;
+            padding: 36px;
+            margin-bottom: 32px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
 
-.bar-item { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
-.bar-label { font-size: 13px; font-weight: 700; color: rgba(255, 255, 255, 0.4); width: 40px; text-align: right; flex-shrink: 0; }
-.bar-bg { flex: 1; background: rgba(255, 255, 255, 0.03); border-radius: 50px; height: 12px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.02); }
-.bar-fill { border-radius: 50px; height: 10px; transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); margin: 1px; }
-.bar-fill.low { background: #ff6e84; box-shadow: 0 0 10px rgba(255, 110, 132, 0.4); }
-.bar-fill.mid { background: #ffd54f; box-shadow: 0 0 10px rgba(255, 213, 79, 0.4); }
-.bar-fill.high { background: var(--primary-container); box-shadow: 0 0 10px rgba(0, 229, 255, 0.4); }
-.bar-pct { font-size: 14px; font-weight: 700; width: 40px; color: var(--on-surface); font-family: 'Space Grotesk', sans-serif; text-align: right; }
+        .summary-title {
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 24px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .summary-num {
+            font-size: 44px;
+            font-weight: 900;
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--on-card);
+            letter-spacing: -2px;
+        }
+
+        .summary-desc {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-dim);
+            margin-top: 8px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border-radius: 32px;
+            padding: 32px;
+            margin-bottom: 32px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+        }
+
+        .stat-label {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--on-card);
+            margin-bottom: 28px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .bar-item { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; }
+        .bar-label { font-size: 14px; font-weight: 800; color: var(--text-dim); width: 44px; }
+        .bar-bg { flex: 1; background: var(--bg-float); border-radius: 50px; height: 16px; overflow: hidden; border: 1px solid var(--border); }
+        .bar-fill { border-radius: 50px; height: 14px; transition: width 1s cubic-bezier(0.22, 1, 0.36, 1); margin: 1px; }
+        .bar-fill.low { background: #ff6e84; }
+        .bar-fill.mid { background: var(--secondary); }
+        .bar-fill.high { background: var(--primary); }
+        .bar-pct { font-size: 15px; font-weight: 800; color: var(--on-card); font-family: 'Space Grotesk', sans-serif; width: 44px; text-align: right; }
+    </style>
 
 .loading { text-align: center; padding: 60px; color: rgba(255, 255, 255, 0.2); font-size: 14px; font-weight: 600; display: flex; flex-direction: column; align-items: center; gap: 16px; }
 .loading span { animation: pulse 1.5s infinite; }
@@ -160,17 +156,17 @@ body.light-mode .header-title { color: #1a1d23; }
 </script>
 <div class="header">
     <div class="header-title">
-        <span class="material-icons-round" style="color:var(--primary-container)">analytics</span>
-        <span>건강 기록장</span>
+        <span class="material-icons-round" style="color:var(--primary); font-size: 32px;">analytics</span>
+        <span>건강 약속</span>
     </div>
 </div>
 
 <div class="content">
   <div class="tab-group">
     <div class="tab-pill"></div>
-    <div class="tab active" onclick="showTab('week')">한 주 이야기</div>
-    <div class="tab" onclick="showTab('month')">한 달 이야기</div>
-    <div class="tab" onclick="showTab('year')">일 년 이야기</div>
+    <div class="tab active" onclick="showTab('week')">한 주 약속</div>
+    <div class="tab" onclick="showTab('month')">한 달 약속</div>
+    <div class="tab" onclick="showTab('year')">일 년 약속</div>
   </div>
   
   <div id="tab-week"><div class="loading"><span class="material-icons-round" style="font-size:32px">hourglass_empty</span><span>데이터를 분석 중입니다...</span></div></div>
@@ -182,17 +178,26 @@ body.light-mode .header-title { color: #1a1d23; }
   <div id="tab-year" style="display:none; position:relative">
     <div class="loading"><span class="material-icons-round" style="font-size:32px">hourglass_empty</span><span>데이터를 분석 중입니다...</span></div>
   </div>
-
-  <!-- 추가 분석 섹션 -->
-
 </div>
 
-<div class="bottom-nav">
-  <div class="nav-item" onclick="location.href='dashboard.html'"><span class="nav-icon material-icons-round">home</span><span>홈</span></div>
-  <div class="nav-item active"><span class="nav-icon material-icons-round">bar_chart</span><span>건강 기록</span></div>
-  <div class="nav-item" onclick="location.href='community.html'"><span class="nav-icon material-icons-round">group</span><span>우리 이야기</span></div>
-  <div class="nav-item" onclick="location.href='settings.html'"><span class="nav-icon material-icons-round">settings</span><span>설정</span></div>
-</div>
+<nav class="nav-bar">
+    <a href="dashboard.html" class="nav-item">
+        <span class="material-icons-round">home</span>
+        <span>Home</span>
+    </a>
+    <a href="stats.html" class="nav-item active">
+        <span class="material-icons-round">analytics</span>
+        <span>건강 약속</span>
+    </a>
+    <a href="community.html" class="nav-item">
+        <span class="material-icons-round">forum</span>
+        <span>Story Nudge</span>
+    </a>
+    <a href="settings.html" class="nav-item">
+        <span class="material-icons-round">person</span>
+        <span>My Center</span>
+    </a>
+</nav>
 
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
@@ -230,15 +235,12 @@ function makeSummary(title,pct,days,unit){
 onAuthStateChanged(auth,async(u)=>{
   let user = u;
   if(!user){
-    const kakaoData = localStorage.getItem('yakmate_kakao_user');
-    if(kakaoData) user = JSON.parse(kakaoData);
+    const storedUser = localStorage.getItem('yakmate_user');
+    if(storedUser) user = JSON.parse(storedUser);
   }
   if(!user){window.location.href='./index.html';return;}
   
-  const snap=await getDocs(collection(db,'users',user.uid,'daily'));
-  const data={};
-  let globalFirstDateKey = null;
-  
+  let docs = [];
   const getKstDate = (d = new Date()) => {
     const offset = 9 * 60 * 60 * 1000;
     const kst = new Date(d.getTime() + offset);
@@ -246,11 +248,27 @@ onAuthStateChanged(auth,async(u)=>{
   };
   const today = new Date();
   const todayKey = getKstDate(today);
+
+  if (user.isGuest) {
+    // For guest mode, we look for guest data in localStorage
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key.startsWith('yakmate_guest_data_')) {
+            const dateKey = key.replace('yakmate_guest_data_', '');
+            docs.push({ id: dateKey, meds: JSON.parse(localStorage.getItem(key)) });
+        }
+    }
+  } else {
+    const snap=await getDocs(collection(db,'users',user.uid,'daily'));
+    snap.forEach(doc => docs.push({ id: doc.id, ...doc.data() }));
+  }
+
+  const data={};
+  let globalFirstDateKey = null;
   const nowTime = today.getHours() * 60 + today.getMinutes();
 
-  snap.forEach(doc=>{
-    const d=doc.data();
-    const meds=d.meds||[];
+  docs.forEach(doc => {
+    const meds=doc.meds||[];
     const total=meds.length;
     if(total === 0) return; 
     
@@ -272,16 +290,14 @@ onAuthStateChanged(auth,async(u)=>{
 
   if(!globalFirstDateKey) globalFirstDateKey = todayKey;
 
-  // 유효한 점수를 가져오는 함수 (사장님 요청사항 반영)
   const getAdherenceForDate = (key) => {
-    if (key < globalFirstDateKey) return null; // 시작 전은 제외
+    if (key < globalFirstDateKey) return null;
     if (data[key] !== undefined) return data[key];
-    if (key > todayKey) return null; // 미래는 제외 (통계에 포함 안 함)
-    // 과거인데 기록 없는 날은 null (약속 없는 날로 간주)
+    if (key > todayKey) return null;
     return null; 
   };
 
-  // 이번 주
+  // Week View
   const weekStart=new Date(today);
   weekStart.setDate(today.getDate()-today.getDay());
   let weekBars='',weekDays=0,weekSum=0,weekValidCount=0;
@@ -306,10 +322,10 @@ onAuthStateChanged(auth,async(u)=>{
   }
   const weekAvg = weekValidCount > 0 ? Math.round(weekSum/weekValidCount) : 100;
   document.getElementById('tab-week').innerHTML=
-    makeSummary('이번 주 건강 챙기기',weekAvg,weekDays,'일')+
-    `<div class="stat-card"><div class="stat-label">요일별 건강 기록</div>${weekBars}</div>`;
+    makeSummary('이번 주 건강 약속',weekAvg,weekDays,'일')+
+    `<div class="stat-card"><div class="stat-label">요일별 달성 현황</div>${weekBars}</div>`;
 
-  // 이번 달
+  // Month View
   const daysInMonth=new Date(today.getFullYear(),today.getMonth()+1,0).getDate();
   let monthBars='',monthDays=0,monthSum=0,monthValidCount=0;
   for(let w=1;w<=5;w++){
@@ -326,7 +342,6 @@ onAuthStateChanged(auth,async(u)=>{
       }
     }
     const pct=wCount>0?Math.round(wSum/wCount):null;
-    
     if(pct !== null) {
         monthBars+=makeBar(w+'주차',pct);
         monthSum += pct;
@@ -341,12 +356,11 @@ onAuthStateChanged(auth,async(u)=>{
     }
   }
   const monthAvg = monthValidCount > 0 ? Math.round(monthSum/monthValidCount) : 100;
-  const monthWeeks = Math.round(monthDays); // 이미 주차별로 카운트됨
   document.getElementById('tab-month').innerHTML=
-    makeSummary('이번 달 건강 챙기기',monthAvg,monthWeeks,'주')+
-    `<div class="stat-card"><div class="stat-label">주차별 건강 기록</div>${monthBars}</div>`;
+    makeSummary('이번 달 건강 약속',monthAvg,monthDays,'주')+
+    `<div class="stat-card"><div class="stat-label">주차별 달성 현황</div>${monthBars}</div>`;
 
-  // 올해
+  // Year View
   let yearBars='',yearDays=0,yearSum=0,yearValidCount=0;
   for(let m=0;m<=today.getMonth();m++){
     const daysInM=new Date(today.getFullYear(),m+1,0).getDate();
@@ -361,7 +375,6 @@ onAuthStateChanged(auth,async(u)=>{
       }
     }
     const pct=mCount>0?Math.round(mSum/mCount):null;
-    
     if(pct !== null) {
         yearBars+=makeBar(MONTHS[m],pct);
         yearSum += pct;
@@ -377,8 +390,8 @@ onAuthStateChanged(auth,async(u)=>{
   }
   const yearAvg = yearValidCount > 0 ? Math.round(yearSum/yearValidCount) : 100;
   document.getElementById('tab-year').innerHTML=
-    makeSummary('올해 건강 챙기기',yearAvg,yearDays,'개월')+
-    `<div class="stat-card"><div class="stat-label">월별 건강 기록</div>${yearBars}</div>`;
+    makeSummary('올해 건강 약속',yearAvg,yearDays,'개월')+
+    `<div class="stat-card"><div class="stat-label">월별 달성 현황</div>${yearBars}</div>`;
 });
 
 window.showTab=function(tab){

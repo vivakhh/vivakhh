@@ -1,444 +1,476 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>YakMate | 대시보드</title>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Space+Grotesk:wght@500;700&family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
-<style>
-:root {
-    --primary: #00f2ff;
-    --primary-glow: rgba(0, 242, 255, 0.3);
-    --secondary: #7c4dff;
-    --background: #05070a;
-    --surface: #12151c;
-    --surface-light: #1e222d;
-    --on-surface: #f0f2f5;
-    --on-surface-dim: #94a3b8;
-    --glass: rgba(18, 21, 28, 0.8);
-    --gold: #ffb74d;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YakMate | Home</title>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Space+Grotesk:wght@500;700&family=Noto+Sans+KR:wght@300;400;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link rel="stylesheet" href="global.css">
+    <style>
+        body {
+            background: var(--bg-main);
+            color: var(--on-bg);
+            padding-bottom: 120px;
+        }
 
-body.light-mode {
-    --background: #f8fafc;
-    --on-surface: #0f172a;
-    --on-surface-dim: #64748b;
-    --surface: #ffffff;
-    --surface-light: #f1f5f9;
-    --glass: rgba(255, 255, 255, 0.9);
-    --gold: #d97706;
-    --primary: #6366f1;
-    --primary-glow: rgba(99, 102, 241, 0.2);
-}
+        .header {
+            padding: 32px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: transparent;
+            z-index: 100;
+        }
 
-* { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
-body { 
-    font-family: 'Outfit', 'Noto Sans KR', sans-serif; 
-    background: var(--background); 
-    color: var(--on-surface);
-    min-height: 100vh;
-    padding-bottom: 120px;
-    overflow-x: hidden;
-}
+        .header-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 4px;
+        }
 
-.header { 
-    padding: 24px; 
-    display: flex; 
-    align-items: center; 
-    justify-content: space-between; 
-    position: sticky; 
-    top: 0; 
-    background: var(--background);
-    background-image: radial-gradient(at 0% 0%, var(--primary-glow) 0%, transparent 50%);
-    backdrop-filter: blur(20px); 
-    z-index: 100; 
-}
-.header-left { display: flex; flex-direction: column; gap: 2px; }
-.header-title { font-size: 13px; font-weight: 600; color: var(--on-surface-dim); text-transform: uppercase; letter-spacing: 1px; }
-.header-sub { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
-.user-avatar { 
-    width: 48px; height: 48px; border-radius: 16px; 
-    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); 
-    display: flex; align-items: center; justify-content: center; 
-    color: #000; font-weight: 800; font-size: 20px; 
-    box-shadow: 0 12px 24px var(--primary-glow);
-    border: 2px solid rgba(255,255,255,0.1);
-}
+        .header-sub {
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            color: var(--on-card);
+        }
 
-.content { padding: 0 20px; }
+        .user-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
 
-/* Premium Gauge Card */
-.progress-card { 
-    background: var(--surface); 
-    background-image: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, transparent 100%);
-    border-radius: 40px; 
-    padding: 32px; 
-    margin-top: 20px;
-    margin-bottom: 32px; 
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-}
+        .progress-card {
+            background: var(--bg-card);
+            backdrop-filter: var(--glass-blur);
+            border-radius: 40px;
+            padding: 40px 32px;
+            margin: 20px 0 32px;
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: var(--shadow);
+        }
 
-.gauge-container { width: 200px; height: 200px; position: relative; margin-bottom: 20px; }
-.gauge-svg { width: 100%; height: 100%; transform: rotate(-90deg); filter: drop-shadow(0 0 10px var(--primary-glow)); }
-.gauge-bg { fill: none; stroke: rgba(255, 255, 255, 0.05); stroke-width: 10; }
-.gauge-fill { fill: none; stroke: url(#gauge-gradient); stroke-width: 10; stroke-linecap: round; transition: stroke-dasharray 1.2s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .gauge-svg {
+            filter: drop-shadow(0 0 15px var(--primary-glow));
+        }
 
-.gauge-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; }
-.gauge-percent { font-size: 48px; font-weight: 900; color: #fff; font-family: 'Outfit', sans-serif; letter-spacing: -2px; }
-.gauge-label { font-size: 11px; color: var(--on-surface-dim); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        .gauge-bg {
+            stroke: var(--border);
+        }
 
-.progress-info-text { text-align: center; }
-.progress-title { font-size: 20px; font-weight: 800; margin-bottom: 4px; }
-.progress-sub { font-size: 14px; color: var(--primary); font-weight: 600; }
+        .gauge-fill {
+            stroke: var(--primary);
+            transition: stroke-dasharray 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
 
-/* Family Support Section */
-.family-section { 
-    background: linear-gradient(135deg, #2a1b55 0%, #1a152e 100%); 
-    border-radius: 32px; 
-    padding: 24px; 
-    margin-bottom: 32px;
-    border: 1px solid rgba(124, 77, 255, 0.3);
-    position: relative;
-    overflow: hidden;
-}
-.family-section::after {
-    content: ''; position: absolute; top: -50%; right: -20%; width: 150px; height: 150px;
-    background: var(--secondary); filter: blur(80px); opacity: 0.2;
-}
-.family-title { font-size: 14px; font-weight: 700; color: var(--secondary); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
-.family-msg { font-size: 16px; font-weight: 600; line-height: 1.5; color: #fff; }
+        .gauge-percent {
+            font-size: 56px;
+            color: var(--on-card);
+        }
 
-.section-title { font-size: 18px; font-weight: 800; color: var(--on-surface); margin: 32px 0 16px; display: flex; align-items: center; justify-content: space-between; }
+        .family-section {
+            background: var(--bg-card);
+            border-radius: 32px;
+            padding: 24px;
+            margin-bottom: 32px;
+            border-left: 4px solid var(--primary);
+            box-shadow: var(--shadow);
+        }
 
-.med-list { display: flex; flex-direction: column; gap: 16px; }
-.med-card { 
-    background: var(--surface); 
-    border-radius: 28px; 
-    padding: 20px 24px; 
-    display: flex; 
-    align-items: center; 
-    justify-content: space-between; 
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-}
-.med-card:active { transform: scale(0.97); }
-.med-card.taken { background: rgba(0, 242, 255, 0.03); border-color: rgba(0, 242, 255, 0.15); }
-.med-time { font-size: 12px; font-weight: 700; color: var(--primary); opacity: 0.7; margin-bottom: 2px; }
-.med-name { font-size: 18px; font-weight: 800; }
-.med-check { 
-    width: 48px; height: 48px; border-radius: 18px; 
-    background: var(--surface-light); 
-    border: 1px solid rgba(255, 255, 255, 0.08); 
-    display: flex; align-items: center; justify-content: center; 
-    font-size: 22px; transition: all 0.4s; 
-}
-.med-card.taken .med-check { 
-    background: var(--primary); color: #000; 
-    box-shadow: 0 8px 20px var(--primary-glow);
-    border-color: transparent;
-}
+        .family-title {
+            color: var(--primary);
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
 
-.bottom-nav { 
-    position: fixed; bottom: 32px; left: 20px; right: 20px; 
-    background: rgba(18, 21, 28, 0.95); 
-    backdrop-filter: blur(30px); 
-    border-radius: 30px; 
-    padding: 16px; 
-    display: grid; 
-    grid-template-columns: repeat(4, 1fr); 
-    border: 1px solid rgba(255, 255, 255, 0.08); 
-    box-shadow: 0 25px 50px rgba(0,0,0,0.5);
-    z-index: 1000; 
-}
-.nav-item { display: flex; flex-direction: column; align-items: center; color: var(--on-surface-dim); font-size: 10px; font-weight: 700; text-decoration: none; gap: 4px; }
-.nav-item.active { color: var(--primary); }
-.nav-icon { font-size: 26px; }
+        .med-card {
+            background: var(--bg-card);
+            border-radius: 28px;
+            padding: 24px;
+            border: 1px solid var(--border);
+            margin-bottom: 16px;
+            box-shadow: var(--shadow);
+        }
 
-#health-tip-card {
-    background: var(--surface-light);
-    border-radius: 24px;
-    padding: 16px 20px;
-    margin-bottom: 24px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    border: 1px solid rgba(255,255,255,0.03);
-}
+        .med-card.taken {
+            border-color: var(--primary);
+            background: rgba(212, 175, 55, 0.05);
+        }
 
-/* Animations */
-@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
-.pulse { animation: pulse 2s infinite; }
-</style>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+        .med-time {
+            color: var(--primary);
+        }
+
+        .med-check {
+            background: var(--bg-float);
+            color: var(--text-dim);
+            border: 1px solid var(--border);
+        }
+
+        .med-card.taken .med-check {
+            background: var(--primary);
+            color: #fff;
+            box-shadow: 0 0 20px var(--primary-glow);
+        }
+
+        #health-tip-card {
+            background: var(--bg-float);
+            border-radius: 24px;
+            padding: 20px;
+            margin-bottom: 24px;
+            border: 1px solid var(--border);
+        }
+    </style>
+
+        /* Animations */
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
 </head>
+
 <body>
-<script>
-  (function() {
-    const theme = localStorage.getItem('yakmate_theme');
-    if (theme === 'light') document.body.classList.add('light-mode');
-  })();
-</script>
-<div class="header">
-  <div class="header-left">
-    <div class="header-title" id="greeting-text">Loading...</div>
-    <div class="header-sub" id="user-name">반갑습니다!</div>
-  </div>
-  <div class="header-right">
-    <div class="user-avatar" id="user-avatar">?</div>
-  </div>
-</div>
-
-<div class="content">
-  <div id="health-tip-card">
-    <span style="font-size: 24px;">💡</span>
-    <div style="font-size: 14px; line-height: 1.4; font-weight: 500;" id="health-tip">오늘도 건강한 하루 보내세요!</div>
-  </div>
-
-  <div class="progress-card">
-    <div class="gauge-container">
-      <svg class="gauge-svg" viewBox="0 0 100 100">
-        <defs>
-          <linearGradient id="gauge-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#00f2ff" />
-            <stop offset="100%" stop-color="#7c4dff" />
-          </linearGradient>
-        </defs>
-        <circle class="gauge-bg" cx="50" cy="50" r="44"></circle>
-        <circle class="gauge-fill" id="gauge-fill" cx="50" cy="50" r="44" stroke-dasharray="0 276.5"></circle>
-      </svg>
-      <div class="gauge-content">
-        <span class="gauge-percent" id="progress-percent">0%</span>
-        <span class="gauge-label">DAILY GOAL</span>
-      </div>
+    <script>
+        (function () {
+            const theme = localStorage.getItem('yakmate_theme');
+            if (theme === 'light') document.body.classList.add('light-mode');
+        })();
+    </script>
+    <div class="header">
+        <div class="header-left">
+            <div class="header-title" id="greeting-text">사장님을 위한 따뜻한 아침</div>
+            <div class="header-sub" id="user-name">오늘도 빛나는 하루 ✨</div>
+        </div>
+        <div class="header-right">
+            <div class="user-avatar" id="user-avatar">
+                <span class="material-icons-round" style="font-size:32px; color:var(--primary)">person</span>
+            </div>
+        </div>
     </div>
-    <div class="progress-info-text">
-        <div class="progress-title" id="progress-title">데이터를 불러오는 중...</div>
-        <div class="progress-sub">소중한 건강을 위한 오늘의 발걸음 ✨</div>
+
+    <div class="content">
+        <div id="health-tip-card" style="display: flex; align-items: center; gap: 16px;">
+            <span style="font-size: 28px;">🌟</span>
+            <div style="font-size: 15px; line-height: 1.5; font-weight: 600;" id="health-tip">오늘도 건강한 약속, 함께 지켜볼까요?</div>
+        </div>
+
+        <div class="progress-card">
+            <div class="gauge-container" style="width: 220px; height: 220px; position: relative; margin-bottom: 24px;">
+                <svg class="gauge-svg" viewBox="0 0 100 100" style="width: 100%; height: 100%; transform: rotate(-90deg);">
+                    <circle class="gauge-bg" cx="50" cy="50" r="44" fill="none" stroke-width="8"></circle>
+                    <circle class="gauge-fill" id="gauge-fill" cx="50" cy="50" r="44" fill="none" stroke-width="8" stroke-linecap="round" stroke-dasharray="0 276.5"></circle>
+                </svg>
+                <div class="gauge-content" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+                    <span class="gauge-percent" id="progress-percent" style="font-weight: 800; letter-spacing: -2px;">0%</span>
+                    <div style="font-size: 10px; font-weight: 700; color: var(--text-dim); letter-spacing: 1px; margin-top: -4px;">HEALTH PROMISE</div>
+                </div>
+            </div>
+            <div class="progress-info-text">
+                <div class="progress-title" id="progress-title" style="font-size: 22px; font-weight: 800; margin-bottom: 6px;">기록을 불러오고 있어요</div>
+                <div class="progress-sub" style="font-size: 14px; opacity: 0.8;">소중한 나를 위한 오늘의 실천</div>
+            </div>
+        </div>
+
+        <!-- Family Support Section -->
+        <div class="family-section">
+            <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:12px;">
+                <div class="family-title">
+                    <span class="material-icons-round" style="font-size:18px">favorite</span>
+                    <span>가족의 따뜻한 넛지</span>
+                </div>
+                <div style="background:rgba(212,175,55,0.1); border:1px solid var(--primary); padding:4px 10px; border-radius:10px; display:flex; align-items:center; gap:4px;">
+                    <span class="material-icons-round" style="font-size:14px; color:var(--primary)">group</span>
+                    <span style="font-size:11px; font-weight:800; color:var(--primary)">가족 2명 연결됨</span>
+                </div>
+            </div>
+            <div class="family-msg" id="family-message" style="font-size: 17px; font-weight: 700; color: var(--on-card); line-height: 1.6;">"사장님, 오늘 약속 잊지 않으셨죠? 항상 응원하고 있어요 ❤️"</div>
+        </div>
+
+        <div class="section-title" style="margin-top: 40px; margin-bottom: 20px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+                <span class="material-icons-round" style="color:var(--primary); font-size: 24px;">schedule</span>
+                <span style="font-size: 20px; font-weight: 800;">오늘의 건강 루틴</span>
+            </div>
+            <button onclick="location.href='routine.html'" style="background: var(--bg-float); border: 1px solid var(--border); color: var(--text-dim); padding: 8px 16px; border-radius: 12px; font-size: 12px; font-weight: 700; cursor: pointer;">변경하기</button>
+        </div>
+
+        <div class="med-list" id="med-list"></div>
     </div>
-  </div>
 
-  <!-- Family Support Section -->
-  <div class="family-section">
-    <div class="family-title">
-        <span class="material-icons-round" style="font-size:16px">favorite</span>
-        <span>가족의 응원 한마디</span>
-    </div>
-    <div class="family-msg" id="family-message">"사장님, 오늘 약 잊지 말고 꼭 챙겨 드세요! 사랑해요 ❤️"</div>
-  </div>
+    <nav class="nav-bar">
+        <a href="dashboard.html" class="nav-item active">
+            <span class="material-icons-round">home</span>
+            <span>Home</span>
+        </a>
+        <a href="stats.html" class="nav-item">
+            <span class="material-icons-round">analytics</span>
+            <span>건강 약속</span>
+        </a>
+        <a href="community.html" class="nav-item">
+            <span class="material-icons-round">forum</span>
+            <span>Story Nudge</span>
+        </a>
+        <a href="settings.html" class="nav-item">
+            <span class="material-icons-round">person</span>
+            <span>My Center</span>
+        </a>
+    </nav>
 
-  <div class="section-title">
-    <div style="display:flex; align-items:center; gap:8px;">
-      <span class="material-icons-round" style="color:var(--primary)">calendar_today</span>
-      <span>오늘의 복약 일정</span>
-    </div>
-    <span class="material-icons-round" style="font-size:20px; opacity:0.3; cursor:pointer;" onclick="location.href='routine.html'">edit_calendar</span>
-  </div>
-  
-  <div class="med-list" id="med-list"></div>
-</div>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-firestore.js";
+        const config = { apiKey: "AIzaSyDpnPJnErnrTloHk3HFrsXHORUMvAiOq5w", authDomain: "pill-sajangnim.firebaseapp.com", projectId: "pill-sajangnim", storageBucket: "pill-sajangnim.firebasestorage.app", messagingSenderId: "648268791992", appId: "1:648268791992:web:41a92580aa1a58ae6bb44d" };
+        const app = initializeApp(config);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        let meds = [];
+        onAuthStateChanged(auth, async (u) => {
+            let user = u;
+            if (!user) {
+                const storedUser = localStorage.getItem('yakmate_user');
+                if (storedUser) user = JSON.parse(storedUser);
+            }
+            if (!user) { window.location.href = './index.html'; return; }
+            
+            const name = user.displayName || '사장님';
+            document.getElementById('user-name').textContent = name + '님 ✨';
+            const avatar = document.getElementById('user-avatar');
+            if (user.photoURL && avatar) {
+                avatar.innerHTML = `<img src="${user.photoURL}" style="width:100%;height:100%;object-fit:cover;">`;
+            }
 
-<div class="bottom-nav">
-  <div class="nav-item active"><span class="nav-icon material-icons-round">home</span><span>홈</span></div>
-  <div class="nav-item" onclick="location.href='stats.html'"><span class="nav-icon material-icons-round">analytics</span><span>분석</span></div>
-  <div class="nav-item" onclick="location.href='community.html'"><span class="nav-icon material-icons-round">forum</span><span>이야기</span></div>
-  <div class="nav-item" onclick="location.href='settings.html'"><span class="nav-icon material-icons-round">person</span><span>내 정보</span></div>
-</div>
+            const getKstDate = () => {
+                const now = new Date();
+                const offset = 9 * 60 * 60 * 1000;
+                const kst = new Date(now.getTime() + offset);
+                return kst.toISOString().split('T')[0];
+            };
+            const today = getKstDate();
 
-<script type="module">
-import{initializeApp}from"https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
-import{getAuth,onAuthStateChanged,signOut}from"https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
-import{getFirestore,doc,getDoc,setDoc}from"https://www.gstatic.com/firebasejs/9.17.2/firebase-firestore.js";
-const config={apiKey:"AIzaSyDpnPJnErnrTloHk3HFrsXHORUMvAiOq5w",authDomain:"pill-sajangnim.firebaseapp.com",projectId:"pill-sajangnim",storageBucket:"pill-sajangnim.firebasestorage.app",messagingSenderId:"648268791992",appId:"1:648268791992:web:41a92580aa1a58ae6bb44d"};
-const app=initializeApp(config);
-const auth=getAuth(app);
-const db=getFirestore(app);
-let meds=[];
-onAuthStateChanged(auth,async(u)=>{
-  let user = u;
-  if(!user){
-    const kakaoData = localStorage.getItem('yakmate_kakao_user');
-    if(kakaoData) user = JSON.parse(kakaoData);
-  }
-  if(!user){window.location.href='./index.html';return;}
-  const name=user.displayName||'사용자';
-  document.getElementById('user-name').textContent=name+'님';
-  const avatar = document.getElementById('user-avatar');
-  if(user.photoURL && avatar) {
-    avatar.innerHTML = `<img src="${user.photoURL}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">`;
-  } else if(avatar) {
-    avatar.textContent=name[0];
-  }
-  const getKstDate = (d = new Date()) => {
-    const offset = 9 * 60 * 60 * 1000;
-    const kst = new Date(d.getTime() + offset);
-    return kst.toISOString().split('T')[0];
-  };
-  const today = getKstDate();
-  const ref=doc(db,'users',user.uid,'daily',today);
-  const snap=await getDoc(ref);
-  
-  if(snap.exists() && snap.data().meds) {
-    meds = snap.data().meds;
-  } else {
-    const rRef = doc(db, 'users', user.uid, 'settings', 'routine');
-    const rSnap = await getDoc(rRef);
-    if(rSnap.exists() && rSnap.data().meds) {
-      meds = rSnap.data().meds.map(m => ({...m, taken: false}));
-    } else {
-      meds = [
-        {id:'m1',name:'아침 약',time:'08:00',taken:false},
-        {id:'m2',name:'점심 약',time:'13:00',taken:false},
-        {id:'m3',name:'저녁 약',time:'19:00',taken:false}
-      ];
-    }
-    await setDoc(ref, { meds, updatedAt: new Date() });
-  }
-  renderMeds();
-  setRandomFamilyMessage();
-});
+            if (user.isGuest) {
+                const guestData = localStorage.getItem(`yakmate_guest_data_${today}`);
+                if (guestData) {
+                    meds = JSON.parse(guestData);
+                } else {
+                    meds = [
+                        { id: 'm1', name: '아침 약속', time: '08:30', taken: false },
+                        { id: 'm2', name: '점심 약속', time: '13:00', taken: false },
+                        { id: 'm3', name: '저녁 약속', time: '19:30', taken: false }
+                    ];
+                    localStorage.setItem(`yakmate_guest_data_${today}`, JSON.stringify(meds));
+                }
+            } else {
+                const ref = doc(db, 'users', user.uid, 'daily', today);
+                const snap = await getDoc(ref);
+                if (snap.exists() && snap.data().meds) {
+                    meds = snap.data().meds;
+                } else {
+                    const rRef = doc(db, 'users', user.uid, 'settings', 'routine');
+                    const rSnap = await getDoc(rRef);
+                    if (rSnap.exists() && rSnap.data().meds) {
+                        meds = rSnap.data().meds.map(m => ({ ...m, taken: false }));
+                    } else {
+                        meds = [
+                            { id: 'm1', name: '아침 약속', time: '08:30', taken: false },
+                            { id: 'm2', name: '점심 약속', time: '13:00', taken: false },
+                            { id: 'm3', name: '저녁 약속', time: '19:30', taken: false }
+                        ];
+                    }
+                    await setDoc(ref, { meds, updatedAt: new Date() });
+                }
+            }
+            renderMeds();
+        });
 
-const greetings = [
-    "오늘도 참 고운 하루네요 🌸",
-    "사장님, 오늘 기분은 어떠신가요? 😊",
-    "건강이 최고예요! 오늘도 화이팅! 💪",
-    "사장님, 건강 챙기시는 모습이 최고예요 ✨"
-];
+        const greetings = [
+            "오늘도 참 고운 하루네요 🌸",
+            "사장님, 오늘 기분은 어떠신가요? 😊",
+            "건강이 최고예요! 오늘도 화이팅! 💪",
+            "사장님, 건강 챙기시는 모습이 최고예요 ✨"
+        ];
 
-function setGreeting() {
-    const titleEl = document.getElementById('greeting-text');
-    if(titleEl) {
-        titleEl.textContent = greetings[Math.floor(Math.random() * greetings.length)];
-    }
-}
+        function setGreeting() {
+            const titleEl = document.getElementById('greeting-text');
+            if (titleEl) {
+                titleEl.textContent = greetings[Math.floor(Math.random() * greetings.length)];
+            }
+        }
 
-setGreeting();
+        setGreeting();
 
-function renderMeds(){
-  const list=document.getElementById('med-list');
-  list.innerHTML='';
-  let taken=0;
-  meds.forEach(med=>{
-    if(med.taken)taken++;
-    const card=document.createElement('div');
-    card.className='med-card'+(med.taken?' taken':'');
-    card.innerHTML=`<div><div class="med-time">${med.time}</div><div class="med-name">${med.name}</div></div><div class="med-check">${med.taken?'<span class="material-icons-round">done_all</span>':''}</div>`;
-    card.onclick=()=>toggleMed(med.id);
-    list.appendChild(card);
-  });
-  const pct = meds.length > 0 ? Math.round(taken/meds.length*100) : 0;
-  document.getElementById('progress-title').textContent=meds.length > 0 ? taken+' / '+meds.length+' 완료' : '일정이 없습니다';
-  document.getElementById('progress-percent').textContent=pct+'%';
-  
-  const offset = 276.5 - (276.5 * pct / 100);
-  const gaugeFill = document.getElementById('gauge-fill');
-  if(gaugeFill) gaugeFill.style.strokeDasharray = `${276.5 - offset} 276.5`;
-}
-async function toggleMed(id){
-  const med=meds.find(m=>m.id===id);
-  if(med){
-    med.taken=!med.taken;
-    
-    // 사장님이 생각지도 못한 새로운 기능: 칭찬 대답 (Toast)
-    if(med.taken) {
-        showPraise();
-    }
-    
-    renderMeds();
-    const user=auth.currentUser;
-    if(user){
-      const today = getKstDate();
-      await setDoc(doc(db,'users',user.uid,'daily',today),{meds,updatedAt:new Date()});
-    }
-  }
-}
+        function renderMeds() {
+            const list = document.getElementById('med-list');
+            list.innerHTML = '';
+            let taken = 0;
+            meds.forEach(med => {
+                if (med.taken) taken++;
+                const card = document.createElement('div');
+                card.className = 'med-card' + (med.taken ? ' taken' : '');
+                card.style.display = 'flex';
+                card.style.alignItems = 'center';
+                card.style.justifyContent = 'space-between';
+                card.innerHTML = `
+                    <div style="display:flex; align-items:center; gap:20px;">
+                        <div class="med-check" style="width:56px; height:56px; border-radius:20px; display:flex; align-items:center; justify-content:center; font-size:28px;">
+                            ${med.taken ? '<span class="material-icons-round">check_circle</span>' : '<span class="material-icons-round" style="opacity:0.2">circle</span>'}
+                        </div>
+                        <div>
+                            <div class="med-time" style="font-size:16px; font-weight:900; margin-bottom:4px; color:var(--primary); font-family:'Space Grotesk', sans-serif; letter-spacing:1px;">${med.time}</div>
+                            <div class="med-name" style="font-size:19px; font-weight:800; color:var(--on-card);">${med.name}</div>
+                        </div>
+                    </div>
+                `;
+                card.onclick = () => toggleMed(med.id);
+                list.appendChild(card);
+            });
+            const pct = meds.length > 0 ? Math.round(taken / meds.length * 100) : 0;
+            document.getElementById('progress-title').textContent = meds.length > 0 ? (pct === 100 ? '오늘의 건강 약속 완료! 🏆' : taken + ' / ' + meds.length + ' 달성') : '일정이 없습니다';
+            document.getElementById('progress-percent').textContent = pct + '%';
 
-function showPraise() {
-    const praises = [
-        "참 잘하셨어요! 건강해지는 소리가 들리네요 💖",
-        "잊지 않고 챙기시는 모습이 너무 멋져요! ✨",
-        "오늘도 건강을 위해 한 걸음 더 나아가셨네요 🌸",
-        "사장님의 건강을 제가 항상 응원하고 있어요 🍀",
-        "정말 대단하세요! 꾸준함이 최고의 보약이에요 🍯"
-    ];
-    const msg = praises[Math.floor(Math.random() * praises.length)];
-    const toast = document.createElement('div');
-    toast.style = "position:fixed; bottom:140px; left:50%; transform:translateX(-50%); background:rgba(0,229,255,0.9); color:#000; padding:16px 24px; border-radius:30px; font-weight:700; font-size:14px; z-index:1000; box-shadow:0 10px 25px rgba(0,229,255,0.4); animation: fadeInUp 0.5s ease-out;";
-    toast.innerHTML = `🌟 ${msg}`;
-    document.body.appendChild(toast);
-    setTimeout(() => {
-        toast.style.animation = "fadeOutDown 0.5s ease-in forwards";
-        setTimeout(() => toast.remove(), 500);
-    }, 2500);
-}
+            const offset = 276.5 - (276.5 * pct / 100);
+            const gaugeFill = document.getElementById('gauge-fill');
+            if (gaugeFill) gaugeFill.style.strokeDasharray = `${276.5 - offset} 276.5`;
+        }
 
-// 건강 팁 무작위 표시
-function setHealthTip() {
-    const tips = [
-        "오늘 날씨가 쌀쌀해요. 따뜻한 물 한 잔으로 몸을 녹여보세요. ☕",
-        "약을 드실 때는 미지근한 물과 함께 드시는 것이 가장 좋아요. 💧",
-        "가벼운 스트레칭은 기분 전환과 건강에 큰 도움이 된답니다. 🙆‍♀️",
-        "오늘 점심은 맛있는 거 드셨나요? 건강한 식사가 최고의 약이에요. 🍱",
-        "햇볕을 10분만 쬐어도 비타민 D가 생겨 뼈가 튼튼해져요. ☀️"
-    ];
-    const tipEl = document.getElementById('health-tip');
-    if(tipEl) tipEl.textContent = tips[Math.floor(Math.random() * tips.length)];
-}
+        async function toggleMed(id) {
+            const med = meds.find(m => m.id === id);
+            if (med) {
+                med.taken = !med.taken;
+                if (med.taken) showPraise();
+                renderMeds();
+                
+                const user = JSON.parse(localStorage.getItem('yakmate_user'));
+                if (user) {
+                    const now = new Date();
+                    const offset = 9 * 60 * 60 * 1000;
+                    const today = new Date(now.getTime() + offset).toISOString().split('T')[0];
+                    if (user.isGuest) {
+                        localStorage.setItem(`yakmate_guest_data_${today}`, JSON.stringify(meds));
+                    } else {
+                        await setDoc(doc(db, 'users', user.uid, 'daily', today), { meds, updatedAt: new Date() });
+                    }
+                }
+            }
+        }
 
-// 애니메이션 스타일 추가
-const style = document.createElement('style');
-style.textContent = `
+        function showPraise() {
+            const praises = [
+                "참 잘하셨어요! 사장님의 건강을 제가 응원합니다 💛",
+                "오늘도 자신을 아끼는 멋진 모습을 보여주셨네요! ✨",
+                "약속을 지키는 사장님, 정말 존경스럽습니다 🤝",
+                "오늘 하루도 건강이 한 뼘 더 자라났어요 🌸",
+                "정말 대단하세요! 꾸준함이 최고의 보약입니다 🍯"
+            ];
+            const msg = praises[Math.floor(Math.random() * praises.length)];
+            const toast = document.createElement('div');
+            toast.style = "position:fixed; bottom:140px; left:50%; transform:translateX(-50%); background:var(--primary); color:#fff; padding:20px 32px; border-radius:32px; font-weight:800; font-size:16px; z-index:2000; box-shadow:0 15px 40px var(--primary-glow); animation: fadeInUp 0.6s cubic-bezier(0.22, 1, 0.36, 1); border: 2px solid rgba(255,255,255,0.2); pointer-events: none;";
+            toast.innerHTML = `🌟 ${msg}`;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.style.animation = "fadeOutDown 0.6s ease-in forwards";
+                setTimeout(() => toast.remove(), 600);
+            }, 3000);
+        }
+
+        // 건강 팁 무작위 표시
+        function setHealthTip() {
+            const tips = [
+                "오늘 날씨가 쌀쌀해요. 따뜻한 물 한 잔으로 몸을 녹여보세요. ☕",
+                "약을 드실 때는 미지근한 물과 함께 드시는 것이 가장 좋아요. 💧",
+                "가벼운 스트레칭은 기분 전환과 건강에 큰 도움이 된답니다. 🙆‍♀️",
+                "오늘 점심은 맛있는 거 드셨나요? 건강한 식사가 최고의 약이에요. 🍱",
+                "햇볕을 10분만 쬐어도 비타민 D가 생겨 뼈가 튼튼해져요. ☀️"
+            ];
+            const tipEl = document.getElementById('health-tip');
+            if (tipEl) tipEl.textContent = tips[Math.floor(Math.random() * tips.length)];
+        }
+
+        // 애니메이션 스타일 추가
+        const style = document.createElement('style');
+        style.textContent = `
     @keyframes fadeInUp { from { opacity:0; transform:translate(-50%, 20px); } to { opacity:1; transform:translate(-50%, 0); } }
     @keyframes fadeOutDown { from { opacity:1; transform:translate(-50%, 0); } to { opacity:0; transform:translate(-50%, 20px); } }
 `;
-document.head.appendChild(style);
+        document.head.appendChild(style);
 
-setHealthTip();
+        setHealthTip();
 
-// 실시간 복약 알람 로직
-let lastAlarmedTime = '';
-function checkAlarms() {
-    if (!meds || meds.length === 0 || Notification.permission !== 'granted') return;
-    
-    const now = new Date();
-    const currentTime = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
-    
-    if (currentTime === lastAlarmedTime) return; // 같은 분에는 한 번만 알람
-    
-    meds.forEach(med => {
-        if (!med.taken && med.time === currentTime) {
-            // 알람 발생
-            const isSound = localStorage.getItem('toggle-sound') !== 'false';
-            const isVibrate = localStorage.getItem('toggle-vibrate') !== 'false';
-            
-            new Notification("약 드실 시간이에요! 💊", {
-                body: `지금 [${med.name}] 복용 시간입니다. 잊지 마세요!`,
-                icon: "favicon.ico",
-                requireInteraction: true,
-                silent: !isSound // 시스템 알림 소리 제어
+        // 실시간 복약 알람 로직
+        let lastAlarmedTime = '';
+        function checkAlarms() {
+            if (!meds || meds.length === 0 || Notification.permission !== 'granted') return;
+
+            const now = new Date();
+            const currentTime = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+
+            if (currentTime === lastAlarmedTime) return; // 같은 분에는 한 번만 알람
+
+            meds.forEach(med => {
+                if (!med.taken && med.time === currentTime) {
+                    // 알람 발생
+                    const isSound = localStorage.getItem('toggle-sound') !== 'false';
+                    const isVibrate = localStorage.getItem('toggle-vibrate') !== 'false';
+
+                    new Notification("약 드실 시간이에요! 💊", {
+                        body: `지금 [${med.name}] 복용 시간입니다. 잊지 마세요!`,
+                        icon: "favicon.ico",
+                        requireInteraction: true,
+                        silent: !isSound // 시스템 알림 소리 제어
+                    });
+
+                    // 진동 발생
+                    if (isVibrate && "vibrate" in navigator) {
+                        navigator.vibrate([200, 100, 200, 100, 200]);
+                    }
+
+                    // 커스텀 소리 재생 (시스템 소리와 별도로 확실한 알람을 위해)
+                    if (isSound) {
+                        const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
+                        audio.play().catch(e => console.log("Audio play failed:", e));
+                    }
+
+                    lastAlarmedTime = currentTime;
+                }
             });
-
-            // 진동 발생
-            if (isVibrate && "vibrate" in navigator) {
-                navigator.vibrate([200, 100, 200, 100, 200]);
-            }
-
-            // 커스텀 소리 재생 (시스템 소리와 별도로 확실한 알람을 위해)
-            if (isSound) {
-                const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
-                audio.play().catch(e => console.log("Audio play failed:", e));
-            }
-            
-            lastAlarmedTime = currentTime;
         }
-    });
-}
-setInterval(checkAlarms, 30000); // 30초마다 체크
-</script>
+        setInterval(checkAlarms, 30000); // 30초마다 체크
+    </script>
 </body>
+
 </html>

@@ -114,6 +114,33 @@ body {
   40%, 60% { transform: translate3d(4px, 0, 0); }
 }
 </style>
+    <link rel="stylesheet" href="global.css">
+    <style>
+        body { 
+            background: var(--bg-main); 
+            color: var(--on-bg);
+        }
+        .bg-glow {
+            background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
+        }
+        .logo-title span { color: var(--primary); }
+        .login-card { 
+            background: var(--bg-card); 
+            border: 1px solid var(--border);
+        }
+        .btn-google { background: #fff; color: #000; }
+        .btn-kakao { background: #FEE500; color: #191919; }
+        .btn-guest { 
+            background: transparent; 
+            color: var(--on-bg); 
+            border: 1px solid var(--border); 
+            margin-top: 8px;
+        }
+        .btn-guest:hover {
+            background: var(--border);
+        }
+        .card-title { color: var(--on-card); }
+    </style>
 </head>
 <body>
 <script>
@@ -141,6 +168,10 @@ body {
         <button class="btn-login btn-kakao" id="btn-kakao">
             <svg style="width:20px;height:20px" viewBox="0 0 24 24"><path fill="#191919" d="M12 3C6.48 3 2 6.48 2 10.8c0 2.7 1.6 5.1 4 6.6l-1 3.6 4.2-2.8c.9.2 1.8.3 2.8.3 5.52 0 10-3.48 10-7.8S17.52 3 12 3z"/></svg>
             카카오로 계속하기
+        </button>
+
+        <button class="btn-login btn-guest" id="btn-guest">
+            로그인 없이 시작하기 (게스트)
         </button>
         
         <div class="error-msg" id="error-msg"></div>
@@ -228,6 +259,17 @@ document.getElementById('btn-kakao').addEventListener('click',()=>{
     Kakao.Auth.authorize({
         redirectUri: "https://ownslp.kr/"
     });
+});
+
+// 게스트 로그인 버튼
+document.getElementById('btn-guest').addEventListener('click', () => {
+    const guestUser = {
+        uid: 'guest_' + Math.random().toString(36).substr(2, 9),
+        displayName: '사장님',
+        isGuest: true
+    };
+    localStorage.setItem('yakmate_user', JSON.stringify(guestUser));
+    window.location.href = './dashboard.html';
 });
 
 // 카카오 리다이렉트 콜백 처리 (URL에 code가 있는 경우)
