@@ -191,11 +191,12 @@
     </style>
 
 <style>/* NAV OVERRIDE */
-
-body.light-mode .nav-bar {
-    background: rgba(255,255,255,0.95) !important;
-    border: 1px solid rgba(0,0,0,0.08) !important;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.12) !important;
+.nav-bar {
+    position: fixed !important;
+    bottom: 24px !important;
+    z-index: 9999 !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
 }
 </style>
 </head>
