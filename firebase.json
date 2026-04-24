@@ -4,15 +4,23 @@
       "site": "yakmate-app",
       "public": "01_YakMate_App",
       "cleanUrls": true,
-      "rewrites": [{"source": "**", "destination": "/index.html"}],
-      "ignore": ["firebase.json", "**/.*", "**/node_modules/**", "02_Alpha_Engine/**", "03_Empire_Blog/**", "04_Scripts_Vault/**", "99_Archive/**", "*.zip", "*.sh"]
-    },
-    {
-      "site": "pill-sajangnim",
-      "public": "01_YakMate_App",
-      "cleanUrls": true,
-      "rewrites": [{"source": "**", "destination": "/index.html"}],
-      "ignore": ["firebase.json", "**/.*", "**/node_modules/**", "02_Alpha_Engine/**", "03_Empire_Blog/**", "04_Scripts_Vault/**", "99_Archive/**", "*.zip", "*.sh"]
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ],
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**",
+        "02_Alpha_Engine/**",
+        "03_Empire_Blog/**",
+        "04_Scripts_Vault/**",
+        "99_Archive/**",
+        "*.zip",
+        "*.sh"
+      ]
     }
   ]
 }
