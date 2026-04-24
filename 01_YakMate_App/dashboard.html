@@ -239,7 +239,7 @@
         </a>
         <a href="stats.html" class="nav-item">
             <span class="material-icons-round">analytics</span>
-            <span>건강 약속</span>
+            <span>Health Promise</span>
         </a>
         <a href="community.html" class="nav-item">
             <span class="material-icons-round">forum</span>
@@ -360,7 +360,7 @@
                 list.appendChild(card);
             });
             const pct = meds.length > 0 ? Math.round(taken / meds.length * 100) : 0;
-            document.getElementById('progress-title').textContent = meds.length > 0 ? (pct === 100 ? '오늘의 건강 약속 완료! 🏆' : taken + ' / ' + meds.length + ' 달성') : '일정이 없습니다';
+            document.getElementById('progress-title').textContent = meds.length > 0 ? (pct === 100 ? '오늘의 Health Promise 완료! 🏆' : taken + ' / ' + meds.length + ' 달성') : '일정이 없습니다';
             document.getElementById('progress-percent').textContent = pct + '%';
 
             const offset = 276.5 - (276.5 * pct / 100);
