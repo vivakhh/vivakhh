@@ -1,0 +1,23 @@
+{
+  "hosting": {
+    "target": "app-site",
+    "public": ".",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "/medicine/**",
+        "destination": "/medicine/index.html"
+      },
+      {
+        "source": "/ads.txt",
+        "destination": "/blog/ads.txt"
+      }
+    ],
+    "cleanUrls": true,
+    "trailingSlash": false
+  }
+}

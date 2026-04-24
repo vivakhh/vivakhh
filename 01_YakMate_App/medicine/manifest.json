@@ -1,0 +1,23 @@
+{
+  "name": "YakMate | 스마트 복약 파트너",
+  "short_name": "YakMate",
+  "description": "뇌졸중·암 생존자를 위한 프리미엄 복약 관리 서비스",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0b0e14",
+  "theme_color": "#b6a0ff",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "orientation": "portrait"
+}

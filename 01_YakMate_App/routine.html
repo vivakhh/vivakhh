@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YakMate | 시간표 관리</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+<style>
+:root {
+    --primary-container: #00e5ff;
+    --background: #0b0e14;
+    --surface-container: #1d2026;
+    --surface-high: #272a31;
+    --on-surface: #e1e2eb;
+    --glass: rgba(29, 32, 38, 0.7);
+    --gold: #D4AF37;
+}
+
+body.light-mode {
+    --background: #fdfdfd;
+    --on-surface: #1a1d23;
+    --surface-container: #ffffff;
+    --surface-high: #f0f2f5;
+    --glass: rgba(255, 255, 255, 0.9);
+    --gold: #8d6e63;
+    --primary-container: #7c4dff;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+body { 
+    font-family: 'Manrope', 'Noto Sans KR', sans-serif; 
+    background: var(--background); 
+    color: var(--on-surface);
+    min-height: 100vh;
+    padding-bottom: 120px;
+}
+
+.header { padding: 32px 24px; display: flex; align-items: center; gap: 16px; position: sticky; top: 0; background: rgba(11, 14, 20, 0.8); backdrop-filter: blur(20px); z-index: 100; }
+.btn-back { background: rgba(255, 255, 255, 0.05); border: none; border-radius: 12px; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: #fff; cursor: pointer; }
+.header-title { font-size: 20px; font-weight: 700; color: #fff; }
+
+.content { padding: 24px; }
+
+.info-card { 
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(0, 229, 255, 0.05) 100%); 
+    border-radius: 28px; 
+    padding: 24px; 
+    margin-bottom: 32px; 
+    border: 1px solid rgba(212, 175, 55, 0.2); 
+}
+.info-text { font-size: 14px; line-height: 1.6; color: var(--on-surface); opacity: 0.9; }
+
+.section-title { font-size: 14px; font-weight: 700; color: var(--gold); margin-bottom: 20px; letter-spacing: 0.5px; display: flex; align-items: center; justify-content: space-between; }
+
+.routine-list { margin-bottom: 32px; }
+.routine-item { 
+    background: var(--glass); 
+    border-radius: 24px; 
+    padding: 20px; 
+    margin-bottom: 12px; 
+    border: 1px solid rgba(255, 255, 255, 0.03); 
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between; 
+}
+.routine-info { flex: 1; }
+.routine-name { font-size: 16px; font-weight: 700; color: #fff; }
+.routine-time { font-size: 13px; color: var(--primary-container); margin-top: 4px; font-weight: 600; }
+.btn-delete { background: rgba(255, 110, 132, 0.1); border: none; color: #ff6e84; border-radius: 10px; width: 32px; height: 32px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+.add-card { 
+    background: var(--glass); 
+    border-radius: 32px; 
+    padding: 24px; 
+    border: 1px solid rgba(255, 255, 255, 0.05); 
+}
+.input-group { margin-bottom: 16px; }
+.input-label { font-size: 12px; opacity: 0.4; margin-bottom: 8px; display: block; }
+.input-field { width: 100%; background: var(--surface-high); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 14px; padding: 14px; color: #fff; font-family: inherit; outline: none; }
+.btn-add { width: 100%; background: var(--primary-container); color: #000; border: none; border-radius: 16px; padding: 16px; font-weight: 700; cursor: pointer; margin-top: 12px; }
+
+.btn-save { 
+    position: fixed; 
+    bottom: 40px; 
+    left: 24px; 
+    right: 24px; 
+    background: linear-gradient(135deg, var(--primary-container) 0%, #7c4dff 100%); 
+    color: #000; 
+    border: none; 
+    border-radius: 20px; 
+    padding: 20px; 
+    font-weight: 800; 
+    font-size: 16px; 
+    cursor: pointer; 
+    box-shadow: 0 10px 30px rgba(0, 229, 255, 0.3);
+    z-index: 101;
+}
+</style>
+</head>
+<body>
+<script>
+  (function() {
+    const theme = localStorage.getItem('yakmate_theme');
+    if (theme === 'light') document.body.classList.add('light-mode');
+  })();
+</script>
+<div class="header">
+    <button class="btn-back" onclick="location.href='dashboard.html'">
+        <span class="material-icons-round">arrow_back</span>
+    </button>
+    <div class="header-title">약 드시는 시간 바꾸기</div>
+</div>
+
+<div class="content">
+    <div class="info-card">
+        <div class="info-text">
+            하루에 언제 약을 드시는지 시간만 알려주세요. 그 시간에 맞춰 따뜻하게 챙겨드릴게요. 🌸
+        </div>
+    </div>
+
+    <div class="section-title">등록된 시간</div>
+    <div class="routine-list" id="routine-list">
+        <!-- Items will be injected here -->
+    </div>
+
+    <div class="section-title">새로운 시간 추가</div>
+    <div class="add-card">
+        <div class="input-group">
+            <label class="input-label">복용 시간</label>
+            <input type="time" class="input-field" id="new-time" value="08:00">
+        </div>
+        <button class="btn-add" id="btn-add">시간 추가하기</button>
+    </div>
+</div>
+
+<button class="btn-save" id="btn-save">일정 저장하고 적용하기</button>
+
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
+import{getAuth,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
+import{getFirestore,doc,getDoc,setDoc}from"https://www.gstatic.com/firebasejs/9.17.2/firebase-firestore.js";
+
+const config={apiKey:"AIzaSyDpnPJnErnrTloHk3HFrsXHORUMvAiOq5w",authDomain:"pill-sajangnim.firebaseapp.com",projectId:"pill-sajangnim",storageBucket:"pill-sajangnim.firebasestorage.app",messagingSenderId:"648268791992",appId:"1:648268791992:web:41a92580aa1a58ae6bb44d"};
+const app=initializeApp(config);
+const auth=getAuth(app);
+const db=getFirestore(app);
+
+let currentUser = null;
+let routine = [];
+
+onAuthStateChanged(auth, async user => {
+    let u = user;
+    if(!u){
+        const kakaoData = localStorage.getItem('yakmate_kakao_user');
+        if(kakaoData) u = JSON.parse(kakaoData);
+    }
+    if(!u){ window.location.href='./index.html'; return; }
+    currentUser = u;
+    
+    // 기본 루틴 불러오기
+    const snap = await getDoc(doc(db, 'users', u.uid, 'settings', 'routine'));
+    if(snap.exists() && snap.data().meds) {
+        routine = snap.data().meds;
+    } else {
+        routine = [
+            {id:'m1', name:'아침 약', time:'08:00'},
+            {id:'m2', name:'점심 약', time:'13:00'},
+            {id:'m3', name:'저녁 약', time:'19:00'}
+        ];
+    }
+    renderRoutine();
+});
+
+function renderRoutine() {
+    const list = document.getElementById('routine-list');
+    if(routine.length === 0) {
+        list.innerHTML = '<div style="text-align:center;padding:40px;opacity:0.3;font-size:14px">설정된 시간표가 없습니다.</div>';
+        return;
+    }
+    list.innerHTML = routine.map((m, i) => `
+        <div class="routine-item">
+            <div class="routine-info">
+                <div class="routine-name">${m.time} 약 드시는 시간</div>
+            </div>
+            <button class="btn-delete" onclick="deleteItem(${i})"><span class="material-icons-round">close</span></button>
+        </div>
+    `).join('');
+}
+
+window.deleteItem = (idx) => {
+    routine.splice(idx, 1);
+    renderRoutine();
+};
+
+document.getElementById('btn-add').addEventListener('click', () => {
+    const time = document.getElementById('new-time').value;
+    if(!time) { alert('시간을 선택해주세요!'); return; }
+    
+    routine.push({ id: 'm'+Date.now(), name: time + ' 약 드시는 시간', time });
+    routine.sort((a, b) => a.time.localeCompare(b.time));
+    
+    renderRoutine();
+});
+
+document.getElementById('btn-save').addEventListener('click', async () => {
+    if(routine.length === 0) {
+        if(!confirm('시간표가 하나도 없습니다. 그래도 저장할까요?')) return;
+    }
+    
+    try {
+        const ref = doc(db, 'users', currentUser.uid, 'settings', 'routine');
+        await setDoc(ref, { meds: routine, updatedAt: new Date() });
+        
+        // 오늘 날짜 데이터도 즉시 갱신할지 확인
+        if(confirm('저장되었습니다! 오늘 남은 일정도 이 시간표대로 즉시 변경할까요?')) {
+            const offset = 9 * 60 * 60 * 1000;
+            const kst = new Date(new Date().getTime() + offset);
+            const today = kst.toISOString().split('T')[0];
+            
+            // 기존 daily 데이터 가져오기 (이미 먹은 약 체크 상태 보존을 위해)
+            const dRef = doc(db, 'users', currentUser.uid, 'daily', today);
+            const dSnap = await getDoc(dRef);
+            let dailyMeds = routine.map(r => ({...r, taken: false}));
+            
+            if(dSnap.exists() && dSnap.data().meds) {
+                const existing = dSnap.data().meds;
+                dailyMeds = routine.map(r => {
+                    const match = existing.find(e => e.name === r.name && e.time === r.time);
+                    return { ...r, taken: match ? match.taken : false };
+                });
+            }
+            
+            await setDoc(dRef, { meds: dailyMeds, updatedAt: new Date() });
+        }
+        
+        window.location.href = 'dashboard.html';
+    } catch(e) {
+        alert('저장 중 오류가 발생했습니다: ' + e.message);
+    }
+});
+</script>
+</body>
+</html>

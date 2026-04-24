@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YakMate | 대시보드</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Space+Grotesk:wght@500;700&family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+<style>
+:root {
+    --primary-container: #00e5ff;
+    --background: #0b0e14;
+    --surface-container: #1d2026;
+    --surface-high: #272a31;
+    --on-surface: #e1e2eb;
+    --glass: rgba(29, 32, 38, 0.7);
+    --gold: #D4AF37;
+}
+
+body.light-mode {
+    --background: #fdfdfd;
+    --on-surface: #1a1d23;
+    --surface-container: #ffffff;
+    --surface-high: #f0f2f5;
+    --glass: rgba(255, 255, 255, 0.9);
+    --gold: #8d6e63;
+    --primary-container: #7c4dff;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+body { 
+    font-family: 'Manrope', 'Noto Sans KR', sans-serif; 
+    background: var(--background); 
+    color: var(--on-surface);
+    min-height: 100vh;
+    padding-bottom: 120px;
+}
+
+.header { padding: 32px 24px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; background: rgba(11, 14, 20, 0.8); backdrop-filter: blur(20px); z-index: 100; }
+.header-left { display: flex; flex-direction: column; gap: 4px; }
+.header-title { font-size: 14px; font-weight: 500; opacity: 0.5; letter-spacing: 0.5px; }
+.header-sub { font-size: 20px; font-weight: 700; color: #fff; }
+.header-right { display: flex; align-items: center; gap: 16px; }
+.user-avatar { width: 44px; height: 44px; border-radius: 14px; background: linear-gradient(135deg, var(--primary-container) 0%, #7c4dff 100%); display: flex; align-items: center; justify-content: center; color: #000; font-weight: 800; font-size: 18px; box-shadow: 0 8px 20px rgba(0, 229, 255, 0.3); }
+.btn-logout { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 10px 16px; font-size: 12px; color: rgba(255, 255, 255, 0.4); cursor: pointer; font-family: inherit; font-weight: 600; }
+
+.content { padding: 0 24px; }
+
+/* Bio-Liquid Gauge Card */
+.progress-card { 
+    background: var(--glass); 
+    border-radius: 40px; 
+    padding: 32px; 
+    margin-top: 16px;
+    margin-bottom: 32px; 
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.gauge-container { width: 180px; height: 180px; position: relative; margin-bottom: 24px; }
+.gauge-svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.gauge-bg { fill: none; stroke: rgba(255, 255, 255, 0.03); stroke-width: 12; }
+.gauge-fill { fill: none; stroke: url(#gauge-gradient); stroke-width: 12; stroke-linecap: round; transition: stroke-dasharray 1s cubic-bezier(0.4, 0, 0.2, 1); }
+
+.gauge-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; }
+.gauge-percent { font-size: 40px; font-weight: 800; color: #fff; font-family: 'Space Grotesk', sans-serif; display: block; }
+.gauge-label { font-size: 12px; opacity: 0.4; font-weight: 600; margin-top: -4px; display: block; }
+
+.progress-info-text { text-align: center; }
+.progress-title { font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+.progress-sub { font-size: 13px; color: var(--primary-container); font-weight: 600; opacity: 0.8; }
+
+.section-title { font-size: 16px; font-weight: 700; color: var(--gold); margin: 40px 0 20px; display: flex; align-items: center; gap: 8px; }
+
+.med-list { display: flex; flex-direction: column; gap: 14px; }
+.med-card { 
+    background: var(--glass); 
+    border-radius: 28px; 
+    padding: 24px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between; 
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+}
+.med-card.taken { background: rgba(0, 229, 255, 0.05); border-color: rgba(0, 229, 255, 0.2); }
+.med-time { font-size: 12px; font-weight: 600; color: var(--primary-container); margin-bottom: 4px; opacity: 0.6; }
+.med-name { font-size: 17px; font-weight: 700; color: #fff; }
+.med-check { width: 44px; height: 44px; border-radius: 16px; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); display: flex; align-items: center; justify-content: center; font-size: 20px; transition: all 0.3s; }
+.med-card.taken .med-check { background: var(--primary-container); border-color: var(--primary-container); color: #000; box-shadow: 0 0 15px rgba(0, 229, 255, 0.4); }
+
+.bottom-nav { position: fixed; bottom: 24px; left: 24px; right: 24px; background: rgba(16, 19, 26, 0.9); backdrop-filter: blur(20px); border-radius: 24px; padding: 12px; display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid rgba(255, 255, 255, 0.05); z-index: 100; }
+.nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; color: rgba(225, 226, 235, 0.3); font-size: 11px; text-decoration: none; gap: 4px; transition: all 0.3s; }
+.nav-item.active { color: var(--primary-container); }
+.nav-icon { font-size: 22px; }
+
+/* Invisible original progress elements to keep the script happy */
+#progress-bar { display: none; }
+</style>
+</head>
+<body>
+<script>
+  (function() {
+    const theme = localStorage.getItem('yakmate_theme');
+    if (theme === 'light') document.body.classList.add('light-mode');
+  })();
+</script>
+<div class="header">
+  <div class="header-left">
+    <div class="header-title">오늘도 건강한 하루 보내세요 🌿</div>
+    <div class="header-sub" id="user-name">반갑습니다!</div>
+  </div>
+  <div class="header-right">
+
+    <div class="user-avatar" id="user-avatar">?</div>
+  </div>
+</div>
+
+<div class="content">
+  <!-- 사장님이 생각지도 못한 새로운 기능: 오늘의 따뜻한 한마디 -->
+  <div id="daily-message" style="background: linear-gradient(135deg, rgba(124, 77, 255, 0.1) 0%, rgba(0, 229, 255, 0.1) 100%); border-radius: 24px; padding: 20px; margin-top: 16px; border: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; gap: 16px;">
+    <div style="font-size: 24px;">💡</div>
+    <div style="font-size: 14px; line-height: 1.6; color: #fff; font-weight: 500;" id="health-tip">오늘도 건강한 하루 보내세요!</div>
+  </div>
+
+  <div class="progress-card">
+    <div class="gauge-container">
+      <svg class="gauge-svg" viewBox="0 0 100 100">
+        <defs>
+          <linearGradient id="gauge-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#00e5ff" />
+            <stop offset="100%" stop-color="#7c4dff" />
+          </linearGradient>
+        </defs>
+        <circle class="gauge-bg" cx="50" cy="50" r="44"></circle>
+        <circle class="gauge-fill" id="gauge-fill" cx="50" cy="50" r="44" stroke-dasharray="0 276.5"></circle>
+      </svg>
+      <div class="gauge-content">
+        <span class="gauge-percent" id="progress-percent">0%</span>
+        <span class="gauge-label">오늘의 달성도</span>
+      </div>
+    </div>
+    <div class="progress-info-text">
+        <div class="progress-title" id="progress-title">0/3번 챙겨드셨어요</div>
+        <div class="progress-sub">소중한 건강을 위해 차근차근 실천해봐요. ✨</div>
+    </div>
+    <!-- Hidden element to maintain script compatibility -->
+    <div id="progress-bar"></div>
+  </div>
+
+  <div class="section-title">
+    <div style="display:flex; align-items:center; gap:8px;">
+      <span class="material-icons-round" style="font-size:18px">medication</span>
+      <span>오늘의 약 챙기기</span>
+    </div>
+    <button class="btn-logout" onclick="location.href='routine.html'" style="color:var(--primary-container); border-color:rgba(0,229,255,0.2); opacity:1;">약 드시는 시간 바꾸기</button>
+  </div>
+  <div class="med-list" id="med-list"></div>
+
+  <!-- 루틴 보강 섹션 -->
+
+</div>
+
+<div class="bottom-nav">
+  <div class="nav-item active"><span class="nav-icon material-icons-round">home</span><span>홈</span></div>
+  <div class="nav-item" onclick="location.href='stats.html'"><span class="nav-icon material-icons-round">bar_chart</span><span>건강 기록</span></div>
+  <div class="nav-item" onclick="location.href='community.html'"><span class="nav-icon material-icons-round">group</span><span>우리 이야기</span></div>
+  <div class="nav-item" onclick="location.href='settings.html'"><span class="nav-icon material-icons-round">settings</span><span>설정</span></div>
+</div>
+
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
+import{getAuth,onAuthStateChanged,signOut}from"https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
+import{getFirestore,doc,getDoc,setDoc}from"https://www.gstatic.com/firebasejs/9.17.2/firebase-firestore.js";
+const config={apiKey:"AIzaSyDpnPJnErnrTloHk3HFrsXHORUMvAiOq5w",authDomain:"pill-sajangnim.firebaseapp.com",projectId:"pill-sajangnim",storageBucket:"pill-sajangnim.firebasestorage.app",messagingSenderId:"648268791992",appId:"1:648268791992:web:41a92580aa1a58ae6bb44d"};
+const app=initializeApp(config);
+const auth=getAuth(app);
+const db=getFirestore(app);
+let meds=[
+  {id:'m1',name:'아침 약',time:'08:00',taken:false},
+  {id:'m2',name:'점심 약',time:'13:00',taken:false},
+  {id:'m3',name:'저녁 약',time:'19:00',taken:false},
+];
+onAuthStateChanged(auth,async(u)=>{
+  let user = u;
+  if(!user){
+    const kakaoData = localStorage.getItem('yakmate_kakao_user');
+    if(kakaoData) user = JSON.parse(kakaoData);
+  }
+  if(!user){window.location.href='./index.html';return;}
+  const name=user.displayName||'사장님';
+  document.getElementById('user-name').textContent=name+'님';
+  const avatar = document.getElementById('user-avatar');
+  if(user.photoURL && avatar) {
+    avatar.innerHTML = `<img src="${user.photoURL}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">`;
+  } else if(avatar) {
+    avatar.textContent=name[0];
+  }
+  const getKstDate = (d = new Date()) => {
+    const offset = 9 * 60 * 60 * 1000;
+    const kst = new Date(d.getTime() + offset);
+    return kst.toISOString().split('T')[0];
+  };
+  const today = getKstDate();
+  const ref=doc(db,'users',user.uid,'daily',today);
+  const snap=await getDoc(ref);
+  
+  if(snap.exists() && snap.data().meds) {
+    meds = snap.data().meds;
+  } else {
+    // 오늘 기록이 없으면 설정된 마스터 루틴 불러오기
+    const rRef = doc(db, 'users', user.uid, 'settings', 'routine');
+    const rSnap = await getDoc(rRef);
+    if(rSnap.exists() && rSnap.data().meds) {
+      meds = rSnap.data().meds.map(m => ({...m, taken: false}));
+    } else {
+      // 마스터 루틴도 없으면 기본값 사용
+      meds = [
+        {id:'m1',name:'아침 약',time:'08:00',taken:false},
+        {id:'m2',name:'점심 약',time:'13:00',taken:false},
+        {id:'m3',name:'저녁 약',time:'19:00',taken:false}
+      ];
+    }
+    // 오늘 날짜 데이터로 초기 저장
+    await setDoc(ref, { meds, updatedAt: new Date() });
+  }
+  renderMeds();
+});
+document.getElementById('btn-logout').addEventListener('click',async()=>{
+  await signOut(auth);
+  window.location.href='./index.html';
+});
+
+const greetings = [
+    "오늘도 참 고운 하루네요 🌸",
+    "사장님, 오늘 기분은 어떠신가요? 😊",
+    "건강이 최고예요! 오늘도 화이팅! 💪",
+    "차 한 잔의 여유와 함께 즐거운 하루 보내세요 🍵",
+    "오늘도 약 잊지 마시고 건강 챙기세요 ✨",
+    "사장님의 미소가 세상을 밝힙니다 ☀️",
+    "오늘도 소소한 행복이 가득하시길 바라요 🍀",
+    "항상 건강하시길 약메이트가 응원합니다 💖",
+    "오늘도 빛나는 하루가 시작되었어요 ✨",
+    "따뜻한 밥 챙겨 드시고 즐겁게 보내세요 🍚",
+    "사장님은 우리 가족의 보물입니다 💎",
+    "오늘도 평온하고 안락한 하루 되세요 🏡",
+    "매일매일 조금씩 더 건강해지실 거예요 🌿",
+    "사장님, 오늘도 사랑 가득한 하루 되세요 💕",
+    "작은 기쁨이 큰 행복이 되는 오늘이 되길... 🕊️",
+    "사장님의 건강을 위해 항상 기도합니다 🙏",
+    "오늘도 활기차고 씩씩하게 보내세요! 🌟",
+    "세상에서 가장 소중한 사장님, 화이팅! 😍",
+    "오늘도 꽃처럼 예쁜 하루 보내세요 🌺",
+    "사장님 곁엔 항상 약메이트가 있어요 🤝",
+    "건강한 습관이 사장님을 웃게 합니다 😄",
+    "오늘도 기분 좋은 소식만 들려오길 바라요 📢",
+    "사장님, 무리하지 마시고 쉬엄쉬엄 하세요 🛌",
+    "반짝반짝 빛나는 사장님의 오늘을 응원해요 ✨",
+    "오늘도 웃음꽃이 활짝 피는 하루 되세요 🌻",
+    "사장님의 발걸음마다 행복이 깃들길... 🚶",
+    "오늘도 약 잘 챙겨드시는 사장님 최고! 👍",
+    "사장님, 오늘 하루도 참 수고 많으셨어요 🌙",
+    "내일은 더 좋은 일이 생길 거예요 🌈",
+    "사장님은 언제나 청춘이십니다! 🕺",
+    "오늘도 마음 넉넉하고 행복한 하루 되세요 🍯",
+    "사장님, 아프지 마시고 늘 건강하세요 🍎",
+    "오늘도 기운찬 하루 보내시길 바랍니다 🔥",
+    "사장님의 건강이 가족의 기쁨입니다 👨‍👩‍👧‍👦",
+    "오늘도 향기로운 하루 보내세요 💐",
+    "사장님, 오늘 하루도 선물처럼 받아보세요 🎁",
+    "오늘도 긍정의 힘으로 즐겁게 지내봐요 ✨",
+    "사장님의 건강 기록이 쌓일수록 행복도 쌓여요 📈",
+    "오늘도 우리 함께 건강한 이야기 나눠요 🗣️",
+    "사장님, 세상에서 가장 소중한 건 사장님이에요 💝",
+    "오늘도 약메이트와 함께 활기차게 시작! 🚀",
+    "사장님의 건강한 미래를 위해 오늘을 기록해요 📝",
+    "오늘도 별처럼 빛나는 하루가 되시길... ⭐",
+    "사장님, 오늘 점심은 맛있는 거 드셨나요? 🍲",
+    "오늘도 따스한 햇살 같은 하루 보내세요 🌞",
+    "사장님의 매일매일이 축복입니다 🙌",
+    "오늘도 건강하고 아름다운 날 되세요 🦋",
+    "사장님, 늘 감사하고 사랑합니다 🧡",
+    "오늘도 행운이 사장님과 함께하길... 🤞",
+    "사장님, 오늘도 반짝이는 추억 하나 만드세요 📸",
+    "오늘도 건강 챙기시는 사장님이 자랑스러워요 🎖️",
+    "사장님, 오늘 하루도 편안하게 마무리하세요 🌛",
+    "오늘도 사랑하는 사람들과 행복한 대화 나누세요 📞",
+    "사장님의 건강은 약메이트가 책임집니다! 💂",
+    "오늘도 상쾌한 공기 마시며 기분 전환하세요 🌬️",
+    "사장님, 오늘도 노래처럼 즐거운 하루 되세요 🎶",
+    "오늘도 따뜻한 마음으로 세상을 바라봐주세요 👓",
+    "사장님의 지혜가 오늘을 더 특별하게 만듭니다 🎓",
+    "오늘도 건강한 습관 하나를 선물합니다 🎁",
+    "사장님, 오늘도 참 잘하셨고 잘하실 거예요 👏",
+    "오늘도 평화롭고 고요한 시간 보내시길... 🌊",
+    "사장님의 웃음소리가 여기까지 들리는 듯해요 👂",
+    "오늘도 정성껏 준비한 약 드시고 힘내세요 🥤",
+    "사장님, 오늘 하루도 반짝반짝 빛나주세요 ✨",
+    "오늘도 마음껏 웃고 행복해지세요 😂",
+    "사장님의 건강을 위해 늘 곁에 있을게요 🕰️",
+    "오늘도 상쾌하게, 건강하게, 행복하게! 🎈",
+    "사장님, 오늘도 사랑받는 하루 되세요 💖",
+    "오늘도 마음의 평안을 찾는 하루 되시길... 🧘",
+    "사장님의 매일이 꽃길이길 바랍니다 🛤️",
+    "오늘도 약 잘 드시고 꿀잠 주무세요 😴",
+    "사장님, 오늘도 사장님답게 당당하게! 🦁",
+    "오늘도 소소한 일상 속 보물을 찾아보세요 🔍",
+    "사장님의 열정을 응원합니다! 오늘도 화이팅! 📣",
+    "오늘도 건강하게, 우리 함께 가요 🤝",
+    "사장님, 오늘 하루도 참 예쁘네요 🖼️",
+    "오늘도 미소 잊지 마세요! 미소는 만병통치약 💊",
+    "사장님의 건강한 내일을 약메이트가 그려요 🎨",
+    "오늘도 포근하고 따뜻한 하루 되세요 🧥",
+    "사장님, 오늘 하루도 당신의 것입니다 👑",
+    "오늘도 즐거운 상상으로 행복해지세요 💭",
+    "사장님의 건강이 곧 세상의 행복입니다 🌍",
+    "오늘도 기적 같은 하루가 사장님을 기다려요 🪄",
+    "사장님, 늘 변함없이 사장님을 응원합니다 📣",
+    "오늘도 맑은 하늘처럼 시원한 하루 보내세요 ☁️",
+    "사장님의 하루하루가 역사가 됩니다 🏛️",
+    "오늘도 약 드시고 건강 지킴이 변신! 🦸",
+    "사장님, 오늘 하루도 힘차게 뛰어봐요 🏃",
+    "오늘도 행복 바이러스 가득 퍼뜨려주세요 🦠",
+    "사장님의 따뜻한 손길을 기억합니다 🤝",
+    "오늘도 마음의 창을 열고 행복을 맞이하세요 🪟",
+    "사장님, 오늘도 반가운 얼굴들과 인사 나누세요 👋",
+    "오늘도 건강한 에너지 뿜뿜! 힘내세요 💪",
+    "사장님의 존재만으로도 큰 위로가 됩니다 🧸",
+    "오늘도 약속한 시간에 약 잘 드시기! 🤙",
+    "사장님, 오늘 하루도 보석처럼 빛내주세요 💍",
+    "오늘도 감사함으로 가득 찬 하루 되시길... 🤲",
+    "사장님의 건강 전도사, 약메이트 올림 🙇",
+    "오늘도 든든한 약메이트와 함께해요! 🛡️",
+    "사장님, 오늘도 건강하고 즐거운 여행 되세요 ✈️"
+];
+
+function setGreeting() {
+    const titleEl = document.querySelector('.header-title');
+    if(titleEl) {
+        const randomIndex = Math.floor(Math.random() * greetings.length);
+        titleEl.textContent = greetings[randomIndex];
+    }
+}
+
+setGreeting();
+function renderMeds(){
+  const list=document.getElementById('med-list');
+  list.innerHTML='';
+  let taken=0;
+  meds.forEach(med=>{
+    if(med.taken)taken++;
+    const card=document.createElement('div');
+    card.className='med-card'+(med.taken?' taken':'');
+    card.innerHTML=`<div><div class="med-time">${med.taken?'잘 드셨어요':med.time}</div><div class="med-name">${med.time} 약 드실 시간</div></div><div class="med-check">${med.taken?'✅':''}</div>`;
+    card.onclick=()=>toggleMed(med.id);
+    list.appendChild(card);
+  });
+  const pct = meds.length > 0 ? Math.round(taken/meds.length*100) : 0;
+  document.getElementById('progress-title').textContent=meds.length > 0 ? taken+'/'+meds.length+'번 챙겨드셨어요' : '설정된 일정이 없습니다';
+  
+  // 복약 진행도 업데이트
+  const progressBar = document.getElementById('progress-bar');
+  if(progressBar) progressBar.style.width=pct+'%';
+  
+  document.getElementById('progress-percent').textContent=pct+'%';
+  
+  // 게이지 업데이트
+  const offset = 276.5 - (276.5 * pct / 100);
+  const gaugeFill = document.getElementById('gauge-fill');
+  if(gaugeFill) gaugeFill.style.strokeDasharray = `${276.5 - offset} 276.5`;
+}
+async function toggleMed(id){
+  const med=meds.find(m=>m.id===id);
+  if(med){
+    med.taken=!med.taken;
+    
+    // 사장님이 생각지도 못한 새로운 기능: 칭찬 대답 (Toast)
+    if(med.taken) {
+        showPraise();
+    }
+    
+    renderMeds();
+    const user=auth.currentUser;
+    if(user){
+      const today = getKstDate();
+      await setDoc(doc(db,'users',user.uid,'daily',today),{meds,updatedAt:new Date()});
+    }
+  }
+}
+
+function showPraise() {
+    const praises = [
+        "참 잘하셨어요! 건강해지는 소리가 들리네요 💖",
+        "잊지 않고 챙기시는 모습이 너무 멋져요! ✨",
+        "오늘도 건강을 위해 한 걸음 더 나아가셨네요 🌸",
+        "사장님의 건강을 제가 항상 응원하고 있어요 🍀",
+        "정말 대단하세요! 꾸준함이 최고의 보약이에요 🍯"
+    ];
+    const msg = praises[Math.floor(Math.random() * praises.length)];
+    const toast = document.createElement('div');
+    toast.style = "position:fixed; bottom:140px; left:50%; transform:translateX(-50%); background:rgba(0,229,255,0.9); color:#000; padding:16px 24px; border-radius:30px; font-weight:700; font-size:14px; z-index:1000; box-shadow:0 10px 25px rgba(0,229,255,0.4); animation: fadeInUp 0.5s ease-out;";
+    toast.innerHTML = `🌟 ${msg}`;
+    document.body.appendChild(toast);
+    setTimeout(() => {
+        toast.style.animation = "fadeOutDown 0.5s ease-in forwards";
+        setTimeout(() => toast.remove(), 500);
+    }, 2500);
+}
+
+// 건강 팁 무작위 표시
+function setHealthTip() {
+    const tips = [
+        "오늘 날씨가 쌀쌀해요. 따뜻한 물 한 잔으로 몸을 녹여보세요. ☕",
+        "약을 드실 때는 미지근한 물과 함께 드시는 것이 가장 좋아요. 💧",
+        "가벼운 스트레칭은 기분 전환과 건강에 큰 도움이 된답니다. 🙆‍♀️",
+        "오늘 점심은 맛있는 거 드셨나요? 건강한 식사가 최고의 약이에요. 🍱",
+        "햇볕을 10분만 쬐어도 비타민 D가 생겨 뼈가 튼튼해져요. ☀️"
+    ];
+    const tipEl = document.getElementById('health-tip');
+    if(tipEl) tipEl.textContent = tips[Math.floor(Math.random() * tips.length)];
+}
+
+// 애니메이션 스타일 추가
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes fadeInUp { from { opacity:0; transform:translate(-50%, 20px); } to { opacity:1; transform:translate(-50%, 0); } }
+    @keyframes fadeOutDown { from { opacity:1; transform:translate(-50%, 0); } to { opacity:0; transform:translate(-50%, 20px); } }
+`;
+document.head.appendChild(style);
+
+setHealthTip();
+
+// 실시간 복약 알람 로직
+let lastAlarmedTime = '';
+function checkAlarms() {
+    if (!meds || meds.length === 0 || Notification.permission !== 'granted') return;
+    
+    const now = new Date();
+    const currentTime = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+    
+    if (currentTime === lastAlarmedTime) return; // 같은 분에는 한 번만 알람
+    
+    meds.forEach(med => {
+        if (!med.taken && med.time === currentTime) {
+            // 알람 발생
+            const isSound = localStorage.getItem('toggle-sound') !== 'false';
+            const isVibrate = localStorage.getItem('toggle-vibrate') !== 'false';
+            
+            new Notification("약 드실 시간이에요! 💊", {
+                body: `지금 [${med.name}] 복용 시간입니다. 잊지 마세요!`,
+                icon: "favicon.ico",
+                requireInteraction: true,
+                silent: !isSound // 시스템 알림 소리 제어
+            });
+
+            // 진동 발생
+            if (isVibrate && "vibrate" in navigator) {
+                navigator.vibrate([200, 100, 200, 100, 200]);
+            }
+
+            // 커스텀 소리 재생 (시스템 소리와 별도로 확실한 알람을 위해)
+            if (isSound) {
+                const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
+                audio.play().catch(e => console.log("Audio play failed:", e));
+            }
+            
+            lastAlarmedTime = currentTime;
+        }
+    });
+}
+setInterval(checkAlarms, 30000); // 30초마다 체크
+</script>
+</body>
+</html>

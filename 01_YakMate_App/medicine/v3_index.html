@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>약메이트 v3.0 | Ethereal Sanctuary</title>
+    
+    <!-- PWA & SEO -->
+    <meta name="description" content="다시, 데이빗. 당신의 완벽한 복약 파트너 YakMate v3.0.">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#080a0f">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    
+    <!-- Fonts & Styles -->
+    <!-- Fonts & Styles -->
+    <style>
+        /* =============================================
+           ✨ YAKMATE v3.0: THE ETHEREAL SANCTUARY
+           ============================================= */
+
+        @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700&family=Space+Grotesk:wght@500;700&display=swap');
+
+        :root {
+            --accent-lavender: #b6a0ff;
+            --accent-cyan: #81ecff;
+            --accent-coral: #ff9e9e;
+            --bg-deep: #080a0f;
+            --surface-glass: rgba(255, 255, 255, 0.04);
+            --surface-glass-heavy: rgba(255, 255, 255, 0.08);
+            --border-glass: rgba(255, 255, 255, 0.1);
+            --font-main: 'Manrope', sans-serif;
+            --font-display: 'Space Grotesk', sans-serif;
+            --blur-glass: blur(28px);
+            --transition-smooth: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            background: var(--bg-deep);
+            color: #fff;
+            font-family: var(--font-main);
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #app {
+            width: 100%;
+            max-width: 480px;
+            height: 100%;
+            position: relative;
+            background: var(--bg-deep);
+            box-shadow: 0 0 100px rgba(182, 160, 255, 0.05);
+            overflow: hidden;
+        }
+
+        .glow { position: absolute; border-radius: 50%; filter: blur(100px); z-index: 0; pointer-events: none; }
+        .glow-1 { width: 300px; height: 300px; background: rgba(182, 160, 255, 0.15); top: -50px; right: -100px; }
+        .glow-2 { width: 250px; height: 250px; background: rgba(129, 236, 255, 0.1); bottom: 100px; left: -80px; }
+
+        .screen {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            padding: 24px;
+            padding-bottom: 120px; /* Prevent overlap with nav */
+            display: none;
+            flex-direction: column;
+            z-index: 10;
+            background: transparent;
+            opacity: 0;
+            transform: scale(0.98);
+            transition: var(--transition-smooth);
+        }
+        .screen.active { display: flex; opacity: 1; transform: scale(1); z-index: 20; }
+
+        .glass-card {
+            background: var(--surface-glass);
+            backdrop-filter: var(--blur-glass);
+            border: 1px solid var(--border-glass);
+            border-radius: 28px;
+            padding: 24px;
+            margin-bottom: 20px;
+            transition: var(--transition-smooth);
+        }
+        .glass-card:active { transform: scale(0.98); }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-lavender), #d4c8ff);
+            color: #000;
+            border: none;
+            padding: 18px;
+            border-radius: 24px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(182, 160, 255, 0.2);
+            width: 100%;
+        }
+
+        .ring-system {
+            display: flex; justify-content: center; align-items: center;
+            position: relative; margin: 40px 0;
+        }
+        .ring-svg { width: 220px; height: 220px; transform: rotate(-90deg); filter: drop-shadow(0 0 15px rgba(182, 160, 255, 0.3)); }
+        .ring-bg { fill: none; stroke: rgba(255, 255, 255, 0.05); stroke-width: 14; }
+        .ring-fill {
+            fill: none; stroke: var(--accent-lavender); stroke-width: 14; stroke-linecap: round;
+            stroke-dasharray: 283; stroke-dashoffset: 283;
+            transition: stroke-dashoffset 2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .ring-content { position: absolute; text-align: center; }
+        .ring-content h2 { font-family: var(--font-display); font-size: 2.2rem; margin-bottom: -4px; }
+        .ring-content p { font-size: 0.8rem; color: rgba(255, 255, 255, 0.5); }
+
+        .gratitude-list { flex: 1; overflow-y: auto; padding-bottom: 20px; }
+        .gratitude-item {
+            background: rgba(255,255,255,0.03);
+            padding: 16px; border-radius: 18px; margin-bottom: 12px;
+            border-left: 3px solid var(--accent-coral);
+            animation: slideIn 0.5s ease-out forwards;
+        }
+        @keyframes slideIn { from { opacity:0; transform:translateX(10px); } to { opacity:1; transform:translateX(0); } }
+
+        #nav-v3 {
+            position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+            width: calc(100% - 48px); max-width: 400px;
+            background: var(--surface-glass-heavy);
+            backdrop-filter: var(--blur-glass);
+            border: 1px solid var(--border-glass);
+            border-radius: 30px;
+            padding: 12px;
+            display: none;
+            justify-content: space-around;
+            z-index: 100;
+        }
+        .nav-btn { text-align: center; color: rgba(255,255,255,0.4); font-size: 0.7rem; text-decoration: none; font-weight: 500; }
+        .nav-btn.active { color: var(--accent-lavender); }
+        .nav-btn .icon { font-size: 1.4rem; display: block; margin-bottom: 2px; }
+
+        /* Premium UI Refinements */
+        body { overflow: hidden; background: radial-gradient(circle at top, #141822 0%, #080a0f 100%); }
+        .glass-card { 
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- Ambient Background -->
+        <div class="glow glow-1"></div>
+        <div class="glow glow-2"></div>
+
+        <!-- 1. LOADING SCREEN -->
+        <section id="loading-screen" class="screen active" style="justify-content: center; align-items: center;">
+            <div style="text-align: center;">
+                <h1 style="font-family: var(--font-display); font-size: 3.5rem; color: var(--accent-lavender); letter-spacing: -2px;">약메이트</h1>
+                <p style="font-size: 0.8rem; color: rgba(255,255,255,0.4); margin-top: 10px; letter-spacing: 2px; text-transform: uppercase;">Ethereal Sanctuary</p>
+                <div id="auth-status-msg" style="margin-top: 20px; font-size: 0.7rem; color: rgba(255,255,255,0.2);">엔진 초기화 중...</div>
+            </div>
+        </section>
+
+        <!-- 2. LOGIN SCREEN -->
+        <section id="login-screen" class="screen" style="justify-content: flex-end; padding-bottom: 80px;">
+            <div class="glass-card" style="text-align: center;">
+                <h2 style="font-family: var(--font-display); font-size: 2rem; margin-bottom: 8px;">더 나은 회복을<br>시작하세요</h2>
+                <p style="color: rgba(255,255,255,0.5); margin-bottom: 40px; font-size: 0.9rem;">당신과 가족을 잇는 따뜻한 보살핌</p>
+                
+                <button id="btn-google-login" class="btn-primary" style="background: #fff; color: #000; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 10px; border-radius: 18px;">
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20"> Google로 시작하기
+                </button>
+                
+                <button id="btn-kakao-login" class="btn-primary" style="background: #FEE500; color: #191919; border-radius: 18px; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                    <img src="https://developers.kakao.com/assets/img/lib/logos/kakaolink/kakaolink_btn_medium.png" width="20"> 카카오 로그인
+                </button>
+                
+                <p id="login-error-msg" style="margin-top: 15px; font-size: 0.75rem; color: var(--accent-coral); display: none;"></p>
+            </div>
+        </section>
+
+        <!-- 3. MAIN DASHBOARD SCREEN -->
+        <section id="dashboard-screen" class="screen">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0 30px;">
+                <div id="user-display">
+                    <p style="font-size: 0.75rem; color: var(--accent-lavender); font-weight: 700; margin-bottom: 4px;">DAILY MISSION</p>
+                    <h3 id="user-name" style="font-family: var(--font-display); font-size: 1.5rem;">반가워요, 데이빗님</h3>
+                </div>
+                <div id="btn-logout" style="font-size: 1.1rem; cursor: pointer; opacity: 0.4;">로그아웃</div>
+            </div>
+
+            <!-- Biometric Ring Card -->
+            <div class="glass-card ring-system">
+                <svg class="ring-svg" viewBox="0 0 100 100">
+                    <circle class="ring-bg" cx="50" cy="50" r="45"></circle>
+                    <circle id="progress-circle" class="ring-fill" cx="50" cy="50" r="45"></circle>
+                </svg>
+                <div class="ring-content">
+                    <h2 id="progress-percent">0%</h2>
+                    <p id="pill-summary">0 / 3 완료</p>
+                </div>
+            </div>
+
+            <div style="flex: 1; overflow-y: auto;">
+                <h4 style="font-family: var(--font-display); margin-bottom: 16px; font-size: 1.1rem; opacity: 0.8;">오늘의 복약 일정</h4>
+                <div id="med-list"></div>
+            </div>
+        </section>
+
+        <!-- 4. GRATITUDE COMMUNITY SCREEN -->
+        <section id="community-screen" class="screen">
+            <div style="padding: 10px 0 30px;">
+                <h2 style="font-family: var(--font-display); font-size: 1.8rem;">한 줄 감사</h2>
+                <p style="color: rgba(255,255,255,0.4); font-size: 0.8rem;">전 세계 환우들과 나누는 따뜻한 고백</p>
+            </div>
+            
+            <div class="glass-card" style="padding: 18px; display: flex; gap: 12px; align-items: center; margin-bottom: 24px;">
+                <input id="input-gratitude" type="text" placeholder="오늘 감사한 일을 한 줄로 남겨보세요..." style="flex: 1; background: transparent; border: none; color: #fff; outline: none; font-size: 0.9rem;">
+                <button id="btn-post-gratitude" style="background: var(--accent-lavender); border: none; padding: 10px 20px; border-radius: 12px; color: #000; font-weight: 700; cursor: pointer;">공유</button>
+            </div>
+
+            <div id="gratitude-feed" class="gratitude-list">
+                <!-- Feed items will be injected here -->
+            </div>
+        </section>
+
+        <!-- 5. GUARDIAN HUB SCREEN -->
+        <section id="guardian-screen" class="screen">
+            <div style="padding: 10px 0 30px;">
+                <h2 style="font-family: var(--font-display); font-size: 1.8rem;">내 가족 안심 연결</h2>
+                <p style="color: rgba(255,255,255,0.4); font-size: 0.8rem;">나를 지탱해주는 든든한 보호자</p>
+            </div>
+
+            <div class="glass-card" style="border-left: 4px solid var(--accent-lavender);">
+                <h3 style="font-size: 1.1rem; margin-bottom: 8px;">보호자 초대하기</h3>
+                <p style="font-size: 0.8rem; color: rgba(255,255,255,0.5); margin-bottom: 20px;">카카오톡으로 공유하여 가족을 초대하세요.</p>
+                <button class="btn-primary" id="btn-invite-guardian" style="border-radius: 14px;">카카오톡 공유하기</button>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <h4 style="margin-bottom: 12px; font-size: 1rem; opacity: 0.8;">연결된 보호자</h4>
+                <div id="guardian-list">
+                    <p style="font-size: 0.8rem; color: rgba(255,255,255,0.3); text-align: center; margin-top: 30px;">아직 연결된 보호자가 없습니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Global Navigation -->
+        <nav id="nav-v3">
+            <a href="#" class="nav-btn active" data-screen="dashboard">
+                <span class="icon">💊</span>
+                <span>복약</span>
+            </a>
+            <a href="#" class="nav-btn" data-screen="community">
+                <span class="icon">✨</span>
+                <span>감사</span>
+            </a>
+            <a href="#" class="nav-btn" data-screen="guardian">
+                <span class="icon">🛡️</span>
+                <span>보호자</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- SDKs -->
+    <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.1.0/kakao.min.js" crossorigin="anonymous"></script>
+
+    <!-- Scripts: Firebase & Logic -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
+        import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, limit, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDpnPJnErnrTloHk3HFrsXHORUMvAiOq5w",
+            authDomain: "pill-sajangnim.firebaseapp.com",
+            projectId: "pill-sajangnim",
+            storageBucket: "pill-sajangnim.firebasestorage.app",
+            messagingSenderId: "648268791992",
+            appId: "1:648268791992:web:41a92580aa1a58ae6bb44d"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let currentUser = null;
+        let authMethod = null; // 'google' or 'kakao'
+        let medications = [
+            { id: '1', name: '혈압약 (기본)', time: '08:00', taken: false },
+            { id: '2', name: '영양제 (기본)', time: '13:00', taken: false },
+            { id: '3', name: '항생제 (기본)', time: '19:00', taken: false }
+        ];
+
+        // Screen Navigation
+        function navigateTo(screenId) {
+            console.log(`Navigating to: ${screenId}`);
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            const target = document.getElementById(`${screenId}-screen`);
+            if (target) target.classList.add('active');
+            
+            const nav = document.getElementById('nav-v3');
+            if (['dashboard', 'community', 'guardian'].includes(screenId)) {
+                nav.style.display = 'flex';
+                updateNavUI(screenId);
+            } else {
+                nav.style.display = 'none';
+            }
+        }
+
+        function updateNavUI(screenId) {
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.screen === screenId);
+            });
+        }
+
+        // --- AUTH LOGIC (CRITICAL FIX) ---
+
+        // 1. Google Login
+        async function loginWithGoogle() {
+            try {
+                const provider = new GoogleAuthProvider();
+                const result = await signInWithPopup(auth, provider);
+                handleAuthSuccess(result.user, 'google');
+            } catch (err) {
+                console.error("Google login failed:", err);
+                showLoginError(`Google 로그인 실패: ${err.message}`);
+            }
+        }
+
+        // 2. Kakao Login
+        async function loginWithKakao() {
+            if (!window.Kakao) {
+                showLoginError("카카오 SDK가 로드되지 않았습니다.");
+                return;
+            }
+            if (!Kakao.isInitialized()) Kakao.init('378387c805534e113c68d0c246933822');
+            
+            Kakao.Auth.login({
+                success: function(authObj) {
+                    Kakao.API.request({
+                        url: '/v2/user/me',
+                        success: function(res) {
+                            const kakaoUser = {
+                                uid: `kakao:${res.id}`,
+                                displayName: res.kakao_account.profile.nickname,
+                                email: res.kakao_account.email || `${res.id}@kakao.user`,
+                                photoURL: res.kakao_account.profile.thumbnail_image_url
+                            };
+                            handleAuthSuccess(kakaoUser, 'kakao');
+                        },
+                        fail: function(err) {
+                            showLoginError("카카오 사용자 정보 요청 실패");
+                        }
+                    });
+                },
+                fail: function(err) {
+                    showLoginError("카카오 인증 실패");
+                }
+            });
+        }
+
+        function handleAuthSuccess(user, method) {
+            console.log("Auth Success:", user, method);
+            currentUser = user;
+            authMethod = method;
+            localStorage.setItem('yakmate_user', JSON.stringify({ user, method }));
+            
+            document.getElementById('user-name').innerText = `반가워요, ${user.displayName}님`;
+            syncData();
+            initCommunity();
+            navigateTo('dashboard');
+        }
+
+        function showLoginError(msg) {
+            const err = document.getElementById('login-error-msg');
+            err.innerText = msg;
+            err.style.display = 'block';
+        }
+
+        async function logout() {
+            if (authMethod === 'google') await signOut(auth);
+            localStorage.removeItem('yakmate_user');
+            currentUser = null;
+            authMethod = null;
+            navigateTo('login');
+        }
+
+        // --- DATA LOGIC ---
+
+        async function syncData() {
+            if (!currentUser) return;
+            const docId = currentUser.uid;
+            const userRef = doc(db, "users", docId);
+            
+            try {
+                const snap = await getDoc(userRef);
+                if (snap.exists()) {
+                    const data = snap.data();
+                    if (data.medications) medications = data.medications;
+                } else {
+                    await setDoc(userRef, { 
+                        name: currentUser.displayName, 
+                        email: currentUser.email,
+                        authMethod: authMethod,
+                        medications: medications 
+                    });
+                }
+                renderDashboard();
+            } catch (err) {
+                console.error("Data sync failed:", err);
+            }
+        }
+
+        async function saveMedications() {
+            if (!currentUser) return;
+            await updateDoc(doc(db, "users", currentUser.uid), { medications });
+        }
+
+        function renderDashboard() {
+            const list = document.getElementById('med-list');
+            list.innerHTML = '';
+            let takenCount = 0;
+
+            medications.forEach(med => {
+                const item = document.createElement('div');
+                item.className = 'glass-card';
+                item.style.padding = '18px';
+                item.style.marginBottom = '12px';
+                item.style.display = 'flex';
+                item.style.justifyContent = 'space-between';
+                item.style.alignItems = 'center';
+                if (med.taken) item.style.opacity = '0.5';
+
+                item.innerHTML = `
+                    <div>
+                        <p style="font-size: 0.7rem; color: rgba(255,255,255,0.4);">${med.time}</p>
+                        <h5 style="font-size: 1rem;">${med.name}</h5>
+                    </div>
+                    <div style="width: 28px; height: 28px; border-radius: 50%; border: 2px solid ${med.taken ? 'var(--accent-lavender)' : 'rgba(255,255,255,0.1)'}; background: ${med.taken ? 'var(--accent-lavender)' : 'transparent'};"></div>
+                `;
+
+                item.onclick = async () => {
+                    med.taken = !med.taken;
+                    renderDashboard();
+                    await saveMedications();
+                };
+
+                list.appendChild(item);
+                if (med.taken) takenCount++;
+            });
+
+            const percent = (takenCount / medications.length) * 100;
+            document.getElementById('progress-percent').innerText = `${Math.round(percent)}%`;
+            document.getElementById('pill-summary').innerText = `${takenCount} / ${medications.length} 완료`;
+            document.getElementById('progress-circle').style.strokeDashoffset = 283 - (283 * percent / 100);
+        }
+
+        // --- COMMUNITY ---
+        function initCommunity() {
+            const feed = document.getElementById('gratitude-feed');
+            const q = query(collection(db, "gratitude"), orderBy("createdAt", "desc"), limit(30));
+            
+            onSnapshot(q, (snapshot) => {
+                feed.innerHTML = '';
+                snapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const item = document.createElement('div');
+                    item.className = 'gratitude-item';
+                    item.innerHTML = `
+                        <p style="font-size: 0.7rem; color: var(--accent-lavender); font-weight: 700; margin-bottom: 4px;">@${data.userName || '치유자'}</p>
+                        <p style="font-size: 0.95rem; line-height: 1.5;">${data.text}</p>
+                    `;
+                    feed.appendChild(item);
+                });
+            });
+        }
+
+        async function postGratitude() {
+            const input = document.getElementById('input-gratitude');
+            const text = input.value.trim();
+            if (!text || !currentUser) return;
+
+            await addDoc(collection(db, "gratitude"), {
+                uid: currentUser.uid,
+                userName: currentUser.displayName,
+                text: text,
+                createdAt: new Date()
+            });
+            input.value = '';
+        }
+
+        // --- INIT ---
+        window.onload = () => {
+            // Check Local Session
+            const saved = localStorage.getItem('yakmate_user');
+            if (saved) {
+                const { user, method } = JSON.parse(saved);
+                handleAuthSuccess(user, method);
+            } else {
+                onAuthStateChanged(auth, (user) => {
+                    if (user) handleAuthSuccess(user, 'google');
+                    else navigateTo('login');
+                });
+            }
+
+            // Bind Events
+            document.getElementById('btn-google-login').onclick = loginWithGoogle;
+            document.getElementById('btn-kakao-login').onclick = loginWithKakao;
+            document.getElementById('btn-logout').onclick = logout;
+            document.getElementById('btn-post-gratitude').onclick = postGratitude;
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.onclick = (e) => {
+                    e.preventDefault();
+                    navigateTo(btn.dataset.screen);
+                };
+            });
+        };
+    </script>
+</body>
+</html>
