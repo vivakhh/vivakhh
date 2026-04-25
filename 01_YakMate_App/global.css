@@ -36,3 +36,28 @@ body { font-family:'Manrope','Noto Sans KR',sans-serif; background:var(--bg-main
 input,select,textarea { background:var(--bg-float); border:1px solid var(--border); color:var(--on-card); border-radius:16px; padding:16px; font-family:inherit; font-size:16px; outline:none; width:100%; }
 input:focus { border-color:var(--primary); }
 ::placeholder { color:var(--text-dim); }
+
+/* NAV BAR GLOBAL */
+.nav-bar {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(29,32,38,0.92);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 32px;
+    padding: 10px 8px;
+    display: flex;
+    flex-direction: row;
+    z-index: 9999;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+    width: calc(100% - 48px);
+    max-width: 480px;
+    justify-content: space-around;
+}
+body.light-mode .nav-bar {
+    background: rgba(255,255,255,0.95);
+    border: 1px solid rgba(0,0,0,0.08);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+}
