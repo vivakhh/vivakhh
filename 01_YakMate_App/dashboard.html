@@ -332,7 +332,15 @@ body.light-mode .nav-item {
                 const storedUser = localStorage.getItem('yakmate_user');
                 if (storedUser) user = JSON.parse(storedUser);
             }
-            if (!user) { const g = { uid: 'guest_' + Math.random().toString(36).substr(2,9), displayName: '사장님', isGuest: true }; localStorage.setItem('yakmate_user', JSON.stringify(g)); user = g; }
+            if (!user) {
+  // 기존 게스트 데이터 전부 삭제
+  Object.keys(localStorage).forEach(k => {
+    if (k.startsWith('yakmate_guest_data_')) localStorage.removeItem(k);
+  });
+  const g = { uid: 'guest_' + Math.random().toString(36).substr(2,9), displayName: '사장님', isGuest: true };
+  localStorage.setItem('yakmate_user', JSON.stringify(g));
+  user = g;
+}
             
             const name = user.displayName || '사장님';
             document.getElementById('user-name').textContent = name + '님 ✨';
