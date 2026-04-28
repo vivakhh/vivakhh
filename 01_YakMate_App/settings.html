@@ -293,7 +293,7 @@ body.light-mode .nav-item {
         <div class="section-title">앱 정보</div>
         <div class="setting-row">
             <span class="setting-label">현재 버전</span>
-            <span style="color:var(--primary); font-weight:800">Premium v1.2.0</span>
+            <span id="version-badge" style="color:var(--primary); font-weight:800">Premium v1.2.0</span>
         </div>
         <div class="menu-item" onclick="window.open('terms.html', '_blank')">
             <div class="menu-left"><span class="menu-label">이용약관</span></div>
@@ -355,24 +355,6 @@ onAuthStateChanged(auth,(u)=>{
     avatar.textContent=name[0].toUpperCase();
   }
 });
-
-
-const _u = JSON.parse(localStorage.getItem('yakmate_user') || '{}');
-if (_u.isGuest) {
-  document.getElementById('logout-btn').textContent = '로그인하기';
-  document.getElementById('logout-btn').style.background = 'var(--primary,#c9a96e)';
-  document.getElementById('logout-btn').style.color = '#fff';
-  document.querySelector('[style*="Premium"]') && (document.querySelector('[style*="Premium"]').textContent = 'v1.2.0');
-}
-
-
-const _u = JSON.parse(localStorage.getItem('yakmate_user') || '{}');
-if (_u.isGuest) {
-  document.getElementById('logout-btn').textContent = '로그인하기';
-  document.getElementById('logout-btn').style.background = 'var(--primary,#c9a96e)';
-  document.getElementById('logout-btn').style.color = '#fff';
-  document.querySelector('[style*="Premium"]') && (document.querySelector('[style*="Premium"]').textContent = 'v1.2.0');
-}
 
 document.getElementById('logout-btn').addEventListener('click',async()=>{
   if(_u.isGuest){localStorage.removeItem('yakmate_user');window.location.href='./index.html?login=true';return;}
@@ -464,6 +446,22 @@ document.getElementById('toggle-pill').addEventListener('change', async (e) => {
         }
     }
 });
+</script>
+
+<script>
+(function() {
+  var u = JSON.parse(localStorage.getItem('yakmate_user') || '{}');
+  if (!u.isGuest) return;
+  window.addEventListener('load', function() {
+    var btn = document.getElementById('logout-btn');
+    if (btn) {
+      btn.textContent = '로그인하기';
+      btn.setAttribute('style', 'background:var(--primary)!important;color:#1a1a1a!important;border:none!important;width:100%;padding:18px;border-radius:16px;font-size:16px;font-weight:700;cursor:pointer;');
+    }
+    var badge = document.getElementById('version-badge');
+    if (badge) badge.textContent = 'v1.2.0';
+  });
+})();
 </script>
 </body>
 </html>

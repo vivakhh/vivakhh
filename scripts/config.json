@@ -5,11 +5,12 @@
     "affiliate_id": "YOUR_AFFILIATE_ID"
   },
   "tistory": {
-    "blog_name": "YOUR_BLOG_NAME",
-    "url": "https://YOUR_BLOG_NAME.tistory.com"
+    "blog_name": "essay7027",
+    "url": "https://essay7027.tistory.com"
   },
   "ai": {
-    "model": "gemini-1.5-pro"
+    "model": "gemini-1.5-pro",
+    "gemini_api_key": ""
   },
   "schedule": {
     "times": ["09:00", "14:00", "19:00"]

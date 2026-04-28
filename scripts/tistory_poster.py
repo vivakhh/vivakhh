@@ -32,8 +32,11 @@ class TistoryPoster:
             print(f"Session saved to {self.state_file}")
             await browser.close()
 
-    async def post_article(self, title, content_html, tags=None):
-        """Posts an article to Tistory using the saved session."""
+    async def post_article(self, title, content_html, tags=None, publish_date=None, publish_time_str=None):
+        """
+        Posts an article to Tistory using the saved session.
+        If publish_date (YYYY-MM-DD) and publish_time_str (HH:MM) are provided, it schedules the post.
+        """
         if not os.path.exists(self.state_file):
             print(f"Error: {self.state_file} not found. Run save_session() first.")
             return False
@@ -60,32 +63,51 @@ class TistoryPoster:
                 await page.fill('textarea.textarea_tit', title)
                 
                 print("Entering content...")
-                # Tistory Editor uses an iframe for the rich text editor
-                # We can switch to HTML mode to inject content
+                # Tistory Editor uses TinyMCE
+                # We can inject the HTML content directly using the TinyMCE Javascript API
                 
-                # Click the mode switch button (기본모드 -> HTML)
-                await page.click('button.btn_mode')
-                await page.click('div.layer_mode button:has-text("HTML")')
+                # Escape backticks and standard quotes for JS evaluation
+                safe_html = content_html.replace('`', '\\`').replace('$', '\\$')
+                await page.evaluate(f"tinymce.activeEditor.setContent(`{safe_html}`)")
                 
-                # Wait for HTML editor textarea
-                await page.wait_for_selector('textarea.textarea_html')
-                await page.fill('textarea.textarea_html', content_html)
+                # Trigger React state update by interacting with the iframe directly
+                frame = page.frame(name="editor-tistory_ifr")
+                if frame:
+                    await frame.click('body')
+                    await page.keyboard.press('End')
+                    await page.keyboard.press('Space')
+                    await page.keyboard.press('Backspace')
                 
                 if tags:
                     print("Entering tags...")
                     tag_str = ", ".join(tags)
-                    await page.fill('input.inp_tag', tag_str)
+                    await page.fill('input#tagText', tag_str)
                     await page.keyboard.press('Enter')
                 
                 print("Publishing...")
                 # Click the '완료' (Complete) button at the bottom
-                await page.click('button.btn_post')
+                await page.click('button#publish-layer-btn')
                 
-                # Wait for the publish layer
-                await page.wait_for_selector('div.layer_post')
+                # Wait for the publish layer to appear
+                await page.wait_for_timeout(2000)
                 
-                # Click '공개 발행' (Public Publish)
-                await page.click('button.btn_publish')
+                if publish_date and publish_time_str:
+                    print(f"Scheduling post for {publish_date} {publish_time_str}...")
+                    # Click the '예약' (Schedule) text/radio
+                    await page.get_by_text("예약", exact=True).click()
+                    
+                    # Wait a moment for date/time inputs to become active
+                    await page.wait_for_timeout(500)
+                    
+                    # Fill in date and time using their classes
+                    await page.fill('input.inp_date', publish_date)
+                    await page.fill('input.inp_time', publish_time_str)
+                    
+                    # Click '예약 발행' (Schedule Publish)
+                    await page.get_by_text("예약 발행", exact=True).click()
+                else:
+                    # Click '공개 발행' (Public Publish)
+                    await page.get_by_text("공개 발행", exact=True).click()
                 
                 # Wait for redirect after posting
                 await page.wait_for_navigation(wait_until="networkidle")
