@@ -306,6 +306,8 @@ onAuthStateChanged(auth,async(u)=>{
       const d=snap.data();
       document.getElementById('total-count').textContent=(d.totalPosts||0).toLocaleString();
       document.getElementById('member-count').textContent=(d.totalMembers||0).toLocaleString()+'명의 사장님과 함께합니다';
+    }else{
+      document.getElementById('member-count').textContent='0명의 사장님과 함께합니다';
     }
   });
 
