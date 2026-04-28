@@ -3,14 +3,11 @@
     {
       "site": "yakmate-app",
       "public": "01_YakMate_App",
+      "cleanUrls": true,
       "ignore": [
         "firebase.json",
         "**/.*",
         "**/node_modules/**",
-        "02_Alpha_Engine/**",
-        "03_Empire_Blog/**",
-        "04_Scripts_Vault/**",
-        "99_Archive/**",
         "*.zip",
         "*.sh"
       ]
