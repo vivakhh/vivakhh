@@ -3,13 +3,6 @@
     {
       "site": "yakmate-app",
       "public": "01_YakMate_App",
-      "cleanUrls": true,
-      "rewrites": [
-        {
-          "source": "**",
-          "destination": "/index.html"
-        }
-      ],
       "ignore": [
         "firebase.json",
         "**/.*",
