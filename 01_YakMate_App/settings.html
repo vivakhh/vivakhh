@@ -356,7 +356,27 @@ onAuthStateChanged(auth,(u)=>{
   }
 });
 
+
+const _u = JSON.parse(localStorage.getItem('yakmate_user') || '{}');
+if (_u.isGuest) {
+  document.getElementById('logout-btn').textContent = '로그인하기';
+  document.getElementById('logout-btn').style.background = 'var(--primary,#c9a96e)';
+  document.getElementById('logout-btn').style.color = '#fff';
+  document.querySelector('[style*="Premium"]') && (document.querySelector('[style*="Premium"]').textContent = 'v1.2.0');
+}
+
+
+const _u = JSON.parse(localStorage.getItem('yakmate_user') || '{}');
+if (_u.isGuest) {
+  document.getElementById('logout-btn').textContent = '로그인하기';
+  document.getElementById('logout-btn').style.background = 'var(--primary,#c9a96e)';
+  document.getElementById('logout-btn').style.color = '#fff';
+  document.querySelector('[style*="Premium"]') && (document.querySelector('[style*="Premium"]').textContent = 'v1.2.0');
+}
+
 document.getElementById('logout-btn').addEventListener('click',async()=>{
+  if(_u.isGuest){localStorage.removeItem('yakmate_user');window.location.href='./index.html?login=true';return;}
+  if(_u.isGuest){localStorage.removeItem('yakmate_user');window.location.href='./index.html?login=true';return;}
   if(!confirm('로그아웃 하시겠어요?'))return;
   await signOut(auth);
   localStorage.removeItem('yakmate_user');
