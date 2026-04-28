@@ -309,6 +309,8 @@ onAuthStateChanged(auth,async(u)=>{
     }else{
       document.getElementById('member-count').textContent='0명의 사장님과 함께합니다';
     }
+  },err=>{
+    document.getElementById('member-count').textContent='0명의 사장님과 함께합니다';
   });
 
   const q=query(collection(db,'community_posts'),orderBy('postNum','desc'),limit(20));
