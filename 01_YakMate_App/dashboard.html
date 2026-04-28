@@ -332,7 +332,7 @@ body.light-mode .nav-item {
                 const storedUser = localStorage.getItem('yakmate_user');
                 if (storedUser) user = JSON.parse(storedUser);
             }
-            if (!user) { window.location.href = './index.html'; return; }
+            if (!user) { const g = { uid: 'guest_' + Math.random().toString(36).substr(2,9), displayName: '사장님', isGuest: true }; localStorage.setItem('yakmate_user', JSON.stringify(g)); user = g; }
             
             const name = user.displayName || '사장님';
             document.getElementById('user-name').textContent = name + '님 ✨';

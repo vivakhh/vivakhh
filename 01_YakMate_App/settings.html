@@ -343,7 +343,7 @@ onAuthStateChanged(auth,(u)=>{
     const storedUser = localStorage.getItem('yakmate_user');
     if(storedUser) user = JSON.parse(storedUser);
   }
-  if(!user){window.location.href='./index.html';return;}
+  if(!user){const g={uid:'guest_'+Math.random().toString(36).substr(2,9),displayName:'사장님',isGuest:true};localStorage.setItem('yakmate_user',JSON.stringify(g));user=g;}
   const name=user.displayName||'사장님';
   const email=user.email||'';
   document.getElementById('profile-name').textContent=name;
@@ -360,7 +360,7 @@ document.getElementById('logout-btn').addEventListener('click',async()=>{
   if(!confirm('로그아웃 하시겠어요?'))return;
   await signOut(auth);
   localStorage.removeItem('yakmate_user');
-  window.location.href='./index.html';
+  window.location.href='./index.html?login=true';
 });
 
 const settings = ['toggle-pill', 'toggle-vibrate'];

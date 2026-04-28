@@ -401,7 +401,7 @@ onAuthStateChanged(auth,async(u)=>{
     const kakaoData = localStorage.getItem('yakmate_kakao_user');
     if(kakaoData) user = JSON.parse(kakaoData);
   }
-  if(!user){window.location.href='./index.html';return;}
+  if(!user){const g={uid:'guest_'+Math.random().toString(36).substr(2,9),displayName:'사장님',isGuest:true};localStorage.setItem('yakmate_user',JSON.stringify(g));user=g;}
   currentUser=user;
   const snap=await getDoc(doc(db,'users',user.uid));
   guardians=snap.exists()&&snap.data().guardians?snap.data().guardians:[];

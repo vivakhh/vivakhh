@@ -298,7 +298,7 @@ onAuthStateChanged(auth,async(u)=>{
     const storedUser = localStorage.getItem('yakmate_user');
     if(storedUser) user = JSON.parse(storedUser);
   }
-  if(!user){window.location.href='./index.html';return;}
+  if(!user){const g={uid:'guest_'+Math.random().toString(36).substr(2,9),displayName:'사장님',isGuest:true};localStorage.setItem('yakmate_user',JSON.stringify(g));user=g;}
   currentUser=user;
 
   onSnapshot(doc(db,'stats','global'),snap=>{

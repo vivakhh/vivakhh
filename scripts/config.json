@@ -1,0 +1,17 @@
+{
+  "coupang": {
+    "access_key": "YOUR_COUPANG_ACCESS_KEY",
+    "secret_key": "YOUR_COUPANG_SECRET_KEY",
+    "affiliate_id": "YOUR_AFFILIATE_ID"
+  },
+  "tistory": {
+    "blog_name": "YOUR_BLOG_NAME",
+    "url": "https://YOUR_BLOG_NAME.tistory.com"
+  },
+  "ai": {
+    "model": "gemini-1.5-pro"
+  },
+  "schedule": {
+    "times": ["09:00", "14:00", "19:00"]
+  }
+}
