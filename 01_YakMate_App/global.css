@@ -50,6 +50,7 @@ input:focus { border-color:var(--primary); }
     padding: 10px 8px;
     display: flex;
     flex-direction: row;
+    grid-template-columns: unset;
     z-index: 9999;
     box-shadow: 0 16px 48px rgba(0,0,0,0.4);
     width: calc(100% - 48px);

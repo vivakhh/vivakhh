@@ -190,30 +190,7 @@
         }
     </style>
 
-    <style>
-    .nav-item {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 4px;
-        color: rgba(225,226,235,0.4);
-        text-decoration: none;
-        padding: 8px 12px;
-        border-radius: 20px;
-        transition: all 0.3s;
-        flex: 1;
-    }
-    body.light-mode .nav-item {
-        color: rgba(26,29,35,0.4);
-    }
-    .nav-item.active {
-        color: #D4AF37;
-        background: rgba(212,175,55,0.1);
-    }
-    .nav-icon { font-size: 22px; }
-    .nav-label { font-size: 10px; font-weight: 700;  letter-spacing: 0.5px; }
-    </style>
+    
 
 
 
@@ -369,7 +346,7 @@ window.sendSMS = () => {
 </script>
 
 
-    <nav class="nav-bar" style="position:fixed!important;bottom:24px!important;left:50%!important;transform:translateX(-50%)!important;border-radius:32px!important;background:rgba(29,32,38,0.92)!important;display:flex!important;flex-direction:row!important;width:calc(100% - 48px)!important;max-width:480px!important;z-index:9999!important;padding:10px 8px!important;backdrop-filter:blur(20px)!important;justify-content:space-around!important;">
+    <nav class="nav-bar">
         <a href="dashboard.html" class="nav-item">
             <span class="material-icons-round">home</span>
             <span>HOME</span>
@@ -387,41 +364,5 @@ window.sendSMS = () => {
             <span>CENTER</span>
         </a>
     </nav>
-<style>/* NAV OVERRIDE */
-.nav-bar {
-    position: fixed !important;
-    bottom: 24px !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    background: rgba(29,32,38,0.92) !important;
-    backdrop-filter: blur(20px) !important;
-    border: 1px solid rgba(255,255,255,0.08) !important;
-    border-radius: 32px !important;
-    padding: 10px 8px !important;
-    display: flex !important;
-    flex-direction: row !important;
-    z-index: 9999 !important;
-    box-shadow: 0 16px 48px rgba(0,0,0,0.4) !important;
-    width: calc(100% - 48px) !important;
-    max-width: 480px !important;
-    justify-content: space-around !important;
-    grid-template-columns: unset !important;
-}
-body.light-mode .nav-bar {
-    background: rgba(255,255,255,0.95) !important;
-    border: 1px solid rgba(0,0,0,0.08) !important;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.12) !important;
-}
-.nav-item {
-    color: rgba(225,226,235,0.4) !important;
-}
-body.light-mode .nav-item {
-    color: rgba(26,29,35,0.4) !important;
-}
-.nav-item.active {
-    color: #D4AF37 !important;
-    background: rgba(212,175,55,0.1) !important;
-}
-</style>
 </body>
 </html>
