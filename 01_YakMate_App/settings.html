@@ -357,8 +357,8 @@ onAuthStateChanged(auth,(u)=>{
 });
 
 document.getElementById('logout-btn').addEventListener('click',async()=>{
-  if(_u.isGuest){localStorage.removeItem('yakmate_user');window.location.href='./index.html?login=true';return;}
-  if(_u.isGuest){localStorage.removeItem('yakmate_user');window.location.href='./index.html?login=true';return;}
+  const _uu=JSON.parse(localStorage.getItem('yakmate_user')||'{}');
+  if(_uu.isGuest){localStorage.removeItem('yakmate_user');window.location.href='/';return;}
   if(!confirm('로그아웃 하시겠어요?'))return;
   await signOut(auth);
   localStorage.removeItem('yakmate_user');
