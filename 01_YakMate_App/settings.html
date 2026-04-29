@@ -463,5 +463,29 @@ document.getElementById('toggle-pill').addEventListener('change', async (e) => {
   });
 })();
 </script>
+<script>
+window.addEventListener('load', function() {
+  var u = JSON.parse(localStorage.getItem('yakmate_user') || '{}');
+  if (!u.isGuest) return;
+
+  // 버튼 텍스트 + 스타일
+  var btn = document.getElementById('logout-btn');
+  if (btn) {
+    btn.textContent = '로그인하기';
+    btn.style.cssText += 'background:var(--primary)!important;color:#1a1a1a!important;border:none!important;';
+
+    // 클릭 시 로그인 화면으로 이동
+    btn.addEventListener('click', function(e) {
+      e.stopImmediatePropagation();
+      localStorage.removeItem('yakmate_user');
+      window.location.href = '/';
+    }, true);
+  }
+
+  // Premium 배지 제거
+  var badge = document.getElementById('version-badge');
+  if (badge) badge.textContent = 'v1.2.0';
+});
+</script>
 </body>
 </html>
