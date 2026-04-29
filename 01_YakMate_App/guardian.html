@@ -69,7 +69,7 @@
             font-size: 13px;
             font-weight: 800;
             color: var(--text-dim);
-            text-transform: uppercase;
+            
             letter-spacing: 1.5px;
             margin-bottom: 16px;
             display: flex;
@@ -146,7 +146,7 @@
             color: var(--primary);
             margin-bottom: 8px;
             display: block;
-            text-transform: uppercase;
+            
         }
 
         .input-field {
@@ -234,7 +234,7 @@
         background: rgba(212,175,55,0.1);
     }
     .nav-icon { font-size: 22px; }
-    .nav-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+    .nav-label { font-size: 10px; font-weight: 700;  letter-spacing: 0.5px; }
     </style>
 
 <style>/* NAV OVERRIDE */
@@ -301,14 +301,14 @@ body.light-mode .nav-bar {
     </div>
 
     <div class="kakao-section">
-        <div style="font-size: 16px; font-weight: 800; color: #FEE500; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+        <div style="font-size: 16px; font-weight: 800; color: var(--primary); margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
             <span class="material-icons-round">sms</span>
             가족에게 직접 알리기
         </div>
         <p style="font-size:13px; color:var(--text-dim); margin-bottom:24px; line-height:1.6; font-weight: 600;">
             가족에게 현재 복용 상태를 문자(SMS)로 즉시 보낼 수 있습니다.
         </p>
-        <button onclick="sendSMS()" style="width:100%; padding:18px; background:#1a73e8; color:#fff; border:none; border-radius:18px; font-size:15px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; box-shadow: 0 10px 20px rgba(26,115,232,0.2);">
+        <button onclick="sendSMS()" style="width:100%; padding:18px; background:var(--primary); color:#fff; border:none; border-radius:18px; font-size:15px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; box-shadow: 0 10px 20px rgba(26,115,232,0.2);">
             <span class="material-icons-round">send</span>
             문자로 알리기 (SMS)
         </button>
@@ -317,19 +317,19 @@ body.light-mode .nav-bar {
     <nav class="nav-bar">
         <a href="dashboard.html" class="nav-item">
             <span class="material-icons-round">home</span>
-            <span>Home</span>
+            <span>홈</span>
         </a>
         <a href="stats.html" class="nav-item">
             <span class="material-icons-round">analytics</span>
-            <span>Health Promise</span>
+            <span>헬스 프로미스</span>
         </a>
         <a href="community.html" class="nav-item">
             <span class="material-icons-round">forum</span>
-            <span>Story Nudge</span>
+            <span>스토리 넛지</span>
         </a>
         <a href="settings.html" class="nav-item active">
             <span class="material-icons-round">person</span>
-            <span>My Center</span>
+            <span>마이센터</span>
         </a>
     </nav>
 
