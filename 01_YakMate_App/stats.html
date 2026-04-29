@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+<style>
+/* 페이지 로드 전 콘텐츠 숨기기 */
+body { visibility: hidden; }
+</style>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+    document.body.style.visibility = 'visible';
+});
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YakMate | Health Promise</title>
@@ -215,32 +224,6 @@ body.light-mode .nav-bar {
     background: rgba(255,255,255,0.95) !important;
     border: 1px solid rgba(0,0,0,0.08) !important;
     box-shadow: 0 8px 32px rgba(0,0,0,0.12) !important;
-}
-</style>
-<style>
-.tab-pill { opacity: 0; transition: none !important; }
-#tab-week, #tab-month, #tab-year { min-height: 500px; }
-</style>
-<script>
-window.addEventListener('DOMContentLoaded', function(){
-    setTimeout(function(){
-        var pill = document.querySelector('.tab-pill');
-        if(pill){
-            pill.style.transition = 'transform 0.3s ease';
-            pill.style.opacity = '1';
-        }
-    }, 150);
-});
-</script>
-<style>
-#tab-week, #tab-month, #tab-year { min-height: 500px; }
-.loading {
-    min-height: 500px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
 }
 </style>
 </head>
