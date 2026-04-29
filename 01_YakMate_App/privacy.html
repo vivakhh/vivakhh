@@ -4,65 +4,29 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>YakMate | 개인정보 처리방침</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Space+Grotesk:wght@500;700&family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
 <link rel="stylesheet" href="global.css">
 <style>
-body{background:var(--bg-main,#f5f5f0);font-family:sans-serif;margin:0;padding:0}
-.page-header{display:flex;align-items:center;gap:12px;padding:20px}
-.back-btn{background:var(--bg-card,#fff);border:none;border-radius:12px;width:40px;height:40px;cursor:pointer;font-size:18px}
-.page-title{font-size:20px;font-weight:700;color:var(--on-card,#111)}
-.content{padding:0 20px 40px}
-.section-card{background:var(--bg-card,#fff);border-radius:16px;padding:20px;margin-bottom:16px}
-.section-title{font-size:14px;font-weight:700;color:var(--primary,#c9a96e);margin-bottom:10px}
-p{font-size:13px;line-height:1.8;color:var(--on-bg,#555);margin:0}
+body { background: var(--bg-main); font-family: 'Noto Sans KR', sans-serif; margin: 0; padding: 0; }
+.page-wrap { max-width: 480px; margin: 0 auto; padding: 0 0 40px; }
+.page-header { display: flex; align-items: center; gap: 12px; padding: 20px 20px 12px; }
+.back-btn { background: var(--bg-card); border: none; border-radius: 12px; width: 40px; height: 40px; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center; color: var(--on-card); }
+.page-title { font-size: 20px; font-weight: 700; color: var(--on-bg); }
+.section-card { background: var(--bg-card); border-radius: 16px; padding: 20px; margin: 0 16px 12px; }
+.section-title { font-size: 14px; font-weight: 700; color: var(--primary); margin-bottom: 10px; }
+.section-body { font-size: 13px; line-height: 1.8; color: var(--on-card); margin: 0; }
 </style>
-
-<script>
-(function() {
-  var theme = localStorage.getItem('yakmate_theme') || 'dark';
-  if (theme === 'light') {
-    document.documentElement.style.setProperty('--bg-main', '#f5f5f0');
-    document.documentElement.style.setProperty('--card-bg', '#ffffff');
-    document.documentElement.style.setProperty('--text-main', '#1a1a1a');
-    document.documentElement.style.setProperty('--text-sub', '#555555');
-    document.body.style.background = '#f5f5f0';
-    document.body.style.color = '#1a1a1a';
-  } else {
-    document.documentElement.style.setProperty('--bg-main', '#1a1a2e');
-    document.documentElement.style.setProperty('--card-bg', '#2a2a3e');
-    document.documentElement.style.setProperty('--text-main', '#f0f0f0');
-    document.documentElement.style.setProperty('--text-sub', '#aaaaaa');
-    document.body.style.background = '#1a1a2e';
-    document.body.style.color = '#f0f0f0';
-  }
-})();
-</script>
 </head>
 <body>
+<div class="page-wrap">
 <div class="page-header">
   <button class="back-btn" onclick="history.back()">&#8592;</button>
   <div class="page-title">개인정보 처리방침</div>
 </div>
-<div class="content">
-  <div class="section-card">
-    <div class="section-title">수집하는 개인정보</div>
-    <p>이름(닉네임), 이메일(소셜 로그인 시), 약 복용 정보, 건강 루틴 데이터를 수집합니다.</p>
-  </div>
-  <div class="section-card">
-    <div class="section-title">이용 목적</div>
-    <p>약 복용 알림, 건강 루틴 관리, 가족 케어 기능 운영에만 사용됩니다. 제3자에게 제공하지 않습니다.</p>
-  </div>
-  <div class="section-card">
-    <div class="section-title">보관 기간</div>
-    <p>회원 탈퇴 시 즉시 삭제됩니다. 게스트 데이터는 기기 로컬 저장소에만 보관되며 서버에 전송되지 않습니다.</p>
-  </div>
-  <div class="section-card">
-    <div class="section-title">이용자의 권리</div>
-    <p>언제든지 개인정보 열람, 수정, 삭제를 요청할 수 있습니다. 앱 내 로그아웃 또는 계정 삭제로 모든 데이터를 제거할 수 있습니다.</p>
-  </div>
-  <div class="section-card">
-    <div class="section-title">문의</div>
-    <p>&#128231; hello.redavid@gmail.com</p>
-  </div>
-</div>
-</body>
-</html>
+<div class="section-card"><div class="section-title">수집하는 개인정보</div><p class="section-body">이름(닉네임), 이메일(소셜 로그인 시), 약 복용 정보, 건강 루틴 데이터를 수집합니다.</p></div>
+<div class="section-card"><div class="section-title">이용 목적</div><p class="section-body">약 복용 알림, 건강 루틴 관리, 가족 케어 기능 운영에만 사용됩니다. 제3자에게 제공하지 않습니다.</p></div>
+<div class="section-card"><div class="section-title">보관 기간</div><p class="section-body">회원 탈퇴 시 즉시 삭제됩니다. 게스트 데이터는 기기 로컬 저장소에만 보관되며 서버에 전송되지 않습니다.</p></div>
+<div class="section-card"><div class="section-title">이용자의 권리</div><p class="section-body">언제든지 개인정보 열람, 수정, 삭제를 요청할 수 있습니다. 앱 내 로그아웃 또는 계정 삭제로 모든 데이터를 제거할 수 있습니다.</p></div>
+<div class="section-card"><div class="section-title">문의</div><p class="section-body">&#128231; hello.redavid@gmail.com</p></div>
+</div></body></html>
