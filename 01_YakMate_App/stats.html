@@ -217,6 +217,17 @@ body.light-mode .nav-bar {
     box-shadow: 0 8px 32px rgba(0,0,0,0.12) !important;
 }
 </style>
+<style>
+.tab-pill { transition: none !important; }
+</style>
+<script>
+window.addEventListener('DOMContentLoaded', function(){
+    setTimeout(function(){
+        var pill = document.querySelector('.tab-pill');
+        if(pill) pill.style.transition = 'transform 0.3s ease';
+    }, 100);
+});
+</script>
 </head>
 <body>
 <script>
