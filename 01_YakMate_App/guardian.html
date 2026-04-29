@@ -293,25 +293,6 @@ body.light-mode nav.nav-bar {
         </button>
     </div>
 
-    <nav class="nav-bar">
-        <a href="dashboard.html" class="nav-item">
-            <span class="material-icons-round">home</span>
-            <span>HOME</span>
-        </a>
-        <a href="stats.html" class="nav-item">
-            <span class="material-icons-round">analytics</span>
-            <span>HEALTH</span>
-        </a>
-        <a href="community.html" class="nav-item">
-            <span class="material-icons-round">forum</span>
-            <span>STORY</span>
-        </a>
-        <a href="settings.html" class="nav-item active">
-            <span class="material-icons-round">person</span>
-            <span>CENTER</span>
-        </a>
-    </nav>
-
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
 import{getAuth,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
@@ -409,5 +390,25 @@ window.sendSMS = () => {
   window.location.href='sms:'+phone+'?body='+encodeURIComponent(msg);
 };
 </script>
+
+
+    <nav class="nav-bar">
+        <a href="dashboard.html" class="nav-item">
+            <span class="material-icons-round">home</span>
+            <span>HOME</span>
+        </a>
+        <a href="stats.html" class="nav-item">
+            <span class="material-icons-round">analytics</span>
+            <span>HEALTH</span>
+        </a>
+        <a href="community.html" class="nav-item">
+            <span class="material-icons-round">forum</span>
+            <span>STORY</span>
+        </a>
+        <a href="settings.html" class="nav-item active">
+            <span class="material-icons-round">person</span>
+            <span>CENTER</span>
+        </a>
+    </nav>
 </body>
 </html>
