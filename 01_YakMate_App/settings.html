@@ -473,13 +473,6 @@ window.addEventListener('load', function() {
   if (btn) {
     btn.textContent = '로그인하기';
     btn.style.cssText += 'background:var(--primary)!important;color:#1a1a1a!important;border:none!important;';
-
-    // 클릭 시 로그인 화면으로 이동
-    btn.addEventListener('click', function(e) {
-      e.stopImmediatePropagation();
-      localStorage.removeItem('yakmate_user');
-      window.location.href = '/';
-    }, true);
   }
 
   // Premium 배지 제거
