@@ -1,14 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<script>
-(function(){
-  if(localStorage.getItem('yakmate_theme')==='light')
-    document.documentElement.classList.add('light-mode');
-})();
-</script>
-
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YakMate | Health Promise</title>
@@ -191,6 +183,12 @@ body.light-mode .nav-item {
 </style>
 </head>
 <body>
+<script>
+  (function() {
+    const theme = localStorage.getItem('yakmate_theme');
+    if (theme === 'light') document.body.classList.add('light-mode');
+  })();
+</script>
 
 <div class="header">
     <div class="header-title">
