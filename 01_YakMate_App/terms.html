@@ -18,7 +18,12 @@ body { background: var(--bg-main); font-family: 'Noto Sans KR', sans-serif; marg
 .section-body { font-size: 13px; line-height: 1.8; color: var(--on-card); margin: 0; }
 </style>
 </head>
-<body>
+<body><script>
+(function() {
+  var theme = localStorage.getItem('yakmate_theme') || 'dark';
+  if (theme === 'light') document.body.classList.add('light-mode');
+})();
+</script>
 <div class="page-wrap">
 <div class="page-header">
   <button class="back-btn" onclick="history.back()">&#8592;</button>
