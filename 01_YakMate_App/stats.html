@@ -218,9 +218,11 @@ body.light-mode .nav-bar {
 }
 </style>
 <style>
-.summary-card { min-height: 140px; }
-.bar-item { min-height: 32px; }
-#week-summary, #month-summary, #year-summary { min-height: 160px; }
+/* 탭 폰트 고정 - FOUT 방지 */
+.tab-btn { font-size: 14px !important; font-weight: 600 !important; }
+/* 콘텐츠 영역 높이 고정 - 흔들림 방지 */
+#tab-week, #tab-month, #tab-year { min-height: 400px; }
+.loading { min-height: 400px; display: flex; align-items: center; justify-content: center; }
 </style>
 </head>
 <body>
