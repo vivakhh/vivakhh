@@ -13,7 +13,7 @@
     --success: #4CAF50;
     --danger: #FF6E84;
 }
-body.light-mode {
+html.light-mode {
     --primary: #B8860B;
     --primary-glow: rgba(184,134,11,0.2);
     --bg-main: #F8F9FA;
@@ -57,7 +57,7 @@ input:focus { border-color:var(--primary); }
     max-width: 480px;
     justify-content: space-around;
 }
-body.light-mode .nav-bar {
+html.light-mode .nav-bar {
     background: rgba(255,255,255,0.95);
     border: 1px solid rgba(0,0,0,0.08);
     box-shadow: 0 8px 32px rgba(0,0,0,0.12);
