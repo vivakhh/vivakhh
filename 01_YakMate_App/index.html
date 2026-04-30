@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="global.css">
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
-body { font-family: "Manrope","Noto Sans KR",sans-serif; background: var(--bg-main); color: var(--on-bg); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; overflow-y: auto; }
+body { font-family: "Manrope","Noto Sans KR",sans-serif; background: var(--bg-main); color: var(--on-bg); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; overflow: hidden; }
 .bg-glow { position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 600px; height: 600px; background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%); z-index: -1; filter: blur(80px); }
 .container { width: 100%; max-width: 400px; position: relative; }
 .logo-area { text-align: center; margin-bottom: 56px; }
@@ -56,105 +56,49 @@ body { font-family: "Manrope","Noto Sans KR",sans-serif; background: var(--bg-ma
   </div>
   <p class="footer-note">사장님의 건강한 내일을 위해<br>언제나 곁에 있겠습니다.</p>
 </div>
-<script src="https://t1.kakaocdn.net/kakao_js_sdk/1.43.1/kakao.min.js" crossorigin="anonymous"></script>
+<script src="https://t1.kakaocdn.net/kakao_js_sdk/2.1.0/kakao.min.js" crossorigin="anonymous"></script>
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
 import{getAuth,onAuthStateChanged,GoogleAuthProvider,signInWithPopup,signInWithRedirect,getRedirectResult}from"https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
 const config={apiKey:"AIzaSyDpnPJnErnrTloHk3HFrsXHORUMvAiOq5w",authDomain:"pill-sajangnim.firebaseapp.com",projectId:"pill-sajangnim",storageBucket:"pill-sajangnim.firebasestorage.app",messagingSenderId:"648268791992",appId:"1:648268791992:web:41a92580aa1a58ae6bb44d"};
 const app=initializeApp(config);
 const auth=getAuth(app);
-window.kakaoInit = false;
-try {
-  if (typeof Kakao !== 'undefined') {
-    Kakao.init("378387c805534e113c68d0c246933822");
-    window.kakaoInit = Kakao.isInitialized();
-  }
-} catch (e) { console.error("Kakao Init Error:", e); }
-
-onAuthStateChanged(auth, u => {
-  if (u) {
-    const user = {
-      uid: u.uid,
-      displayName: u.displayName || '사장님',
-      photoURL: u.photoURL || '',
-      email: u.email || '',
-      isGuest: false
-    };
-    localStorage.setItem("yakmate_user", JSON.stringify(user));
-    window.location.href = "./dashboard.html";
-  }
+window.addEventListener("load",()=>{try{if(!Kakao.isInitialized())Kakao.init("378387c805534e113c68d0c246933822");}catch(e){}});
+onAuthStateChanged(auth,u=>{if(u)window.location.href="./dashboard.html";});
+getRedirectResult(auth).then(r=>{if(r?.user)window.location.href="./dashboard.html";}).catch(()=>{});
+document.getElementById("btn-guest").addEventListener("click",()=>{
+  const g={uid:"guest_"+Math.random().toString(36).substr(2,9),displayName:"사장님",isGuest:true};
+  localStorage.setItem("yakmate_user",JSON.stringify(g));
+  window.location.href="./dashboard.html";
 });
-getRedirectResult(auth).then(r => {
-  if (r?.user) {
-    const u = r.user;
-    const user = {
-      uid: u.uid,
-      displayName: u.displayName || '사장님',
-      photoURL: u.photoURL || '',
-      email: u.email || '',
-      isGuest: false
-    };
-    localStorage.setItem("yakmate_user", JSON.stringify(user));
-    window.location.href = "./dashboard.html";
-  }
-}).catch(e => { console.error("Redirect Result Error:", e); });
-
-document.getElementById("btn-guest").addEventListener("click", () => {
-  const g = { uid: "guest_" + Math.random().toString(36).substr(2, 9), displayName: "사장님", isGuest: true };
-  localStorage.setItem("yakmate_user", JSON.stringify(g));
-  window.location.href = "./dashboard.html";
+document.getElementById("btn-google").addEventListener("click",async()=>{
+  try{await signInWithPopup(auth,new GoogleAuthProvider());}
+  catch(e){if(e.code==="auth/popup-blocked")await signInWithRedirect(auth,new GoogleAuthProvider());}
 });
-document.getElementById("btn-google").addEventListener("click", async () => {
-  try { await signInWithPopup(auth, new GoogleAuthProvider()); }
-  catch (e) { 
-    if (e.code === "auth/popup-blocked") await signInWithRedirect(auth, new GoogleAuthProvider());
-    else alert("Google Login Error: " + e.message);
-  }
+document.getElementById("btn-kakao").addEventListener("click",()=>{
+  Kakao.Auth.authorize({redirectUri:"https://ownslp.kr/"});
 });
-document.getElementById("btn-kakao").addEventListener("click", () => {
-  const errorBox = document.getElementById("error-msg");
-  
-  if (!window.kakaoInit) {
-    errorBox.innerHTML = `[카카오 초기화 실패]<br>카카오 JavaScript 키가 틀렸거나 네트워크 오류입니다.<br><span style="font-size:11px;opacity:0.7">Key: 378387c805534e113c68d0c246933822</span>`;
-    errorBox.classList.add("active");
-    return;
-  }
-  
-  errorBox.classList.remove("active");
-  
-  try {
-    Kakao.Auth.login({
-      success: function(authObj) {
-        Kakao.API.request({
-          url: "/v2/user/me",
-          success: function(data) {
-            const user = {
-              uid: "kakao_" + data.id,
-              displayName: data.kakao_account?.profile?.nickname || "사장님",
-              photoURL: data.kakao_account?.profile?.profile_image_url || "",
-              isGuest: false
-            };
-            localStorage.setItem("yakmate_user", JSON.stringify(user));
-            window.location.href = "./dashboard.html";
-          },
-          fail: function(err) { 
-            errorBox.innerHTML = `[카카오 프로필 에러]<br>${err.msg || JSON.stringify(err)}`;
-            errorBox.classList.add("active");
-          }
-        });
+const kakaoCode=new URLSearchParams(window.location.search).get("code");
+if(kakaoCode){
+  try{
+    Kakao.API.request({
+      url:"/v2/user/me",
+      success:function(data){
+        const user={
+          uid:"kakao_"+data.id,
+          displayName:data.kakao_account?.profile?.nickname||"사장님",
+          photoURL:data.kakao_account?.profile?.profile_image_url||"",
+          isGuest:false
+        };
+        localStorage.setItem("yakmate_user",JSON.stringify(user));
+        window.location.href="./dashboard.html";
       },
-      fail: function(err) { 
-        let errMsg = err.error_description || err.msg || JSON.stringify(err);
-        if(err.error === 'access_denied') errMsg = "사용자가 로그인을 취소했거나 권한을 거부했습니다.";
-        errorBox.innerHTML = `🚨 <b>[카카오 로그인 에러]</b><br><span style="color:#fff">${err.error || 'ERROR'}</span><br>${errMsg}<br><br><span style="font-size:11px;opacity:0.8">이 메시지를 캡쳐해서 사장님AI에게 알려주세요!</span>`;
-        errorBox.classList.add("active");
+      fail:function(){
+        window.location.href="./dashboard.html";
       }
     });
-  } catch (e) {
-    errorBox.innerHTML = `🚨 <b>[시스템 에러]</b><br>팝업이 차단되었거나 알 수 없는 오류입니다.<br>${e.message}`;
-    errorBox.classList.add("active");
-  }
-});
+  }catch(e){window.location.href="./dashboard.html";}
+}
 </script>
 </body>
 </html>
