@@ -336,12 +336,26 @@ document.getElementById('add-btn')?.addEventListener('click',async()=>{
   location.reload();
 });
 
-window.sendSMS = () => {
+window.sendSMS = async () => {
   if(guardians.length===0){alert('먼저 가족을 등록해주세요!');return;}
   const userName=currentUser.displayName||'사장님';
   const msg='[약메이트 알림] 💊\n'+userName+'님이 오늘 약을 아직 안 챙기신 것 같아요.\n잠깐 확인해주시겠어요? 😊\n\n- 약메이트 가족 케어';
-  const phone=guardians[0].phone.replace(/-/g,'');
-  window.location.href='sms:'+phone+'?body='+encodeURIComponent(msg);
+  
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: '약메이트 가족 케어',
+        text: msg,
+      });
+      console.log('공유 성공');
+    } catch (err) {
+      console.log('공유 취소 또는 실패:', err);
+    }
+  } else {
+    // Web Share API를 지원하지 않는 브라우저(PC 등)를 위한 대비책: SMS로 대체
+    const phone=guardians[0].phone.replace(/-/g,'');
+    window.location.href='sms:'+phone+'?body='+encodeURIComponent(msg);
+  }
 };
 </script>
 
