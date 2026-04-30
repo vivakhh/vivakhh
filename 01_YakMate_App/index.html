@@ -76,7 +76,7 @@ document.getElementById("btn-google").addEventListener("click",async()=>{
   catch(e){if(e.code==="auth/popup-blocked")await signInWithRedirect(auth,new GoogleAuthProvider());}
 });
 document.getElementById("btn-kakao").addEventListener("click",()=>{
-  Kakao.Auth.authorize({redirectUri:"https://ownslp.kr/"});
+  Kakao.Auth.authorize({redirectUri:"https://ownslp.kr/",scope:"profile_nickname,profile_image"});
 });
 const kakaoCode=new URLSearchParams(window.location.search).get("code");
 if(kakaoCode){
