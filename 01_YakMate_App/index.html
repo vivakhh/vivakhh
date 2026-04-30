@@ -85,6 +85,14 @@ if(kakaoCode){
   localStorage.setItem("yakmate_user",JSON.stringify(user));
   window.location.href="./dashboard.html";
 }
+
+const kakaoCode=new URLSearchParams(window.location.search).get("code");
+if(kakaoCode){
+  const user={uid:"kakao_user",displayName:"카카오 사용자",photoURL:"",isKakao:true,isGuest:false};
+  localStorage.setItem("yakmate_user",JSON.stringify(user));
+  history.replaceState({},"","/");
+  window.location.href="./dashboard.html";
+}
 </script>
 </body>
 </html>
