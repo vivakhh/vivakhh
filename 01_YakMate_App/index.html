@@ -81,24 +81,9 @@ document.getElementById("btn-kakao").addEventListener("click",()=>{
 });
 const kakaoCode=new URLSearchParams(window.location.search).get("code");
 if(kakaoCode){
-  try{
-    Kakao.API.request({
-      url:"/v2/user/me",
-      success:function(data){
-        const user={
-          uid:"kakao_"+data.id,
-          displayName:data.kakao_account?.profile?.nickname||"사장님",
-          photoURL:data.kakao_account?.profile?.profile_image_url||"",
-          isGuest:false
-        };
-        localStorage.setItem("yakmate_user",JSON.stringify(user));
-        window.location.href="./dashboard.html";
-      },
-      fail:function(){
-        window.location.href="./dashboard.html";
-      }
-    });
-  }catch(e){window.location.href="./dashboard.html";}
+  const user={uid:"kakao_user",displayName:"카카오 사용자",photoURL:"",isKakao:true,isGuest:false};
+  localStorage.setItem("yakmate_user",JSON.stringify(user));
+  window.location.href="./dashboard.html";
 }
 </script>
 </body>
