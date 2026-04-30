@@ -247,11 +247,36 @@
                 </div>
                 <div style="background:rgba(212,175,55,0.1); border:1px solid var(--primary); padding:4px 10px; border-radius:10px; display:flex; align-items:center; gap:4px;">
                     <span class="material-icons-round" style="font-size:14px; color:var(--primary)">group</span>
-                    <span style="font-size:11px; font-weight:800; color:var(--primary)">가족 2명 연결됨</span>
+                    <span style="font-size:11px; font-weight:800; color:var(--primary)">가족 케어 활성</span>
                 </div>
             </div>
             <div class="family-msg" id="family-message" style="font-size: 17px; font-weight: 700; color: var(--on-card); line-height: 1.6;">"사장님, 오늘 약속 잊지 않으셨죠? 항상 응원하고 있어요 ❤️"</div>
         </div>
+
+        <div class="section-title">
+            <span>오늘의 Health Promise 💊</span>
+        </div>
+        <div id="med-list"></div>
+    </div>
+
+    <!-- Overdue Family Alert Popup -->
+    <div id="overdue-popup" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:3000; align-items:center; justify-content:center; backdrop-filter:blur(5px);">
+        <div style="background:var(--bg-card); padding:32px 24px; border-radius:32px; width:85%; max-width:400px; text-align:center; box-shadow: 0 20px 40px rgba(0,0,0,0.3); border:1px solid var(--border); animation: fadeInUp 0.4s ease-out;">
+            <div style="font-size:48px; margin-bottom:16px;">🚨</div>
+            <h3 style="font-size:20px; font-weight:800; color:var(--on-bg); margin-bottom:12px;">약 드실 시간이 지났어요!</h3>
+            <p style="font-size:14px; color:var(--text-dim); margin-bottom:24px; line-height:1.6;" id="overdue-desc">
+                [혈압약]을 아직 안 드신 것 같아요.<br>가족에게 알림을 보낼까요?
+            </p>
+            <div style="display:flex; flex-direction:column; gap:12px;">
+                <button onclick="triggerFamilyShare()" style="padding:16px; border-radius:16px; border:none; background:var(--primary); color:#fff; font-weight:800; font-size:15px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;">
+                    <span class="material-icons-round">share</span> 가족에게 알리기 (공유)
+                </button>
+                <button onclick="closeOverduePopup()" style="padding:16px; border-radius:16px; border:1px solid var(--border); background:var(--bg-float); color:var(--text-dim); font-weight:700; font-size:15px; cursor:pointer;">
+                    제가 지금 챙겨 먹을게요
+                </button>
+            </div>
+        </div>
+    </div>
 
         <div class="section-title" style="margin-top: 40px; margin-bottom: 20px; display:flex; justify-content:space-between; align-items:center;">
             <div style="display:flex; align-items:center; gap:10px;">
@@ -467,6 +492,30 @@
 
         setHealthTip();
 
+        // Overdue Popup Logic
+        let currentOverdueMed = null;
+        function showOverduePopup(med) {
+            currentOverdueMed = med;
+            document.getElementById('overdue-desc').innerHTML = `<strong>[${med.name}]</strong>을(를) 아직 안 드신 것 같아요.<br>가족에게 상태를 알릴까요?`;
+            document.getElementById('overdue-popup').style.display = 'flex';
+        }
+        function closeOverduePopup() {
+            document.getElementById('overdue-popup').style.display = 'none';
+        }
+        async function triggerFamilyShare() {
+            const userName = JSON.parse(localStorage.getItem('yakmate_user'))?.displayName || '사장님';
+            const medName = currentOverdueMed ? currentOverdueMed.name : '약';
+            const msg = `[약메이트 긴급 알림] 🚨\n${userName}님이 아직 [${medName}]을(를) 챙기지 않으셨어요!\n가족의 따뜻한 확인 전화가 필요합니다. 💛`;
+            
+            if (navigator.share) {
+                try { await navigator.share({ title: '약메이트 알림', text: msg }); } 
+                catch (e) { console.log(e); }
+            } else {
+                alert('공유 기능이 지원되지 않는 기기입니다. 직접 연락해주세요.');
+            }
+            closeOverduePopup();
+        }
+
         // 실시간 복약 알람 로직
         let lastAlarmedTime = '';
         function checkAlarms() {
@@ -477,41 +526,49 @@
 
             if (currentTime === lastAlarmedTime) return; // 같은 분에는 한 번만 알람
 
-            meds.forEach(med => {
-                if (!med.taken && med.time === currentTime) {
-                    // 알람 발생
-                    const isSound = localStorage.getItem('toggle-sound') !== 'false';
-                    const isVibrate = localStorage.getItem('toggle-vibrate') !== 'false';
+                if (!med.taken) {
+                    // 정시 알람
+                    if (med.time === currentTime) {
+                        const isSound = localStorage.getItem('toggle-sound') !== 'false';
+                        const isVibrate = localStorage.getItem('toggle-vibrate') !== 'false';
 
-                    new Notification("약 드실 시간이에요! 💊", {
-                        body: `지금 [${med.name}] 복용 시간입니다. 잊지 마세요!`,
-                        icon: "favicon.ico",
-                        requireInteraction: true,
-                        silent: !isSound // 시스템 알림 소리 제어
-                    });
+                        new Notification("약 드실 시간이에요! 💊", {
+                            body: `지금 [${med.name}] 복용 시간입니다. 잊지 마세요!`,
+                            icon: "favicon.ico",
+                            requireInteraction: true,
+                            silent: !isSound
+                        });
 
-                    // 진동 발생
-                    if (isVibrate && "vibrate" in navigator) {
-                        navigator.vibrate([200, 100, 200, 100, 200]);
+                        if (isVibrate && "vibrate" in navigator) navigator.vibrate([200, 100, 200, 100, 200]);
+
+                        if (isSound) {
+                            const selectedSound = localStorage.getItem('yakmate_alarm_sound') || 'nature';
+                            const soundUrls = {
+                                nature: 'https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3',
+                                bell: 'https://assets.mixkit.co/active_storage/sfx/600/600-preview.mp3',
+                                piano: 'https://assets.mixkit.co/active_storage/sfx/951/951-preview.mp3'
+                            };
+                            const audio = new Audio(soundUrls[selectedSound] || soundUrls.nature);
+                            audio.play().catch(e => console.log("Audio play failed:", e));
+                        }
+                    } else {
+                        // 미복용 지연 체크 로직 (사장님 철학: 약을 안먹고 시간이 지나면 가족에게 알림)
+                        const medDate = new Date();
+                        const [hours, minutes] = med.time.split(':');
+                        medDate.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+                        const diffMinutes = Math.floor((now - medDate) / (1000 * 60));
+                        
+                        // 현재 테스트를 위해 1분 지각 시 바로 팝업이 뜨도록 설정했습니다. (실제 서비스에서는 60으로 변경)
+                        if (diffMinutes >= 1 && diffMinutes < 120 && !med.familyPrompted) {
+                            med.familyPrompted = true; // 팝업 무한 반복 방지
+                            showOverduePopup(med);
+                        }
                     }
-
-                    // 커스텀 소리 재생 (시스템 소리와 별도로 확실한 알람을 위해)
-                    if (isSound) {
-                        const selectedSound = localStorage.getItem('yakmate_alarm_sound') || 'nature';
-                        const soundUrls = {
-                            nature: 'https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3',
-                            bell: 'https://assets.mixkit.co/active_storage/sfx/600/600-preview.mp3',
-                            piano: 'https://assets.mixkit.co/active_storage/sfx/951/951-preview.mp3'
-                        };
-                        const audio = new Audio(soundUrls[selectedSound] || soundUrls.nature);
-                        audio.play().catch(e => console.log("Audio play failed:", e));
-                    }
-
-                    lastAlarmedTime = currentTime;
                 }
             });
+            lastAlarmedTime = currentTime;
         }
-        setInterval(checkAlarms, 30000); // 30초마다 체크
+        setInterval(checkAlarms, 10000); // 테스트를 위해 10초마다 빠르게 체크
     </script>
 </body>
 
