@@ -63,7 +63,14 @@ import{getAuth,onAuthStateChanged,GoogleAuthProvider,signInWithPopup,signInWithR
 const config={apiKey:"AIzaSyDpnPJnErnrTloHk3HFrsXHORUMvAiOq5w",authDomain:"pill-sajangnim.firebaseapp.com",projectId:"pill-sajangnim",storageBucket:"pill-sajangnim.firebasestorage.app",messagingSenderId:"648268791992",appId:"1:648268791992:web:41a92580aa1a58ae6bb44d"};
 const app=initializeApp(config);
 const auth=getAuth(app);
-window.addEventListener("load",()=>{try{if(!Kakao.isInitialized())Kakao.init("378387c805534e113c68d0c246933822");}catch(e){}});
+window.kakaoInit = false;
+try {
+  if (typeof Kakao !== 'undefined') {
+    Kakao.init("378387c805534e113c68d0c246933822");
+    window.kakaoInit = Kakao.isInitialized();
+  }
+} catch (e) { console.error("Kakao Init Error:", e); }
+
 onAuthStateChanged(auth, u => {
   if (u) {
     const user = {
@@ -90,7 +97,8 @@ getRedirectResult(auth).then(r => {
     localStorage.setItem("yakmate_user", JSON.stringify(user));
     window.location.href = "./dashboard.html";
   }
-}).catch(() => {});
+}).catch(e => { console.error("Redirect Result Error:", e); });
+
 document.getElementById("btn-guest").addEventListener("click", () => {
   const g = { uid: "guest_" + Math.random().toString(36).substr(2, 9), displayName: "사장님", isGuest: true };
   localStorage.setItem("yakmate_user", JSON.stringify(g));
@@ -98,9 +106,16 @@ document.getElementById("btn-guest").addEventListener("click", () => {
 });
 document.getElementById("btn-google").addEventListener("click", async () => {
   try { await signInWithPopup(auth, new GoogleAuthProvider()); }
-  catch (e) { if (e.code === "auth/popup-blocked") await signInWithRedirect(auth, new GoogleAuthProvider()); }
+  catch (e) { 
+    if (e.code === "auth/popup-blocked") await signInWithRedirect(auth, new GoogleAuthProvider());
+    else alert("Google Login Error: " + e.message);
+  }
 });
 document.getElementById("btn-kakao").addEventListener("click", () => {
+  if (!window.kakaoInit) {
+    alert("카카오 SDK가 초기화되지 않았습니다. 잠시 후 다시 시도해주세요.");
+    return;
+  }
   Kakao.Auth.login({
     success: function(authObj) {
       Kakao.API.request({
@@ -115,10 +130,10 @@ document.getElementById("btn-kakao").addEventListener("click", () => {
           localStorage.setItem("yakmate_user", JSON.stringify(user));
           window.location.href = "./dashboard.html";
         },
-        fail: function() { alert('카카오 정보 가져오기에 실패했습니다.'); }
+        fail: function(err) { alert('카카오 정보 가져오기 실패: ' + JSON.stringify(err)); }
       });
     },
-    fail: function(err) { console.error(err); }
+    fail: function(err) { alert('카카오 로그인 실패: ' + JSON.stringify(err)); }
   });
 });
 </script>
