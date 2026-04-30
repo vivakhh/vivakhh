@@ -80,18 +80,24 @@ document.getElementById("btn-kakao").addEventListener("click",()=>{
 });
 const kakaoCode=new URLSearchParams(window.location.search).get("code");
 if(kakaoCode){
-  fetch("https://kapi.kakao.com/v2/user/me",{
-    headers:{Authorization:"Bearer "+localStorage.getItem("kakao_access_token")}
-  }).then(r=>r.json()).then(data=>{
-    const user={
-      uid:"kakao_"+data.id,
-      displayName:data.kakao_account?.profile?.nickname||"사장님",
-      photoURL:data.kakao_account?.profile?.profile_image_url||"",
-      isGuest:false
-    };
-    localStorage.setItem("yakmate_user",JSON.stringify(user));
-    window.location.href="./dashboard.html";
-  }).catch(()=>window.location.href="./dashboard.html");
+  try{
+    Kakao.API.request({
+      url:"/v2/user/me",
+      success:function(data){
+        const user={
+          uid:"kakao_"+data.id,
+          displayName:data.kakao_account?.profile?.nickname||"사장님",
+          photoURL:data.kakao_account?.profile?.profile_image_url||"",
+          isGuest:false
+        };
+        localStorage.setItem("yakmate_user",JSON.stringify(user));
+        window.location.href="./dashboard.html";
+      },
+      fail:function(){
+        window.location.href="./dashboard.html";
+      }
+    });
+  }catch(e){window.location.href="./dashboard.html";}
 }
 </script>
 </body>
