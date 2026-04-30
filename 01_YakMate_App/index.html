@@ -64,8 +64,7 @@ const config={apiKey:"AIzaSyDpnPJnErnrTloHk3HFrsXHORUMvAiOq5w",authDomain:"pill-
 const app=initializeApp(config);
 const auth=getAuth(app);
 window.addEventListener("load",()=>{try{if(!Kakao.isInitialized())Kakao.init("378387c805534e113c68d0c246933822");}catch(e){}});
-const kakaoCodeCheck=new URLSearchParams(window.location.search).get("code");
-if(!kakaoCodeCheck){onAuthStateChanged(auth,u=>{if(u)window.location.href="./dashboard.html";});}
+onAuthStateChanged(auth,u=>{if(u)window.location.href="./dashboard.html";});
 getRedirectResult(auth).then(r=>{if(r?.user)window.location.href="./dashboard.html";}).catch(()=>{});
 document.getElementById("btn-guest").addEventListener("click",()=>{
   const g={uid:"guest_"+Math.random().toString(36).substr(2,9),displayName:"사장님",isGuest:true};
@@ -77,21 +76,28 @@ document.getElementById("btn-google").addEventListener("click",async()=>{
   catch(e){if(e.code==="auth/popup-blocked")await signInWithRedirect(auth,new GoogleAuthProvider());}
 });
 document.getElementById("btn-kakao").addEventListener("click",()=>{
-  Kakao.Auth.authorize({redirectUri:"https://ownslp.kr/",scope:"profile_nickname,profile_image"});
+  Kakao.Auth.authorize({redirectUri:"https://ownslp.kr/"});
 });
 const kakaoCode=new URLSearchParams(window.location.search).get("code");
 if(kakaoCode){
-  const user={uid:"kakao_user",displayName:"카카오 사용자",photoURL:"",isKakao:true,isGuest:false};
-  localStorage.setItem("yakmate_user",JSON.stringify(user));
-  window.location.href="./dashboard.html";
-}
-
-const kakaoCode=new URLSearchParams(window.location.search).get("code");
-if(kakaoCode){
-  const user={uid:"kakao_user",displayName:"카카오 사용자",photoURL:"",isKakao:true,isGuest:false};
-  localStorage.setItem("yakmate_user",JSON.stringify(user));
-  history.replaceState({},"","/");
-  window.location.href="./dashboard.html";
+  try{
+    Kakao.API.request({
+      url:"/v2/user/me",
+      success:function(data){
+        const user={
+          uid:"kakao_"+data.id,
+          displayName:data.kakao_account?.profile?.nickname||"사장님",
+          photoURL:data.kakao_account?.profile?.profile_image_url||"",
+          isGuest:false
+        };
+        localStorage.setItem("yakmate_user",JSON.stringify(user));
+        window.location.href="./dashboard.html";
+      },
+      fail:function(){
+        window.location.href="./dashboard.html";
+      }
+    });
+  }catch(e){window.location.href="./dashboard.html";}
 }
 </script>
 </body>
