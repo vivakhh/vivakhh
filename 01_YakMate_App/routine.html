@@ -186,7 +186,7 @@ onAuthStateChanged(auth, async user => {
         const kakaoData = localStorage.getItem('yakmate_kakao_user');
         if(kakaoData) u = JSON.parse(kakaoData);
     }
-    if(!u){ window.location.href='./index.html'; return; }
+    var storedUser = JSON.parse(localStorage.getItem('yakmate_user') || 'null'); if(!u && !storedUser){ window.location.href='./index.html'; return; } if(!u && storedUser) u = storedUser;
     currentUser = u;
     
     // 기본 루틴 불러오기

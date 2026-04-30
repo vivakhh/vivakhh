@@ -253,10 +253,12 @@
             <div class="family-msg" id="family-message" style="font-size: 17px; font-weight: 700; color: var(--on-card); line-height: 1.6;">"사장님, 오늘 약속 잊지 않으셨죠? 항상 응원하고 있어요 ❤️"</div>
         </div>
 
-        <div class="section-title">
-            <span>오늘의 Health Promise 💊</span>
+        <div style="background:var(--bg-card); border-radius:20px; padding:20px 20px 12px; margin-bottom:16px; box-shadow:var(--shadow);">
+            <div class="section-title" style="margin-bottom:12px;">
+                <span>오늘의 Health Promise 💊</span>
+            </div>
+            <div id="med-list"><p style="color:var(--on-bg); opacity:0.5; font-size:14px; text-align:center; padding:16px 0;">약을 추가하면 여기에 표시돼요 💊</p></div>
         </div>
-        <div id="med-list"></div>
     </div>
 
     <!-- Gentle Overdue Bottom Sheet -->
@@ -288,7 +290,7 @@
                 <span class="material-icons-round" style="color:var(--primary); font-size: 24px;">schedule</span>
                 <span style="font-size: 20px; font-weight: 800;">오늘의 건강 루틴</span>
             </div>
-            <button onclick="location.href='routine.html'" style="background: transparent; border: 1.5px solid var(--primary-container); color: var(--primary-container); padding: 8px 16px; border-radius: 12px; font-size: 12px; font-weight: 700; cursor: pointer;">변경하기</button>
+            <button onclick="(function(){ var u = JSON.parse(localStorage.getItem('yakmate_user')); if(u){ location.href='routine.html'; } else { alert('로그인이 필요해요 😊'); } })()" style="background: transparent; border: 1.5px solid var(--primary-container); color: var(--primary-container); padding: 8px 16px; border-radius: 12px; font-size: 12px; font-weight: 700; cursor: pointer;">변경하기</button>
         </div>
 
         <div class="med-list" id="med-list"></div>
@@ -349,7 +351,7 @@
             };
             const today = getKstDate();
 
-            if (user.isGuest) {
+            if (user.isGuest || user.isKakao) {
                 const guestData = localStorage.getItem(`yakmate_guest_data_${today}`);
                 if (guestData) {
                     meds = JSON.parse(guestData);
@@ -446,7 +448,7 @@
                     const now = new Date();
                     const offset = 9 * 60 * 60 * 1000;
                     const today = new Date(now.getTime() + offset).toISOString().split('T')[0];
-                    if (user.isGuest) {
+                    if (user.isGuest || user.isKakao) {
                         localStorage.setItem(`yakmate_guest_data_${today}`, JSON.stringify(meds));
                     } else {
                         await setDoc(doc(db, 'users', user.uid, 'daily', today), { meds, updatedAt: new Date() });
