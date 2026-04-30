@@ -64,7 +64,8 @@ const config={apiKey:"AIzaSyDpnPJnErnrTloHk3HFrsXHORUMvAiOq5w",authDomain:"pill-
 const app=initializeApp(config);
 const auth=getAuth(app);
 window.addEventListener("load",()=>{try{if(!Kakao.isInitialized())Kakao.init("378387c805534e113c68d0c246933822");}catch(e){}});
-onAuthStateChanged(auth,u=>{if(u)window.location.href="./dashboard.html";});
+const kakaoCodeCheck=new URLSearchParams(window.location.search).get("code");
+if(!kakaoCodeCheck){onAuthStateChanged(auth,u=>{if(u)window.location.href="./dashboard.html";});}
 getRedirectResult(auth).then(r=>{if(r?.user)window.location.href="./dashboard.html";}).catch(()=>{});
 document.getElementById("btn-guest").addEventListener("click",()=>{
   const g={uid:"guest_"+Math.random().toString(36).substr(2,9),displayName:"사장님",isGuest:true};
