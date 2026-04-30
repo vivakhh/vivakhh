@@ -188,6 +188,9 @@
             padding: 32px;
             margin: 0 24px 32px;
         }
+        .relation-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 24px; }
+        .relation-btn { padding: 12px 8px; border-radius: 16px; border: 1px solid var(--border); background: var(--bg-float); cursor: pointer; text-align: center; transition: 0.2s; font-size: 13px; font-weight: 700; color: var(--text-dim); }
+        .relation-btn.selected { border-color: var(--primary); background: rgba(212,175,55,0.1); color: var(--primary); }
     </style>
 
     
@@ -229,6 +232,19 @@
         <div class="input-group" style="margin-bottom: 24px;">
             <label class="input-label">전화번호</label>
             <input class="input-field" id="guardian-phone" placeholder="010-0000-0000" type="tel">
+        </div>
+        <div class="input-group" style="margin-bottom: 24px;">
+            <label class="input-label">관계</label>
+            <div class="relation-grid">
+                <button class="relation-btn" onclick="selectRelation(this, '아내')">👩 아내</button>
+                <button class="relation-btn" onclick="selectRelation(this, '남편')">👨 남편</button>
+                <button class="relation-btn" onclick="selectRelation(this, '자녀')">👦 자녀</button>
+                <button class="relation-btn" onclick="selectRelation(this, '부모님')">👴 부모님</button>
+                <button class="relation-btn" onclick="selectRelation(this, '형제')">🧑 형제</button>
+                <button class="relation-btn" onclick="selectRelation(this, '친구')">😊 친구</button>
+                <button class="relation-btn" onclick="selectRelation(this, '요양사')">👩‍⚕️ 요양사</button>
+                <button class="relation-btn" onclick="selectRelation(this, '기타')">👤 기타</button>
+            </div>
         </div>
         <button class="add-btn" id="add-btn">가족 추가하기</button>
     </div>
@@ -326,8 +342,9 @@ document.getElementById('add-btn')?.addEventListener('click',async()=>{
   const name=document.getElementById('guardian-name').value.trim();
   const phone=document.getElementById('guardian-phone').value.trim();
   if(!name||!phone){alert('이름과 전화번호를 입력해주세요!');return;}
+  if(!selectedRelation){alert('관계를 선택해주세요!');return;}
   if(guardians.length>=2){alert('최대 2명까지 가능합니다.');return;}
-  guardians.push({name,phone,relation:'가족'});
+  guardians.push({name,phone,relation:selectedRelation});
   const ref=doc(db,'users',currentUser.uid);
   const snap=await getDoc(ref);
   if(snap.exists()){await updateDoc(ref,{guardians});}
