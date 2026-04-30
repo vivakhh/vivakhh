@@ -64,41 +64,63 @@ const config={apiKey:"AIzaSyDpnPJnErnrTloHk3HFrsXHORUMvAiOq5w",authDomain:"pill-
 const app=initializeApp(config);
 const auth=getAuth(app);
 window.addEventListener("load",()=>{try{if(!Kakao.isInitialized())Kakao.init("378387c805534e113c68d0c246933822");}catch(e){}});
-onAuthStateChanged(auth,u=>{if(u)window.location.href="./dashboard.html";});
-getRedirectResult(auth).then(r=>{if(r?.user)window.location.href="./dashboard.html";}).catch(()=>{});
-document.getElementById("btn-guest").addEventListener("click",()=>{
-  const g={uid:"guest_"+Math.random().toString(36).substr(2,9),displayName:"사장님",isGuest:true};
-  localStorage.setItem("yakmate_user",JSON.stringify(g));
-  window.location.href="./dashboard.html";
+onAuthStateChanged(auth, u => {
+  if (u) {
+    const user = {
+      uid: u.uid,
+      displayName: u.displayName || '사장님',
+      photoURL: u.photoURL || '',
+      email: u.email || '',
+      isGuest: false
+    };
+    localStorage.setItem("yakmate_user", JSON.stringify(user));
+    window.location.href = "./dashboard.html";
+  }
 });
-document.getElementById("btn-google").addEventListener("click",async()=>{
-  try{await signInWithPopup(auth,new GoogleAuthProvider());}
-  catch(e){if(e.code==="auth/popup-blocked")await signInWithRedirect(auth,new GoogleAuthProvider());}
+getRedirectResult(auth).then(r => {
+  if (r?.user) {
+    const u = r.user;
+    const user = {
+      uid: u.uid,
+      displayName: u.displayName || '사장님',
+      photoURL: u.photoURL || '',
+      email: u.email || '',
+      isGuest: false
+    };
+    localStorage.setItem("yakmate_user", JSON.stringify(user));
+    window.location.href = "./dashboard.html";
+  }
+}).catch(() => {});
+document.getElementById("btn-guest").addEventListener("click", () => {
+  const g = { uid: "guest_" + Math.random().toString(36).substr(2, 9), displayName: "사장님", isGuest: true };
+  localStorage.setItem("yakmate_user", JSON.stringify(g));
+  window.location.href = "./dashboard.html";
 });
-document.getElementById("btn-kakao").addEventListener("click",()=>{
-  Kakao.Auth.authorize({redirectUri:"https://ownslp.kr/"});
+document.getElementById("btn-google").addEventListener("click", async () => {
+  try { await signInWithPopup(auth, new GoogleAuthProvider()); }
+  catch (e) { if (e.code === "auth/popup-blocked") await signInWithRedirect(auth, new GoogleAuthProvider()); }
 });
-const kakaoCode=new URLSearchParams(window.location.search).get("code");
-if(kakaoCode){
-  try{
-    Kakao.API.request({
-      url:"/v2/user/me",
-      success:function(data){
-        const user={
-          uid:"kakao_"+data.id,
-          displayName:data.kakao_account?.profile?.nickname||"사장님",
-          photoURL:data.kakao_account?.profile?.profile_image_url||"",
-          isGuest:false
-        };
-        localStorage.setItem("yakmate_user",JSON.stringify(user));
-        window.location.href="./dashboard.html";
-      },
-      fail:function(){
-        window.location.href="./dashboard.html";
-      }
-    });
-  }catch(e){window.location.href="./dashboard.html";}
-}
+document.getElementById("btn-kakao").addEventListener("click", () => {
+  Kakao.Auth.login({
+    success: function(authObj) {
+      Kakao.API.request({
+        url: "/v2/user/me",
+        success: function(data) {
+          const user = {
+            uid: "kakao_" + data.id,
+            displayName: data.kakao_account?.profile?.nickname || "사장님",
+            photoURL: data.kakao_account?.profile?.profile_image_url || "",
+            isGuest: false
+          };
+          localStorage.setItem("yakmate_user", JSON.stringify(user));
+          window.location.href = "./dashboard.html";
+        },
+        fail: function() { alert('카카오 정보 가져오기에 실패했습니다.'); }
+      });
+    },
+    fail: function(err) { console.error(err); }
+  });
+});
 </script>
 </body>
 </html>

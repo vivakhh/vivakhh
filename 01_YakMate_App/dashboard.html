@@ -191,50 +191,11 @@
   }
     </style>
 
-<style>/* NAV OVERRIDE */
-.nav-bar {
-    position: fixed !important;
-    bottom: 24px !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    background: rgba(29,32,38,0.92) !important;
-    backdrop-filter: blur(20px) !important;
-    border: 1px solid rgba(255,255,255,0.08) !important;
-    border-radius: 32px !important;
-    padding: 10px 8px !important;
-    display: flex !important;
-    flex-direction: row !important;
-    z-index: 9999 !important;
-    box-shadow: 0 16px 48px rgba(0,0,0,0.4) !important;
-    width: calc(100% - 48px) !important;
-    max-width: 480px !important;
-    justify-content: space-around !important;
-}
-body.light-mode .nav-bar {
-    background: rgba(255,255,255,0.95) !important;
-    border: 1px solid rgba(0,0,0,0.08) !important;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.12) !important;
-}
-.nav-item {
-    color: rgba(225,226,235,0.4) !important;
-}
-body.light-mode .nav-item {
-    color: rgba(26,29,35,0.4) !important;
-}
-.nav-item.active {
-    color: #D4AF37 !important;
-    background: rgba(212,175,55,0.1) !important;
-}
-</style>
+
 </head>
 
 <body>
-<script>
-(function(){
-  var u = localStorage.getItem('yakmate_user');
-  if(!u) window.location.href='./index.html';
-})();
-</script>
+
 
     <script>
         (function () {
@@ -338,16 +299,10 @@ body.light-mode .nav-item {
                 if (storedUser) user = JSON.parse(storedUser);
             }
             if (!user) {
-  // 기존 게스트 데이터 전부 삭제
-  Object.keys(localStorage).forEach(k => {
-    if (k.startsWith('yakmate_guest_data_')) localStorage.removeItem(k);
-  });
-  // 게스트 이전 데이터 초기화
-  Object.keys(localStorage).forEach(function(k){ if(k.startsWith('yakmate_guest_data_')) localStorage.removeItem(k); });
-  const g = { uid: 'guest_' + Math.random().toString(36).substr(2,9), displayName: '사장님', isGuest: true };
-  localStorage.setItem('yakmate_user', JSON.stringify(g));
-  user = g;
-}
+                // No user found, go to login
+                window.location.href = './index.html';
+                return;
+            }
             
             const name = user.displayName || '사장님';
             document.getElementById('user-name').textContent = name + '님 ✨';
