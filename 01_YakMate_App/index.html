@@ -65,165 +65,49 @@ const config={apiKey:"AIzaSyDpnPJnErnrTloHk3HFrsXHORUMvAiOq5w",authDomain:"pill-
 const app=initializeApp(config);
 const auth=getAuth(app);
 const db=getFirestore(app);
-
 window.addEventListener("load",()=>{try{if(!Kakao.isInitialized())Kakao.init("378387c805534e113c68d0c246933822");}catch(e){}});
-
-// Kakao redirect 처리 - 제일 먼저
 const kakaoCode=new URLSearchParams(window.location.search).get("code");
 if(kakaoCode){
-  // Firebase Anonymous로 로그인 → Firebase UID 받기
-  signInAnonymously(auth).then(async (result)=>{
-    const uid = result.user.uid;
-    const userRef = doc(db, 'users', uid);
-    const snap = await getDoc(userRef);
-    if(!snap.exists()){
-      await setDoc(userRef, {
-        uid, loginType:'kakao', displayName:'카카오 사용자',
-        joinDate: new Date(Date.now()+9*60*60*1000).toISOString().split('T')[0],
-        createdAt: new Date()
-      });
-    }
-    localStorage.setItem('yakmate_user', JSON.stringify({uid, displayName: snap.exists() ? snap.data().displayName : '카카오 사용자', loginType:'kakao', isKakao:true, isGuest:false}));
-    window.location.href='./dashboard.html';
-  }).catch(e=>{ console.error('Anonymous auth error:', e); });
-} else {
-  // Google 세션 확인 - Kakao/Guest localStorage 있으면 무시
-  onAuthStateChanged(auth, async (u)=>{
+  signInAnonymously(auth).then(async(result)=>{
+    const uid=result.user.uid;
+    const joinDate=new Date(Date.now()+9*60*60*1000).toISOString().split("T")[0];
+    const userRef=doc(db,"users",uid);
+    const snap=await getDoc(userRef);
+    if(!snap.exists()){await setDoc(userRef,{uid,loginType:"kakao",displayName:"카카오 사용자",joinDate,createdAt:new Date()});}
+    localStorage.setItem("yakmate_user",JSON.stringify({uid,displayName:"카카오 사용자",loginType:"kakao",isKakao:true,isGuest:false,joinDate}));
+    window.location.href="./dashboard.html";
+  }).catch(e=>{console.error("Anonymous error:",e);});
+}else{
+  onAuthStateChanged(auth,async(u)=>{
     if(u){
-      const stored = localStorage.getItem('yakmate_user');
-      const storedUser = stored ? JSON.parse(stored) : null;
-      if(!storedUser || (!storedUser.isKakao && !storedUser.isGuest)){
-        window.location.href='./dashboard.html';
+      const stored=localStorage.getItem("yakmate_user");
+      const storedUser=stored?JSON.parse(stored):null;
+      if(!storedUser||(!storedUser.isKakao&&!storedUser.isGuest)){
+        window.location.href="./dashboard.html";
       }
     }
   });
-  getRedirectResult(auth).then(r=>{if(r?.user)window.location.href='./dashboard.html';}).catch(()=>{});
+  getRedirectResult(auth).then(r=>{if(r?.user)window.location.href="./dashboard.html";}).catch(()=>{});
 }
-
-// 게스트 버튼
 document.getElementById("btn-guest").addEventListener("click",()=>{
-  const g={uid:"guest_"+Math.random().toString(36).substr(2,9),displayName:"사장님",isGuest:true,loginType:'guest',
-    joinDate: new Date(Date.now()+9*60*60*1000).toISOString().split('T')[0]};
+  const joinDate=new Date(Date.now()+9*60*60*1000).toISOString().split("T")[0];
+  const g={uid:"guest_"+Math.random().toString(36).substr(2,9),displayName:"사장님",isGuest:true,loginType:"guest",joinDate};
   localStorage.setItem("yakmate_user",JSON.stringify(g));
   window.location.href="./dashboard.html";
 });
-
-// Google 버튼
 document.getElementById("btn-google").addEventListener("click",async()=>{
-  localStorage.removeItem('yakmate_user');
+  localStorage.removeItem("yakmate_user");
   try{await signInWithPopup(auth,new GoogleAuthProvider());}
   catch(e){if(e.code==="auth/popup-blocked")await signInWithRedirect(auth,new GoogleAuthProvider());}
 });
-
-// 카카오 버튼
 document.getElementById("btn-kakao").addEventListener("click",async()=>{
-  localStorage.removeItem('yakmate_user');
+  localStorage.removeItem("yakmate_user");
   await signOut(auth);
   Kakao.Auth.authorize({redirectUri:"https://ownslp.kr/"});
 });
 </script>
-<script type="module">
-import{initializeApp}from"https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
-import{getAuth,onAuthStateChanged,GoogleAuthProvider,signInWithPopup,signInWithRedirect,getRedirectResult,signInAnonymously,signOut}from"https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
-import{getFirestore,doc,setDoc,getDoc}from"https://www.gstatic.com/firebasejs/9.17.2/firebase-firestore.js";
-const config={apiKey:"AIzaSyDpnPJnErnrTloHk3HFrsXHORUMvAiOq5w",authDomain:"pill-sajangnim.firebaseapp.com",projectId:"pill-sajangnim",storageBucket:"pill-sajangnim.firebasestorage.app",messagingSenderId:"648268791992",appId:"1:648268791992:web:41a92580aa1a58ae6bb44d"};
-const app=initializeApp(config);
-const auth=getAuth(app);
-const db=getFirestore(app);
 
-window.addEventListener("load",()=>{try{if(!Kakao.isInitialized())Kakao.init("378387c805534e113c68d0c246933822");}catch(e){}});
 
-// Kakao redirect 처리 - 제일 먼저
-const kakaoCode=new URLSearchParams(window.location.search).get("code");
-if(kakaoCode){
-  // Firebase Anonymous로 로그인 → Firebase UID 받기
-  signInAnonymously(auth).then(async (result)=>{
-    const uid = result.user.uid;
-    const userRef = doc(db, 'users', uid);
-    const snap = await getDoc(userRef);
-    if(!snap.exists()){
-      await setDoc(userRef, {
-        uid, loginType:'kakao', displayName:'카카오 사용자',
-        joinDate: new Date(Date.now()+9*60*60*1000).toISOString().split('T')[0],
-        createdAt: new Date()
-      });
-    }
-    localStorage.setItem('yakmate_user', JSON.stringify({uid, displayName: snap.exists() ? snap.data().displayName : '카카오 사용자', loginType:'kakao', isKakao:true, isGuest:false}));
-    window.location.href='./dashboard.html';
-  }).catch(e=>{ console.error('Anonymous auth error:', e); });
-} else {
-  // Google 세션 확인 - Kakao/Guest localStorage 있으면 무시
-  onAuthStateChanged(auth, async (u)=>{
-    if(u){
-      const stored = localStorage.getItem('yakmate_user');
-      const storedUser = stored ? JSON.parse(stored) : null;
-      if(!storedUser || (!storedUser.isKakao && !storedUser.isGuest)){
-        window.location.href='./dashboard.html';
-      }
-    }
-  });
-  getRedirectResult(auth).then(r=>{if(r?.user)window.location.href='./dashboard.html';}).catch(()=>{});
-}
 
-// 게스트 버튼
-document.getElementById("btn-guest").addEventListener("click",()=>{
-  const g={uid:"guest_"+Math.random().toString(36).substr(2,9),displayName:"사장님",isGuest:true,loginType:'guest',
-    joinDate: new Date(Date.now()+9*60*60*1000).toISOString().split('T')[0]};
-  localStorage.setItem("yakmate_user",JSON.stringify(g));
-  window.location.href="./dashboard.html";
-});
-
-// Google 버튼
-document.getElementById("btn-google").addEventListener("click",async()=>{
-  localStorage.removeItem('yakmate_user');
-  try{await signInWithPopup(auth,new GoogleAuthProvider());}
-  catch(e){if(e.code==="auth/popup-blocked")await signInWithRedirect(auth,new GoogleAuthProvider());}
-});
-
-// 카카오 버튼
-document.getElementById("btn-kakao").addEventListener("click",async()=>{
-  localStorage.removeItem('yakmate_user');
-  await signOut(auth);
-  Kakao.Auth.authorize({redirectUri:"https://ownslp.kr/"});
-});
-</script>
-<script type="module">
-import{initializeApp}from"https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
-import{getAuth,onAuthStateChanged,GoogleAuthProvider,signInWithPopup,signInWithRedirect,getRedirectResult}from"https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
-const config={apiKey:"AIzaSyDpnPJnErnrTloHk3HFrsXHORUMvAiOq5w",authDomain:"pill-sajangnim.firebaseapp.com",projectId:"pill-sajangnim",storageBucket:"pill-sajangnim.firebasestorage.app",messagingSenderId:"648268791992",appId:"1:648268791992:web:41a92580aa1a58ae6bb44d"};
-const app=initializeApp(config);
-const auth=getAuth(app);
-window.addEventListener("load",()=>{try{if(!Kakao.isInitialized())Kakao.init("378387c805534e113c68d0c246933822");}catch(e){}});
-const _kc=new URLSearchParams(window.location.search).get("code");
-if(!_kc){onAuthStateChanged(auth,u=>{
-  if(u){
-    const stored = localStorage.getItem('yakmate_user');
-    const storedUser = stored ? JSON.parse(stored) : null;
-    if(!storedUser || (!storedUser.isKakao && !storedUser.isGuest)){
-      window.location.href="./dashboard.html";
-    }
-  }
-});}
-getRedirectResult(auth).then(r=>{if(r?.user)window.location.href="./dashboard.html";}).catch(()=>{});
-document.getElementById("btn-guest").addEventListener("click",()=>{
-  const g={uid:"guest_"+Math.random().toString(36).substr(2,9),displayName:"사장님",isGuest:true};
-  localStorage.setItem("yakmate_user",JSON.stringify(g));
-  window.location.href="./dashboard.html";
-});
-document.getElementById("btn-google").addEventListener("click",async()=>{
-  try{await signInWithPopup(auth,new GoogleAuthProvider());}
-  catch(e){if(e.code==="auth/popup-blocked")await signInWithRedirect(auth,new GoogleAuthProvider());}
-});
-document.getElementById("btn-kakao").addEventListener("click", async ()=>{
-  await signOut(auth);
-  Kakao.Auth.authorize({redirectUri:"https://ownslp.kr/"});
-});
-const kakaoCode=new URLSearchParams(window.location.search).get("code");
-if(kakaoCode){
-  const user={uid:"kakao_user",displayName:"카카오 사용자",photoURL:"",isKakao:true,isGuest:false};
-  localStorage.setItem("yakmate_user",JSON.stringify(user));
-  window.location.href="./dashboard.html";
-}
-</script>
 </body>
 </html>
