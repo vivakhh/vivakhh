@@ -280,29 +280,44 @@ document.getElementById('btn-save').addEventListener('click', async () => {
     }
 });
 
-async function searchDrug() {
-  const name = document.getElementById('new-name').value.trim();
+const DRUG_DB = [
+  {name:'아스피린', desc:'혈전 예방 / 해열·진통·소염', time:'식후'},
+  {name:'노바스크', desc:'고혈압·협심증 치료 (칼슘길항제)', time:'식전/식후 무관'},
+  {name:'리피토', desc:'고콜레스테롤 치료 (스타틴)', time:'식전/식후 무관'},
+  {name:'플라빅스', desc:'혈전 예방 (항혈소판제)', time:'식후'},
+  {name:'메트포르민', desc:'당뇨병 치료 (혈당강하제)', time:'식사 중'},
+  {name:'암로디핀', desc:'고혈압 치료 (칼슘길항제)', time:'식전/식후 무관'},
+  {name:'아토르바스타틴', desc:'고콜레스테롤 치료', time:'저녁 식후'},
+  {name:'리바록사반', desc:'혈전·색전증 예방 (항응고제)', time:'식사 중'},
+  {name:'와파린', desc:'혈전 예방 (항응고제)', time:'일정한 시간'},
+  {name:'오메프라졸', desc:'위산 억제·위궤양 치료', time:'식전 30분'},
+  {name:'에소메프라졸', desc:'위식도역류 치료', time:'식전 1시간'},
+  {name:'메토프롤롤', desc:'고혈압·부정맥 치료 (베타차단제)', time:'식사 중'},
+  {name:'클로피도그렐', desc:'혈전 예방 (항혈소판제)', time:'식후'},
+  {name:'심바스타틴', desc:'고콜레스테롤 치료', time:'저녁 식후'},
+  {name:'가바펜틴', desc:'신경통·뇌전증 치료', time:'식사 무관'},
+  {name:'프레드니솔론', desc:'염증·자가면역 치료 (스테로이드)', time:'식후'},
+  {name:'레보티록신', desc:'갑상선 호르몬 보충', time:'아침 공복'},
+  {name:'알로퓨리놀', desc:'통풍 치료 (요산 감소)', time:'식후'},
+  {name:'딜티아젬', desc:'부정맥·협심증 치료', time:'식전/식후 무관'},
+  {name:'실로스타졸', desc:'혈전 예방·말초혈관질환', time:'식전 30분'},
+];
+
+function searchDrug() {
+  const name = document.getElementById('new-name').value.trim().toLowerCase();
   if (!name) { alert('약 이름을 입력해주세요'); return; }
   const resultDiv = document.getElementById('drug-result');
   resultDiv.style.display = 'block';
-  resultDiv.innerHTML = '🔍 검색 중...';
-  try {
-    const url = `https://apis.data.go.kr/1471000/DrbEasyDrugInfoService/getDrbEasyDrugList?serviceKey=9SvtWRXFJFNKLvFiJBVEJfpjXoH%2B2rXJVPwN2cBRdyBJ1EIoGkYekXGjvXf9cDVMNWLjFNRlYHMXXfU9jCcmw%3D%3D&itemName=${encodeURIComponent(name)}&type=json&numOfRows=3`;
-    const res = await fetch(url);
-    const data = await res.json();
-    const items = data?.body?.items;
-    if (!items || items.length === 0) {
-      resultDiv.innerHTML = '<p style="color:var(--on-card);opacity:0.6;">검색 결과가 없어요. 직접 입력하세요.</p>';
-      return;
-    }
-    resultDiv.innerHTML = items.map(item => `
-      <div onclick="selectDrug('${item.itemName}')" style="padding:12px;border-bottom:1px solid var(--border);cursor:pointer;border-radius:8px;" onmouseover="this.style.background='var(--bg-float)'" onmouseout="this.style.background='transparent'">
-        <div style="font-weight:700;color:var(--on-card);font-size:14px;">${item.itemName}</div>
-        <div style="font-size:12px;color:var(--on-card);opacity:0.6;margin-top:4px;">${(item.efcyQesitm||'').substring(0,60)}...</div>
-      </div>`).join('');
-  } catch(e) {
-    resultDiv.innerHTML = '<p style="color:var(--on-card);opacity:0.6;">검색 오류. 직접 입력해주세요.</p>';
+  const matches = DRUG_DB.filter(d => d.name.toLowerCase().includes(name) || name.includes(d.name.toLowerCase()));
+  if (matches.length === 0) {
+    resultDiv.innerHTML = '<p style="color:var(--on-card);opacity:0.6;font-size:13px;">검색 결과가 없어요. 약 이름을 직접 입력하고 추가하세요 💊</p>';
+    return;
   }
+  resultDiv.innerHTML = matches.map(d => `
+    <div onclick="selectDrug('${d.name}')" style="padding:12px 8px;border-bottom:1px solid var(--border);cursor:pointer;">
+      <div style="font-weight:700;color:var(--on-card);font-size:14px;">${d.name}</div>
+      <div style="font-size:12px;color:var(--on-card);opacity:0.6;margin-top:2px;">${d.desc} · ${d.time}</div>
+    </div>`).join('');
 }
 
 function selectDrug(name) {
