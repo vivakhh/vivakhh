@@ -65,7 +65,15 @@ const app=initializeApp(config);
 const auth=getAuth(app);
 window.addEventListener("load",()=>{try{if(!Kakao.isInitialized())Kakao.init("378387c805534e113c68d0c246933822");}catch(e){}});
 const _kc=new URLSearchParams(window.location.search).get("code");
-if(!_kc){onAuthStateChanged(auth,u=>{if(u)window.location.href="./dashboard.html";});}
+if(!_kc){onAuthStateChanged(auth,u=>{
+  if(u){
+    const stored = localStorage.getItem('yakmate_user');
+    const storedUser = stored ? JSON.parse(stored) : null;
+    if(!storedUser || (!storedUser.isKakao && !storedUser.isGuest)){
+      window.location.href="./dashboard.html";
+    }
+  }
+});}
 getRedirectResult(auth).then(r=>{if(r?.user)window.location.href="./dashboard.html";}).catch(()=>{});
 document.getElementById("btn-guest").addEventListener("click",()=>{
   const g={uid:"guest_"+Math.random().toString(36).substr(2,9),displayName:"사장님",isGuest:true};
@@ -76,7 +84,8 @@ document.getElementById("btn-google").addEventListener("click",async()=>{
   try{await signInWithPopup(auth,new GoogleAuthProvider());}
   catch(e){if(e.code==="auth/popup-blocked")await signInWithRedirect(auth,new GoogleAuthProvider());}
 });
-document.getElementById("btn-kakao").addEventListener("click",()=>{
+document.getElementById("btn-kakao").addEventListener("click", async ()=>{
+  await signOut(auth);
   Kakao.Auth.authorize({redirectUri:"https://ownslp.kr/"});
 });
 const kakaoCode=new URLSearchParams(window.location.search).get("code");
