@@ -352,7 +352,6 @@
             const today = getKstDate();
 
             if (user.isGuest || user.isKakao) {
-                alert('분기: isGuest=' + user.isGuest + ', isKakao=' + user.isKakao);
                 const guestData = localStorage.getItem(`yakmate_guest_data_${today}`);
                 if (guestData) {
                     meds = JSON.parse(guestData);
@@ -381,7 +380,7 @@
                             { id: 'm3', name: '저녁 약속', time: '19:30', taken: false }
                         ];
                     }
-                    await setDoc(ref, { meds, updatedAt: new Date() });
+                    if (!user.isGuest && !user.isKakao) await setDoc(ref, { meds, updatedAt: new Date() });
                 }
             }
             renderMeds();
