@@ -326,9 +326,16 @@
         let meds = [];
         onAuthStateChanged(auth, async (u) => {
             let user = u;
+            // localStorage Kakao/Guest 유저 우선 적용
+            const storedUserStr = localStorage.getItem('yakmate_user');
+            if (storedUserStr) {
+                const storedUser = JSON.parse(storedUserStr);
+                if (storedUser.isKakao || storedUser.isGuest) {
+                    user = storedUser;
+                }
+            }
             if (!user) {
-                const storedUser = localStorage.getItem('yakmate_user');
-                if (storedUser) user = JSON.parse(storedUser);
+                if (storedUserStr) user = JSON.parse(storedUserStr);
             }
             if (!user) {
                 // No user found, go to login
