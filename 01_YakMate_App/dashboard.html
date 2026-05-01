@@ -358,6 +358,62 @@ onAuthStateChanged(auth,async(firebaseUser)=>{
   }catch(e){console.error("Firestore error:",e);meds=[{id:"m1",name:"아침 약속",time:"08:30",taken:false},{id:"m2",name:"점심 약속",time:"13:00",taken:false},{id:"m3",name:"저녁 약속",time:"19:30",taken:false}];}
   renderMeds();
 });
+
+function renderMeds() {
+  const list = document.getElementById('med-list');
+  if (!list) return;
+  list.innerHTML = '';
+  let taken = 0;
+  if (!meds || meds.length === 0) {
+    list.innerHTML = '<p style="color:var(--on-bg);opacity:0.5;font-size:14px;text-align:center;padding:16px 0;">약을 추가하면 여기에 표시돼요 💊</p>';
+    updateCircle(0);
+    return;
+  }
+  meds.forEach((med, idx) => {
+    if (med.taken) taken++;
+    const card = document.createElement('div');
+    card.className = 'med-card' + (med.taken ? ' taken' : '');
+    card.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:16px;background:var(--bg-card);border-radius:16px;margin-bottom:12px;';
+    card.innerHTML = `
+      <div style="display:flex;align-items:center;gap:16px;">
+        <div style="width:52px;height:52px;border-radius:16px;background:var(--bg-card);display:flex;align-items:center;justify-content:center;font-size:24px;border:2px solid var(--border);">💊</div>
+        <div>
+          <div style="font-weight:700;font-size:16px;color:var(--on-card);">${med.name}</div>
+          <div style="font-size:13px;color:var(--on-card);opacity:0.6;margin-top:2px;">${med.time}</div>
+        </div>
+      </div>
+      <button onclick="handleTaken(${idx})" style="width:52px;height:52px;border-radius:16px;border:2px solid ${med.taken ? 'var(--primary)' : 'var(--border)'};background:${med.taken ? 'var(--primary)' : 'transparent'};cursor:pointer;font-size:22px;display:flex;align-items:center;justify-content:center;">
+        ${med.taken ? '✅' : '⭕'}
+      </button>`;
+    list.appendChild(card);
+  });
+  updateCircle(meds.length > 0 ? Math.round((taken / meds.length) * 100) : 0);
+}
+
+function updateCircle(pct) {
+  const el = document.querySelector('.gauge-value, [class*="percent"]');
+  if (el) el.textContent = pct + '%';
+  const circle = document.querySelector('.gauge-fill, circle.gauge-fill');
+  if (circle) {
+    const r = parseFloat(circle.getAttribute('r') || 44);
+    const circumference = 2 * Math.PI * r;
+    circle.style.strokeDasharray = circumference;
+    circle.style.strokeDashoffset = circumference - (pct / 100) * circumference;
+  }
+  const statusEl = document.querySelector('.gauge-status, [class*="status"]');
+  if (statusEl) statusEl.textContent = pct === 100 ? '오늘 약속을 다 지키셨어요! 🎉' : '소중한 나를 위한 오늘의 실천';
+}
+
+async function handleTaken(idx) {
+  meds[idx].taken = !meds[idx].taken;
+  const storedStr = localStorage.getItem('yakmate_user');
+  const storedUser = storedStr ? JSON.parse(storedStr) : null;
+  const today = new Date(Date.now()+9*60*60*1000).toISOString().split('T')[0];
+  if (storedUser?.isGuest) {
+    localStorage.setItem('yakmate_guest_data_' + today, JSON.stringify(meds));
+  }
+  renderMeds();
+}
 </script>
 </body>
 
