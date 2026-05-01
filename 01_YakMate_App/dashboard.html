@@ -316,274 +316,49 @@
     </nav>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-firestore.js";
-        const config = { apiKey: "AIzaSyDpnPJnErnrTloHk3HFrsXHORUMvAiOq5w", authDomain: "pill-sajangnim.firebaseapp.com", projectId: "pill-sajangnim", storageBucket: "pill-sajangnim.firebasestorage.app", messagingSenderId: "648268791992", appId: "1:648268791992:web:41a92580aa1a58ae6bb44d" };
-        const app = initializeApp(config);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        let meds = [];
-        onAuthStateChanged(auth, async (u) => {
-            let user = u;
-            // localStorage Kakao/Guest 유저 우선 적용
-            const storedUserStr = localStorage.getItem('yakmate_user');
-            if (storedUserStr) {
-                const storedUser = JSON.parse(storedUserStr);
-                if (storedUser.isKakao || storedUser.isGuest) {
-                    user = storedUser;
-                }
-            }
-            if (!user) {
-                if (storedUserStr) user = JSON.parse(storedUserStr);
-            }
-            if (!user) {
-                // No user found, go to login
-                window.location.href = './index.html';
-                return;
-            }
-            
-            const name = user.displayName || '사장님';
-            document.getElementById('user-name').textContent = name + '님 ✨';
-            const avatar = document.getElementById('user-avatar');
-            if (user.photoURL && avatar) {
-                avatar.innerHTML = `<img src="${user.photoURL}" style="width:100%;height:100%;object-fit:cover;">`;
-            }
-
-            const getKstDate = () => {
-                const now = new Date();
-                const offset = 9 * 60 * 60 * 1000;
-                const kst = new Date(now.getTime() + offset);
-                return kst.toISOString().split('T')[0];
-            };
-            const today = getKstDate();
-
-            if (user.isGuest || user.isKakao) {
-                const guestData = localStorage.getItem(`yakmate_guest_data_${today}`);
-                if (guestData) {
-                    meds = JSON.parse(guestData);
-                } else {
-                    meds = [
-                        { id: 'm1', name: '아침 약속', time: '08:30', taken: false },
-                        { id: 'm2', name: '점심 약속', time: '13:00', taken: false },
-                        { id: 'm3', name: '저녁 약속', time: '19:30', taken: false }
-                    ];
-                    localStorage.setItem(`yakmate_guest_data_${today}`, JSON.stringify(meds));
-                }
-            } else {
-                const ref = doc(db, 'users', user.uid, 'daily', today);
-                const snap = await getDoc(ref);
-                if (snap.exists() && snap.data().meds) {
-                    meds = snap.data().meds;
-                } else {
-                    const rRef = doc(db, 'users', user.uid, 'settings', 'routine');
-                    const rSnap = await getDoc(rRef);
-                    if (rSnap.exists() && rSnap.data().meds) {
-                        meds = rSnap.data().meds.map(m => ({ ...m, taken: false }));
-                    } else {
-                        meds = [
-                            { id: 'm1', name: '아침 약속', time: '08:30', taken: false },
-                            { id: 'm2', name: '점심 약속', time: '13:00', taken: false },
-                            { id: 'm3', name: '저녁 약속', time: '19:30', taken: false }
-                        ];
-                    }
-                    if (!user.isGuest && !user.isKakao) await setDoc(ref, { meds, updatedAt: new Date() });
-                }
-            }
-            renderMeds();
-        });
-
-        const greetings = [
-            "오늘도 참 고운 하루네요 🌸",
-            "사장님, 오늘 기분은 어떠신가요? 😊",
-            "건강이 최고예요! 오늘도 화이팅! 💪",
-            "사장님, 건강 챙기시는 모습이 최고예요 ✨"
-        ];
-
-        function setGreeting() {
-            const titleEl = document.getElementById('greeting-text');
-            if (titleEl) {
-                titleEl.textContent = greetings[Math.floor(Math.random() * greetings.length)];
-            }
-        }
-
-        setGreeting();
-
-        function renderMeds() {
-            const list = document.getElementById('med-list');
-            list.innerHTML = '';
-            let taken = 0;
-            meds.forEach(med => {
-                if (med.taken) taken++;
-                const card = document.createElement('div');
-                card.className = 'med-card' + (med.taken ? ' taken' : '');
-                card.style.display = 'flex';
-                card.style.alignItems = 'center';
-                card.style.justifyContent = 'space-between';
-                card.innerHTML = `
-                    <div style="display:flex; align-items:center; gap:20px;">
-                        <div class="med-check" style="width:56px; height:56px; border-radius:20px; display:flex; align-items:center; justify-content:center; font-size:28px;">
-                            ${med.taken ? '<span class="material-icons-round">check_circle</span>' : '<span class="material-icons-round" style="opacity:0.2">circle</span>'}
-                        </div>
-                        <div>
-                            <div class="med-time" style="font-size:16px; font-weight:900; margin-bottom:4px; color:var(--primary); font-family:'Space Grotesk', sans-serif; letter-spacing:1px;">${med.time}</div>
-                            <div class="med-name" style="font-size:19px; font-weight:800; color:var(--on-card);">${med.name}</div>
-                        </div>
-                    </div>
-                `;
-                card.onclick = () => toggleMed(med.id);
-                list.appendChild(card);
-            });
-            const pct = meds.length > 0 ? Math.round(taken / meds.length * 100) : 0;
-            document.getElementById('progress-title').textContent = meds.length > 0 ? (pct === 100 ? '오늘의 Health Promise 완료! 🏆' : taken + ' / ' + meds.length + ' 달성') : '일정이 없습니다';
-            document.getElementById('progress-percent').textContent = pct + '%';
-
-            const offset = 276.5 - (276.5 * pct / 100);
-            const gaugeFill = document.getElementById('gauge-fill');
-            if (gaugeFill) gaugeFill.style.strokeDasharray = `${276.5 - offset} 276.5`;
-        }
-
-        async function toggleMed(id) {
-            const med = meds.find(m => m.id === id);
-            if (med) {
-                med.taken = !med.taken;
-                if (med.taken) showPraise();
-                renderMeds();
-                
-                const user = JSON.parse(localStorage.getItem('yakmate_user'));
-                if (user) {
-                    const now = new Date();
-                    const offset = 9 * 60 * 60 * 1000;
-                    const today = new Date(now.getTime() + offset).toISOString().split('T')[0];
-                    if (user.isGuest || user.isKakao) {
-                        localStorage.setItem(`yakmate_guest_data_${today}`, JSON.stringify(meds));
-                    } else {
-                        await setDoc(doc(db, 'users', user.uid, 'daily', today), { meds, updatedAt: new Date() });
-                    }
-                }
-            }
-        }
-
-        function showPraise() {
-            const praises = [
-                "참 잘하셨어요! 사장님의 건강을 제가 응원합니다 💛",
-                "오늘도 자신을 아끼는 멋진 모습을 보여주셨네요! ✨",
-                "약속을 지키는 사장님, 정말 존경스럽습니다 🤝",
-                "오늘 하루도 건강이 한 뼘 더 자라났어요 🌸",
-                "정말 대단하세요! 꾸준함이 최고의 보약입니다 🍯"
-            ];
-            const msg = praises[Math.floor(Math.random() * praises.length)];
-            const toast = document.createElement('div');
-            toast.style = "position:fixed; bottom:140px; left:50%; transform:translateX(-50%); background:var(--primary); color:#fff; padding:20px 32px; border-radius:32px; font-weight:800; font-size:16px; z-index:2000; box-shadow:0 15px 40px var(--primary-glow); animation: fadeInUp 0.6s cubic-bezier(0.22, 1, 0.36, 1); border: 2px solid rgba(255,255,255,0.2); pointer-events: none;";
-            toast.innerHTML = `🌟 ${msg}`;
-            document.body.appendChild(toast);
-            setTimeout(() => {
-                toast.style.animation = "fadeOutDown 0.6s ease-in forwards";
-                setTimeout(() => toast.remove(), 600);
-            }, 3000);
-        }
-
-        // 건강 팁 무작위 표시
-        function setHealthTip() {
-            const tips = [
-                "오늘 날씨가 쌀쌀해요. 따뜻한 물 한 잔으로 몸을 녹여보세요. ☕",
-                "약을 드실 때는 미지근한 물과 함께 드시는 것이 가장 좋아요. 💧",
-                "가벼운 스트레칭은 기분 전환과 건강에 큰 도움이 된답니다. 🙆‍♀️",
-                "오늘 점심은 맛있는 거 드셨나요? 건강한 식사가 최고의 약이에요. 🍱",
-                "햇볕을 10분만 쬐어도 비타민 D가 생겨 뼈가 튼튼해져요. ☀️"
-            ];
-            const tipEl = document.getElementById('health-tip');
-            if (tipEl) tipEl.textContent = tips[Math.floor(Math.random() * tips.length)];
-        }
-
-        // 애니메이션 스타일 추가
-        const style = document.createElement('style');
-        style.textContent = `
-    @keyframes fadeInUp { from { opacity:0; transform:translate(-50%, 20px); } to { opacity:1; transform:translate(-50%, 0); } }
-    @keyframes fadeOutDown { from { opacity:1; transform:translate(-50%, 0); } to { opacity:0; transform:translate(-50%, 20px); } }
-`;
-        document.head.appendChild(style);
-
-        setHealthTip();
-
-        // Overdue Popup Logic
-        let currentOverdueMed = null;
-        function showOverduePopup(med) {
-            currentOverdueMed = med;
-            document.getElementById('overdue-desc').innerHTML = `<strong>[${med.name}]</strong>을(를) 아직 안 드신 것 같아요.<br>가족에게 상태를 알릴까요?`;
-            document.getElementById('overdue-popup').style.display = 'flex';
-        }
-        function closeOverduePopup() {
-            document.getElementById('overdue-popup').style.display = 'none';
-        }
-        async function triggerFamilyShare() {
-            const userName = JSON.parse(localStorage.getItem('yakmate_user'))?.displayName || '사장님';
-            const medName = currentOverdueMed ? currentOverdueMed.name : '약';
-            const msg = `[약메이트 긴급 알림] 🚨\n${userName}님이 아직 [${medName}]을(를) 챙기지 않으셨어요!\n가족의 따뜻한 확인 전화가 필요합니다. 💛`;
-            
-            if (navigator.share) {
-                try { await navigator.share({ title: '약메이트 알림', text: msg }); } 
-                catch (e) { console.log(e); }
-            } else {
-                alert('공유 기능이 지원되지 않는 기기입니다. 직접 연락해주세요.');
-            }
-            closeOverduePopup();
-        }
-
-        // 실시간 복약 알람 로직
-        let lastAlarmedTime = '';
-        function checkAlarms() {
-            if (!meds || meds.length === 0 || Notification.permission !== 'granted') return;
-
-            const now = new Date();
-            const currentTime = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
-
-            if (currentTime === lastAlarmedTime) return; // 같은 분에는 한 번만 알람
-
-                if (!med.taken) {
-                    // 정시 알람
-                    if (med.time === currentTime) {
-                        const isSound = localStorage.getItem('toggle-sound') !== 'false';
-                        const isVibrate = localStorage.getItem('toggle-vibrate') !== 'false';
-
-                        new Notification("약 드실 시간이에요! 💊", {
-                            body: `지금 [${med.name}] 복용 시간입니다. 잊지 마세요!`,
-                            icon: "favicon.ico",
-                            requireInteraction: true,
-                            silent: !isSound
-                        });
-
-                        if (isVibrate && "vibrate" in navigator) navigator.vibrate([200, 100, 200, 100, 200]);
-
-                        if (isSound) {
-                            const selectedSound = localStorage.getItem('yakmate_alarm_sound') || 'nature';
-                            const soundUrls = {
-                                nature: 'https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3',
-                                bell: 'https://assets.mixkit.co/active_storage/sfx/600/600-preview.mp3',
-                                piano: 'https://assets.mixkit.co/active_storage/sfx/951/951-preview.mp3'
-                            };
-                            const audio = new Audio(soundUrls[selectedSound] || soundUrls.nature);
-                            audio.play().catch(e => console.log("Audio play failed:", e));
-                        }
-                    } else {
-                        // 미복용 지연 체크 로직 (사장님 철학: 약을 안먹고 시간이 지나면 가족에게 알림)
-                        const medDate = new Date();
-                        const [hours, minutes] = med.time.split(':');
-                        medDate.setHours(parseInt(hours), parseInt(minutes), 0, 0);
-                        const diffMinutes = Math.floor((now - medDate) / (1000 * 60));
-                        
-                        // 현재 테스트를 위해 1분 지각 시 바로 팝업이 뜨도록 설정했습니다. (실제 서비스에서는 60으로 변경)
-                        if (diffMinutes >= 1 && diffMinutes < 120 && !med.familyPrompted) {
-                            med.familyPrompted = true; // 팝업 무한 반복 방지
-                            showOverduePopup(med);
-                        }
-                    }
-                }
-            });
-            lastAlarmedTime = currentTime;
-        }
-        setInterval(checkAlarms, 10000); // 테스트를 위해 10초마다 빠르게 체크
-    </script>
+import{initializeApp}from"https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
+import{getAuth,onAuthStateChanged,signOut}from"https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
+import{getFirestore,doc,getDoc,setDoc}from"https://www.gstatic.com/firebasejs/9.17.2/firebase-firestore.js";
+const config={apiKey:"AIzaSyDpnPJnErnrTloHk3HFrsXHORUMvAiOq5w",authDomain:"pill-sajangnim.firebaseapp.com",projectId:"pill-sajangnim",storageBucket:"pill-sajangnim.firebasestorage.app",messagingSenderId:"648268791992",appId:"1:648268791992:web:41a92580aa1a58ae6bb44d"};
+const app=initializeApp(config);
+const auth=getAuth(app);
+const db=getFirestore(app);
+let meds=[];
+const getKstDate=()=>{const kst=new Date(Date.now()+9*60*60*1000);return kst.toISOString().split("T")[0];};
+const today=getKstDate();
+onAuthStateChanged(auth,async(firebaseUser)=>{
+  const storedStr=localStorage.getItem("yakmate_user");
+  const storedUser=storedStr?JSON.parse(storedStr):null;
+  let user=firebaseUser||storedUser;
+  if(!user){window.location.href="./index.html";return;}
+  const name=firebaseUser?.displayName||storedUser?.displayName||"사장님";
+  const nameEl=document.getElementById("user-name");
+  if(nameEl)nameEl.textContent=name+"님 ✨";
+  const avatar=document.getElementById("user-avatar");
+  if(avatar&&firebaseUser?.photoURL)avatar.innerHTML=`<img src="${firebaseUser.photoURL}" style="width:100%;height:100%;object-fit:cover;">`;
+  if(storedUser?.isGuest){
+    const guestData=localStorage.getItem(`yakmate_guest_data_${today}`);
+    if(guestData){meds=JSON.parse(guestData);}
+    else{meds=[{id:"m1",name:"아침 약속",time:"08:30",taken:false},{id:"m2",name:"점심 약속",time:"13:00",taken:false},{id:"m3",name:"저녁 약속",time:"19:30",taken:false}];localStorage.setItem(`yakmate_guest_data_${today}`,JSON.stringify(meds));}
+    renderMeds();return;
+  }
+  const uid=firebaseUser?.uid||storedUser?.uid;
+  if(!uid){renderMeds();return;}
+  try{
+    const dailyRef=doc(db,"users",uid,"daily",today);
+    const dailySnap=await getDoc(dailyRef);
+    if(dailySnap.exists()&&dailySnap.data().meds){meds=dailySnap.data().meds;}
+    else{
+      const routineRef=doc(db,"users",uid,"settings","routine");
+      const routineSnap=await getDoc(routineRef);
+      if(routineSnap.exists()&&routineSnap.data().meds){meds=routineSnap.data().meds.map(m=>({...m,taken:false}));}
+      else{meds=[{id:"m1",name:"아침 약속",time:"08:30",taken:false},{id:"m2",name:"점심 약속",time:"13:00",taken:false},{id:"m3",name:"저녁 약속",time:"19:30",taken:false}];await setDoc(routineRef,{meds,updatedAt:new Date()});}
+      await setDoc(dailyRef,{meds,date:today,updatedAt:new Date()});
+    }
+  }catch(e){console.error("Firestore error:",e);meds=[{id:"m1",name:"아침 약속",time:"08:30",taken:false},{id:"m2",name:"점심 약속",time:"13:00",taken:false},{id:"m3",name:"저녁 약속",time:"19:30",taken:false}];}
+  renderMeds();
+});
+</script>
 </body>
 
 </html>
