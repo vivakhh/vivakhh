@@ -369,22 +369,45 @@ function renderMeds() {
     updateCircle(0);
     return;
   }
+  // 시간별로 묶기
+  const groups = {};
   meds.forEach((med, idx) => {
     if (med.taken) taken++;
+    const key = med.time || '00:00';
+    if (!groups[key]) groups[key] = [];
+    groups[key].push({...med, idx});
+  });
+  // 시간 순서 정렬
+  Object.keys(groups).sort().forEach(time => {
+    const group = groups[time];
+    const allTaken = group.every(m => m.taken);
+    // 시간 헤더
+    const header = document.createElement('div');
+    header.style.cssText = 'font-size:13px;font-weight:800;color:var(--primary);margin:16px 0 8px 4px;';
+    const [h, m] = time.split(':');
+    const hour = parseInt(h);
+    const ampm = hour < 12 ? '오전' : '오후';
+    const hour12 = hour === 0 ? 12 : hour > 12 ? hour - 12 : hour;
+    header.textContent = ampm + ' ' + hour12 + ':' + m;
+    list.appendChild(header);
+    // 그룹 카드
     const card = document.createElement('div');
-    card.className = 'med-card' + (med.taken ? ' taken' : '');
-    card.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:16px;background:var(--bg-card);border-radius:16px;margin-bottom:12px;';
-    card.innerHTML = `
-      <div style="display:flex;align-items:center;gap:16px;">
-        <div style="width:52px;height:52px;border-radius:16px;background:var(--bg-card);display:flex;align-items:center;justify-content:center;font-size:24px;border:2px solid var(--border);">💊</div>
-        <div>
-          <div style="font-weight:700;font-size:16px;color:var(--on-card);">${med.name}</div>
-          <div style="font-size:13px;color:var(--on-card);opacity:0.6;margin-top:2px;">${med.time}</div>
+    card.style.cssText = 'background:var(--bg-card);border-radius:16px;margin-bottom:12px;overflow:hidden;border:1px solid var(--border);';
+    group.forEach((med, i) => {
+      const row = document.createElement('div');
+      row.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:14px 16px;' + (i > 0 ? 'border-top:1px solid var(--border);' : '');
+      row.innerHTML = \`
+        <div style="display:flex;align-items:center;gap:12px;">
+          <span style="font-size:20px;">💊</span>
+          <div>
+            <div style="font-weight:700;font-size:15px;color:var(--on-card);\${med.taken ? 'text-decoration:line-through;opacity:0.5;' : ''}">\${med.name}</div>
+          </div>
         </div>
-      </div>
-      <button onclick="handleTaken(${idx})" style="width:52px;height:52px;border-radius:16px;border:2px solid ${med.taken ? 'var(--primary)' : 'var(--border)'};background:${med.taken ? 'var(--primary)' : 'transparent'};cursor:pointer;font-size:22px;display:flex;align-items:center;justify-content:center;">
-        ${med.taken ? '✅' : '⭕'}
-      </button>`;
+        <button onclick="handleTaken(\${med.idx})" style="width:44px;height:44px;border-radius:12px;border:2px solid \${med.taken ? 'var(--primary)' : 'var(--border)'};background:\${med.taken ? 'var(--primary)' : 'transparent'};cursor:pointer;font-size:20px;display:flex;align-items:center;justify-content:center;">
+          \${med.taken ? '✅' : '⭕'}
+        </button>\`;
+      card.appendChild(row);
+    });
     list.appendChild(card);
   });
   updateCircle(meds.length > 0 ? Math.round((taken / meds.length) * 100) : 0);
