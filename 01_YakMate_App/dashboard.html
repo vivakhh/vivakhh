@@ -127,6 +127,8 @@ const DEFAULT_MEDS = [
 ];
 
 let meds = [];
+  const DAY_ICONS = ['🌸','⭐','🌿','🌻','🎵','🌈','☀️'];
+  const todayIcon = DAY_ICONS[new Date().getDay()];
 const today = new Date(Date.now() + 9*60*60*1000).toISOString().split('T')[0];
 
 onAuthStateChanged(auth, async (fbUser) => {
@@ -193,7 +195,7 @@ function renderMeds() {
       const row = document.createElement('div');
       row.className = 'med-row';
       row.innerHTML =
-        '<div class="med-info"><span style="font-size:20px">💊</span>' +
+        '<div class="med-info"><span style="font-size:20px">' + todayIcon + '</span>' +
         '<span class="med-name' + (med.taken?' taken':'') + '">' + med.name + '</span></div>' +
         '<button class="check-btn' + (med.taken?' checked':'') + '" onclick="handleTaken(' + med.idx + ')">' +
         (med.taken ? '✅' : '⭕') + '</button>';
