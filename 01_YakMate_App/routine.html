@@ -242,7 +242,7 @@ document.getElementById('btn-add').addEventListener('click', () => {
         const time = document.getElementById('new-time').value;
     if(!time) { alert('시간을 선택해주세요!'); return; }
     
-    routine.push({ id: 'm'+Date.now(), name: time + ' 약 드시는 시간', time });
+    routine.push({ id: 'm'+Date.now(), name: name, time });
     routine.sort((a, b) => a.time.localeCompare(b.time));
     
     renderRoutine();
