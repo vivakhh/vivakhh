@@ -160,6 +160,11 @@
         <div class="add-card">
             <div style="margin-bottom: 16px;">
                 <label style="font-size: 12px; font-weight: 800; color: var(--primary); display: block; margin-bottom: 8px; text-transform: uppercase;">복용 시간 ⏰</label>
+                <div style="display:flex; gap:8px; margin-bottom:12px;">
+                  <button onclick="setPreset('08:00')" id="preset-morning" style="flex:1; padding:12px 8px; border-radius:16px; border:2px solid var(--border); background:transparent; color:var(--on-card); font-size:13px; font-weight:800; cursor:pointer; transition:all 0.2s;">🌅 아침</button>
+                  <button onclick="setPreset('13:00')" id="preset-lunch" style="flex:1; padding:12px 8px; border-radius:16px; border:2px solid var(--border); background:transparent; color:var(--on-card); font-size:13px; font-weight:800; cursor:pointer; transition:all 0.2s;">☀️ 점심</button>
+                  <button onclick="setPreset('19:00')" id="preset-dinner" style="flex:1; padding:12px 8px; border-radius:16px; border:2px solid var(--border); background:transparent; color:var(--on-card); font-size:13px; font-weight:800; cursor:pointer; transition:all 0.2s;">🌙 저녁</button>
+                </div>
                 <input type="time" id="new-time" style="width:100%; background:var(--bg-float); border:1px solid var(--border); border-radius:18px; padding:20px; color:var(--on-card); font-size:24px; font-weight:800; text-align:center; outline:none;" value="08:00">
             </div>
             <div style="margin-bottom: 16px;">
@@ -338,6 +343,24 @@ const DRUG_DB = [
   {name:'실로스타졸', desc:'혈전 예방·말초혈관질환', time:'식전 30분'},
   {name:'와파린', desc:'혈전 예방 (항응고제)', time:'일정한 시간'},
 ];
+function setPreset(time) {
+  document.getElementById('new-time').value = time;
+  const ids = ['preset-morning','preset-lunch','preset-dinner'];
+  const times = ['08:00','13:00','19:00'];
+  ids.forEach((id, i) => {
+    const btn = document.getElementById(id);
+    if (times[i] === time) {
+      btn.style.background = 'var(--primary)';
+      btn.style.color = '#000';
+      btn.style.borderColor = 'var(--primary)';
+    } else {
+      btn.style.background = 'transparent';
+      btn.style.color = 'var(--on-card)';
+      btn.style.borderColor = 'var(--border)';
+    }
+  });
+}
+
 function searchDrug() {
   var input = document.getElementById('new-name');
   if (!input) return;
