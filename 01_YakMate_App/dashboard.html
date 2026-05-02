@@ -396,15 +396,7 @@ function renderMeds() {
     group.forEach((med, i) => {
       const row = document.createElement('div');
       row.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:14px 16px;' + (i > 0 ? 'border-top:1px solid var(--border);' : '');
-      row.innerHTML = \`
-        <div style="display:flex;align-items:center;gap:12px;">
-          <span style="font-size:20px;">💊</span>
-          <div>
-              <div style="font-weight:700;font-size:15px;color:var(--on-card);" class="med-name"></div>
-          </div>
-        </div>
-        <button onclick="handleTaken(\${med.idx})" style="width:44px;height:44px;border-radius:12px;border:2px solid \${med.taken ? 'var(--primary)' : 'var(--border)'};background:\${med.taken ? 'var(--primary)' : 'transparent'};cursor:pointer;font-size:20px;display:flex;align-items:center;justify-content:center;">
-          \${med.taken ? '✅' : '⭕'}
+        row.innerHTML = '<div style="display:flex;align-items:center;gap:12px;"><span style="font-size:20px;">💊</span><div style="font-weight:700;font-size:15px;color:var(--on-card);" class="med-name">' + med.name + '</div></div><button onclick="handleTaken(' + med.idx + ')" style="width:44px;height:44px;border-radius:12px;border:2px solid ' + (med.taken ? "var(--primary)" : "var(--border)") + ';background:' + (med.taken ? "var(--primary)" : "transparent") + ';cursor:pointer;font-size:20px;">' + (med.taken ? "✅" : "⭕") + '</button>';
         </button>\`;
       card.appendChild(row);
     });
