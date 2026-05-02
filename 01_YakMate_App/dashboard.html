@@ -4,63 +4,60 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>YakMate | Home</title>
-
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>YakMate | Home</title>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Space+Grotesk:wght@500;700&family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
 <link rel="stylesheet" href="global.css">
 <style>
-.time-header { font-size:13px; font-weight:800; color:var(--primary); margin:16px 0 8px 4px; }
-.med-card { background:var(--bg-card); border-radius:16px; margin-bottom:12px; overflow:hidden; border:1px solid var(--border); }
-.med-row { display:flex; align-items:center; justify-content:space-between; padding:14px 16px; }
-.med-row.border-top { border-top:1px solid var(--border); }
-.med-info { display:flex; align-items:center; gap:12px; }
-.med-icon { font-size:20px; }
-.med-name { font-weight:700; font-size:15px; color:var(--on-card); }
-.med-name.taken { text-decoration:line-through; opacity:0.5; }
-.check-btn { width:44px; height:44px; border-radius:12px; border:2px solid var(--border); background:transparent; cursor:pointer; font-size:20px; }
-.check-btn.checked { border-color:var(--primary); background:var(--primary); }
-.gauge-wrap { position:relative; display:flex; align-items:center; justify-content:center; margin:8px auto; }
-.gauge-center { position:absolute; text-align:center; }
-.gauge-pct { font-size:32px; font-weight:800; color:var(--on-card); }
-.gauge-msg { text-align:center; font-size:14px; opacity:0.6; margin-top:4px; }
-.nudge-card { border-left:4px solid var(--primary); }
-.nudge-title { font-size:13px; font-weight:700; color:var(--primary); margin-bottom:8px; display:flex; align-items:center; justify-content:space-between; }
-.nudge-btn { font-size:11px; border:1px solid var(--primary); background:transparent; color:var(--primary); border-radius:20px; padding:4px 10px; cursor:pointer; }
-.nudge-text { font-size:14px; font-weight:600; color:var(--on-card); }
-.section-title { font-size:16px; font-weight:800; color:var(--on-card); margin-bottom:12px; }
-.routine-header { display:flex; align-items:center; justify-content:space-between; }
-.change-btn { font-size:13px; color:var(--primary); background:transparent; border:none; cursor:pointer; font-weight:600; }
-.avatar-btn { background:transparent; border:none; cursor:pointer; }
-.avatar { width:40px; height:40px; border-radius:50%; background:var(--bg-float); display:flex; align-items:center; justify-content:center; font-size:20px; }
-.bottom-nav { position:fixed; bottom:0; left:0; right:0; background:var(--bg-card); border-top:1px solid var(--border); display:flex; padding:8px 0 20px; }
-.nav-btn { flex:1; display:flex; flex-direction:column; align-items:center; gap:2px; background:transparent; border:none; cursor:pointer; font-size:10px; color:var(--on-bg); opacity:0.5; }
-.nav-btn.active { opacity:1; color:var(--primary); }
-.nav-btn span:first-child { font-size:20px; }
+  body { background: var(--bg-main); color: var(--on-bg); padding-bottom: 140px !important; }
+  .header { padding: 32px 24px; background: transparent; z-index: 100; display: flex; align-items: center; justify-content: space-between; }
+  .header-title { font-size: 28px; font-weight: 800; color: var(--on-card); letter-spacing: -1px; }
+  .header-sub { font-size: 13px; opacity: 0.5; margin-bottom: 4px; }
+  .avatar-btn { width: 44px; height: 44px; border-radius: 50%; background: var(--bg-card); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 20px; }
+  .section { padding: 0 24px; margin-bottom: 24px; }
+  .card { background: var(--bg-card); backdrop-filter: var(--glass-blur); border-radius: 32px; padding: 24px; margin-bottom: 16px; border: 1px solid var(--border); box-shadow: var(--shadow); }
+  .gauge-wrap { position: relative; display: flex; align-items: center; justify-content: center; }
+  .gauge-center { position: absolute; text-align: center; }
+  .gauge-pct { font-size: 36px; font-weight: 900; color: var(--on-card); font-family: 'Space Grotesk', sans-serif; }
+  .gauge-msg { text-align: center; font-size: 13px; opacity: 0.55; margin-top: 8px; }
+  .nudge-card { border-left: 4px solid var(--primary); }
+  .nudge-label { font-size: 12px; font-weight: 700; color: var(--primary); letter-spacing: 1px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; }
+  .nudge-btn { font-size: 11px; border: 1px solid var(--primary); background: transparent; color: var(--primary); border-radius: 20px; padding: 4px 10px; cursor: pointer; font-weight: 600; }
+  .nudge-text { font-size: 14px; font-weight: 600; color: var(--on-card); line-height: 1.5; }
+  .section-label { font-size: 12px; font-weight: 800; color: var(--primary); letter-spacing: 1px; margin-bottom: 12px; }
+  .time-header { font-size: 13px; font-weight: 800; color: var(--primary); margin: 16px 0 8px 2px; letter-spacing: 0.5px; }
+  .med-group { background: var(--bg-card); border-radius: 20px; overflow: hidden; border: 1px solid var(--border); margin-bottom: 12px; }
+  .med-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; }
+  .med-row + .med-row { border-top: 1px solid var(--border); }
+  .med-info { display: flex; align-items: center; gap: 12px; }
+  .med-name { font-weight: 700; font-size: 15px; color: var(--on-card); }
+  .med-name.taken { text-decoration: line-through; opacity: 0.4; }
+  .check-btn { width: 44px; height: 44px; border-radius: 14px; border: 2px solid var(--border); background: transparent; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+  .check-btn.checked { border-color: var(--primary); background: var(--primary); }
+  .routine-row { display: flex; align-items: center; justify-content: space-between; }
+  .routine-label { font-size: 15px; font-weight: 700; color: var(--on-card); }
+  .change-btn { font-size: 13px; color: var(--primary); background: transparent; border: none; cursor: pointer; font-weight: 700; }
+  .empty-msg { text-align: center; opacity: 0.4; font-size: 14px; padding: 20px 0; }
 </style>
 </head>
 <body>
-<div class="app">
-  <div class="header">
-    <div>
-      <div class="header-sub">사장님을 위한 따뜻한 아침</div>
-      <div class="header-title">오늘도 빛나는 하루 ✨</div>
-    </div>
-    <button class="avatar-btn" onclick="location.href='profile.html'">
-      <div id="user-avatar" class="avatar">👤</div>
-    </button>
+<div class="header">
+  <div>
+    <div class="header-sub" id="user-greeting">안녕하세요</div>
+    <div class="header-title">오늘도 빛나는 하루 ✨</div>
   </div>
+  <div class="avatar-btn" onclick="location.href='settings.html'">👤</div>
+</div>
 
-  <div class="card">
+<div class="section">
+  <div class="card" style="text-align:center;">
     <div class="gauge-wrap">
-      <svg viewBox="0 0 120 120" width="160" height="160">
+      <svg viewBox="0 0 120 120" width="150" height="150">
         <circle cx="60" cy="60" r="50" fill="none" stroke="var(--border)" stroke-width="10"/>
         <circle id="gauge-ring" cx="60" cy="60" r="50" fill="none" stroke="var(--primary)" stroke-width="10"
           stroke-dasharray="314" stroke-dashoffset="314" stroke-linecap="round"
-          transform="rotate(-90 60 60)" style="transition:stroke-dashoffset 0.5s"/>
+          transform="rotate(-90 60 60)" style="transition:stroke-dashoffset 0.6s ease;"/>
         <circle cx="60" cy="10" r="5" fill="var(--primary)"/>
       </svg>
       <div class="gauge-center">
@@ -71,36 +68,40 @@
   </div>
 
   <div class="card nudge-card">
-    <div class="nudge-title">❤️ 가족의 따뜻한 넛지 <button class="nudge-btn">👥 가족 케어 활성</button></div>
+    <div class="nudge-label">❤️ 가족의 따뜻한 넛지 <button class="nudge-btn">👥 가족 케어</button></div>
     <div class="nudge-text">"사장님, 오늘 약 드셨나요? 항상 응원하고 있어요 ❤️"</div>
   </div>
 
   <div class="card">
-    <div class="section-title">오늘의 약 복용 💊</div>
-    <div id="med-list"></div>
+    <div class="section-label">오늘의 약 복용 💊</div>
+    <div id="med-list"><div class="empty-msg">불러오는 중...</div></div>
   </div>
 
   <div class="card">
-    <div class="routine-header">
-      <span>⏰ 오늘의 건강 루틴</span>
-      <button onclick="location.href='routine.html'" class="change-btn">변경하기</button>
+    <div class="routine-row">
+      <span class="routine-label">⏰ 루틴 설정</span>
+      <button class="change-btn" onclick="location.href='routine.html'">변경하기 →</button>
     </div>
   </div>
 </div>
 
-<nav class="bottom-nav">
-  <button class="nav-btn active" onclick="location.href='dashboard.html'">
-    <span class="material-icons-round">home</span><span>HOME</span>
-  </button>
-  <button class="nav-btn" onclick="location.href='stats.html'">
-    <span class="material-icons-round">bar_chart</span><span>HEALTH</span>
-  </button>
-  <button class="nav-btn" onclick="location.href='community.html'">
-    <span class="material-icons-round">chat_bubble</span><span>STORY</span>
-  </button>
-  <button class="nav-btn" onclick="location.href='guardian.html'">
-    <span class="material-icons-round">person</span><span>CENTER</span>
-  </button>
+<nav class="nav-bar">
+  <a href="dashboard.html" class="nav-item active">
+    <span class="material-icons-round">home</span>
+    <span class="nav-label">HOME</span>
+  </a>
+  <a href="stats.html" class="nav-item">
+    <span class="material-icons-round">analytics</span>
+    <span class="nav-label">HEALTH</span>
+  </a>
+  <a href="community.html" class="nav-item">
+    <span class="material-icons-round">forum</span>
+    <span class="nav-label">STORY</span>
+  </a>
+  <a href="settings.html" class="nav-item">
+    <span class="material-icons-round">person</span>
+    <span class="nav-label">CENTER</span>
+  </a>
 </nav>
 
 <script type="module">
@@ -108,141 +109,119 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebas
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
 import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-firestore.js";
 
-const config = {
+const app = initializeApp({
   apiKey: "AIzaSyDpnPJnErnrTloHk3HFrsXHORUMvAiOq5w",
   authDomain: "pill-sajangnim.firebaseapp.com",
   projectId: "pill-sajangnim",
   storageBucket: "pill-sajangnim.firebasestorage.app",
   messagingSenderId: "648268791992",
   appId: "1:648268791992:web:41a92580aa1a58ae6bb44d"
-};
-
-const app = initializeApp(config);
+});
 const auth = getAuth(app);
 const db = getFirestore(app);
 
 const DEFAULT_MEDS = [
-  { id: "m1", name: "아침 💊", time: "08:00", taken: false },
-  { id: "m2", name: "점심 💊", time: "13:00", taken: false },
-  { id: "m3", name: "저녁 💊", time: "19:00", taken: false }
+  { id:"m1", name:"아침 💊", time:"08:00", taken:false },
+  { id:"m2", name:"점심 💊", time:"13:00", taken:false },
+  { id:"m3", name:"저녁 💊", time:"19:00", taken:false }
 ];
 
 let meds = [];
 const today = new Date(Date.now() + 9*60*60*1000).toISOString().split('T')[0];
 
-onAuthStateChanged(auth, async (firebaseUser) => {
-  const storedStr = localStorage.getItem('yakmate_user');
-  const storedUser = storedStr ? JSON.parse(storedStr) : null;
+onAuthStateChanged(auth, async (fbUser) => {
+  const stored = localStorage.getItem('yakmate_user');
+  const storedUser = stored ? JSON.parse(stored) : null;
+  if (!fbUser && !storedUser) { location.href='./index.html'; return; }
 
-  if (!firebaseUser && !storedUser) {
-    window.location.href = './index.html';
-    return;
-  }
-
-  const uid = firebaseUser?.uid || storedUser?.uid;
-  const name = firebaseUser?.displayName || storedUser?.displayName || '사장님';
-  document.querySelector('.header-sub').textContent = name + '을 위한 따뜻한 아침';
+  const name = fbUser?.displayName || storedUser?.displayName || '사장님';
+  document.getElementById('user-greeting').textContent = name + '님, 안녕하세요 👋';
 
   if (storedUser?.isGuest) {
     const saved = localStorage.getItem('yakmate_guest_' + today);
     meds = saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(DEFAULT_MEDS));
-    renderMeds();
-    return;
+    renderMeds(); return;
   }
 
+  const uid = fbUser?.uid || storedUser?.uid;
   try {
-    const dailyRef = doc(db, 'users', uid, 'daily', today);
+    const dailyRef = doc(db,'users',uid,'daily',today);
     const dailySnap = await getDoc(dailyRef);
-
     if (dailySnap.exists() && dailySnap.data().meds && dailySnap.data().meds.length > 0) {
       meds = dailySnap.data().meds;
     } else {
-      const routineRef = doc(db, 'users', uid, 'settings', 'routine');
-      const routineSnap = await getDoc(routineRef);
+      const routineSnap = await getDoc(doc(db,'users',uid,'settings','routine'));
       if (routineSnap.exists() && routineSnap.data().meds && routineSnap.data().meds.length > 0) {
-        meds = routineSnap.data().meds.map(m => ({ ...m, taken: false }));
+        meds = routineSnap.data().meds.map(m => ({...m, taken:false}));
       } else {
         meds = JSON.parse(JSON.stringify(DEFAULT_MEDS));
       }
-      await setDoc(dailyRef, { meds, date: today, updatedAt: new Date() });
+      await setDoc(dailyRef, {meds, date:today, updatedAt:new Date()});
     }
   } catch(e) {
     console.error(e);
     meds = JSON.parse(JSON.stringify(DEFAULT_MEDS));
   }
-
   renderMeds();
 });
 
 function renderMeds() {
   const list = document.getElementById('med-list');
   if (!meds || meds.length === 0) {
-    list.innerHTML = '<p style="text-align:center;opacity:0.5;padding:16px;">약을 추가하면 여기에 표시돼요 💊</p>';
-    updateGauge(0);
-    return;
+    list.innerHTML = '<div class="empty-msg">약을 추가하면 여기에 표시돼요 💊</div>';
+    updateGauge(0); return;
   }
-
   const groups = {};
   meds.forEach((med, idx) => {
     const key = med.time || '00:00';
     if (!groups[key]) groups[key] = [];
-    groups[key].push({ ...med, idx });
+    groups[key].push({...med, idx});
   });
-
   list.innerHTML = '';
-  let takenCount = 0;
-  meds.forEach(m => { if (m.taken) takenCount++; });
-
+  let takenCount = meds.filter(m => m.taken).length;
   Object.keys(groups).sort().forEach(time => {
-    const group = groups[time];
-    const header = document.createElement('div');
-    header.className = 'time-header';
     const h = parseInt(time.split(':')[0]);
     const m = time.split(':')[1];
-    header.textContent = (h < 12 ? '오전 ' : '오후 ') + (h === 0 ? 12 : h > 12 ? h - 12 : h) + ':' + m;
+    const label = (h < 12 ? '오전 ' : '오후 ') + (h===0?12:h>12?h-12:h) + ':' + m;
+    const header = document.createElement('div');
+    header.className = 'time-header';
+    header.textContent = label;
     list.appendChild(header);
-
-    const card = document.createElement('div');
-    card.className = 'med-card';
-    group.forEach((med, i) => {
+    const group = document.createElement('div');
+    group.className = 'med-group';
+    groups[time].forEach(med => {
       const row = document.createElement('div');
-      row.className = 'med-row' + (i > 0 ? ' border-top' : '');
+      row.className = 'med-row';
       row.innerHTML =
-        '<div class="med-info"><span class="med-icon">💊</span>' +
-        '<span class="med-name' + (med.taken ? ' taken' : '') + '">' + med.name + '</span></div>' +
-        '<button class="check-btn' + (med.taken ? ' checked' : '') + '" onclick="handleTaken(' + med.idx + ')">' +
+        '<div class="med-info"><span style="font-size:20px">💊</span>' +
+        '<span class="med-name' + (med.taken?' taken':'') + '">' + med.name + '</span></div>' +
+        '<button class="check-btn' + (med.taken?' checked':'') + '" onclick="handleTaken(' + med.idx + ')">' +
         (med.taken ? '✅' : '⭕') + '</button>';
-      card.appendChild(row);
+      group.appendChild(row);
     });
-    list.appendChild(card);
+    list.appendChild(group);
   });
-
   updateGauge(Math.round((takenCount / meds.length) * 100));
 }
 
 function updateGauge(pct) {
   document.getElementById('gauge-pct').textContent = pct + '%';
-  const ring = document.getElementById('gauge-ring');
-  const circumference = 2 * Math.PI * 50;
-  ring.style.strokeDashoffset = circumference - (pct / 100) * circumference;
+  const circ = 2 * Math.PI * 50;
+  document.getElementById('gauge-ring').style.strokeDashoffset = circ - (pct/100)*circ;
   document.getElementById('gauge-msg').textContent =
-    pct === 100 ? '오늘 약속을 다 지키셨어요! 🎉' : '소중한 나를 위한 오늘의 실천';
+    pct===100 ? '🎉 오늘 약속을 다 지키셨어요!' : '소중한 나를 위한 오늘의 실천';
 }
 
 window.handleTaken = async function(idx) {
   meds[idx].taken = !meds[idx].taken;
-  const storedStr = localStorage.getItem('yakmate_user');
-  const storedUser = storedStr ? JSON.parse(storedStr) : null;
-
+  const stored = localStorage.getItem('yakmate_user');
+  const storedUser = stored ? JSON.parse(stored) : null;
   if (storedUser?.isGuest) {
     localStorage.setItem('yakmate_guest_' + today, JSON.stringify(meds));
   } else {
     try {
       const uid = auth.currentUser?.uid || storedUser?.uid;
-      if (uid) {
-        const dailyRef = doc(db, 'users', uid, 'daily', today);
-        await setDoc(dailyRef, { meds, date: today, updatedAt: new Date() });
-      }
+      if (uid) await setDoc(doc(db,'users',uid,'daily',today), {meds, date:today, updatedAt:new Date()});
     } catch(e) { console.error(e); }
   }
   renderMeds();
