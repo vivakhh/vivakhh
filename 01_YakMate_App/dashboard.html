@@ -347,7 +347,7 @@ onAuthStateChanged(auth,async(firebaseUser)=>{
   try{
     const dailyRef=doc(db,"users",uid,"daily",today);
     const dailySnap=await getDoc(dailyRef);
-    if(dailySnap.exists()&&dailySnap.data().meds){meds=dailySnap.data().meds;}
+    if(dailySnap.exists()&&dailySnap.data().meds&&dailySnap.data().meds.length>0){meds=dailySnap.data().meds;}
     else{
       const routineRef=doc(db,"users",uid,"settings","routine");
       const routineSnap=await getDoc(routineRef);
@@ -355,7 +355,7 @@ onAuthStateChanged(auth,async(firebaseUser)=>{
       else{meds=[{id:"m1",name:"아침 💊",time:"08:00",taken:false},{id:"m2",name:"점심 💊",time:"13:00",taken:false},{id:"m3",name:"저녁 💊",time:"19:00",taken:false}];await setDoc(routineRef,{meds,updatedAt:new Date()});}
       await setDoc(dailyRef,{meds,date:today,updatedAt:new Date()});
     }
-  }catch(e){console.error("Firestore error:",e);meds=[{id:"m1",name:"아침 약 복용",time:"08:30",taken:false},{id:"m2",name:"점심 약 복용",time:"13:00",taken:false},{id:"m3",name:"저녁 약 복용",time:"19:30",taken:false}];}
+  }catch(e){console.error("Firestore error:",e);meds=[{id:"m1",name:"아침 💊",time:"08:00",taken:false},{id:"m2",name:"점심 💊",time:"13:00",taken:false},{id:"m3",name:"저녁 💊",time:"19:00",taken:false}];}
   renderMeds();
 });
 
