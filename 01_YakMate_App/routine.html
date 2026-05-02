@@ -303,7 +303,7 @@ const DRUG_DB = [
   {name:'실로스타졸', desc:'혈전 예방·말초혈관질환', time:'식전 30분'},
 ];
 
-function searchDrug() {
+window.searchDrug = function() {
   const name = document.getElementById('new-name').value.trim().toLowerCase();
   if (!name) { alert('약 이름을 입력해주세요'); return; }
   const resultDiv = document.getElementById('drug-result');
@@ -320,7 +320,7 @@ function searchDrug() {
     </div>`).join('');
 }
 
-function selectDrug(name) {
+window.selectDrug = function(name) {
   document.getElementById('new-name').value = name;
   document.getElementById('drug-result').style.display = 'none';
 }
