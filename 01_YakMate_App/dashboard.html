@@ -152,15 +152,27 @@ onAuthStateChanged(auth, async (fbUser) => {
   try {
     const dailyRef = doc(db,'users',uid,'daily',today);
     const dailySnap = await getDoc(dailyRef);
-    const routineSnap2 = await getDoc(doc(db,'users',uid,'settings','routine'));
-    const routineUpdated = routineSnap2.exists() ? routineSnap2.data().updatedAt?.toMillis() : 0;
-    const dailyUpdated = dailySnap.exists() ? dailySnap.data().updatedAt?.toMillis() : 0;
-    const routineChanged = routineUpdated > dailyUpdated;
-
-    if (dailySnap.exists() && dailySnap.data().meds && dailySnap.data().meds.length > 0 && !routineChanged) {
+    if (dailySnap.exists() && dailySnap.data().meds && dailySnap.data().meds.length > 0) {
       meds = dailySnap.data().meds;
     } else {
+      // routine 먼저 확인해서 최신 약 목록 가져오기
       const routineSnap = await getDoc(doc(db,'users',uid,'settings','routine'));
+      if (routineSnap.exists() && routineSnap.data().meds && routineSnap.data().meds.length > 0) {
+        const routineMeds = routineSnap.data().meds;
+        if (dailySnap.exists() && dailySnap.data().meds) {
+          const savedMeds = dailySnap.data().meds;
+          meds = routineMeds.map(rm => {
+            const found = savedMeds.find(sm => sm.time === rm.time && sm.id === rm.id);
+            return found ? {...rm, taken: found.taken} : {...rm, taken: false};
+          });
+        } else {
+          meds = routineMeds.map(m => ({...m, taken: false}));
+        }
+        await setDoc(doc(db,'users',uid,'daily',today), {meds, date:today, updatedAt:new Date()});
+        renderMeds();
+        return;
+      }
+      const routineSnap_unused = routineSnap;
       if (routineSnap.exists() && routineSnap.data().meds && routineSnap.data().meds.length > 0) {
         meds = routineSnap.data().meds.map(m => ({...m, taken:false}));
       } else {
