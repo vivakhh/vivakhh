@@ -231,9 +231,18 @@ function renderRoutine() {
     `).join('');
 }
 
-window.deleteItem = (idx) => {
+window.deleteItem = async (idx) => {
     routine.splice(idx, 1);
     renderRoutine();
+    try {
+      const uid = currentUser?.uid || (JSON.parse(localStorage.getItem('yakmate_user')||'{}')).uid;
+      if (uid) {
+        const ref = doc(db, 'users', uid, 'settings', 'routine');
+        await setDoc(ref, { meds: routine, updatedAt: new Date() });
+        const today = new Date(Date.now()+9*60*60*1000).toISOString().split('T')[0];
+        await setDoc(doc(db,'users',uid,'daily',today), {meds:routine.map(m=>({...m,taken:false})),date:today,updatedAt:new Date()});
+      }
+    } catch(e) { console.error(e); }
 };
 
 document.getElementById('btn-add').addEventListener('click', async () => {
