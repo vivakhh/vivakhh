@@ -152,7 +152,12 @@ onAuthStateChanged(auth, async (fbUser) => {
   try {
     const dailyRef = doc(db,'users',uid,'daily',today);
     const dailySnap = await getDoc(dailyRef);
-    if (dailySnap.exists() && dailySnap.data().meds && dailySnap.data().meds.length > 0) {
+    const routineSnap2 = await getDoc(doc(db,'users',uid,'settings','routine'));
+    const routineUpdated = routineSnap2.exists() ? routineSnap2.data().updatedAt?.toMillis() : 0;
+    const dailyUpdated = dailySnap.exists() ? dailySnap.data().updatedAt?.toMillis() : 0;
+    const routineChanged = routineUpdated > dailyUpdated;
+
+    if (dailySnap.exists() && dailySnap.data().meds && dailySnap.data().meds.length > 0 && !routineChanged) {
       meds = dailySnap.data().meds;
     } else {
       const routineSnap = await getDoc(doc(db,'users',uid,'settings','routine'));
