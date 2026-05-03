@@ -8,131 +8,19 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <link rel="stylesheet" href="global.css">
     <style>
-        body {
-            background: var(--bg-main);
-            color: var(--on-bg);
-            padding-bottom: 140px;
-        }
-
-        .header {
-            padding: 32px 24px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .btn-back {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            width: 48px;
-            height: 48px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--on-card);
-            cursor: pointer;
-            box-shadow: var(--shadow);
-        }
-
-        .header-title {
-            font-size: 24px;
-            font-weight: 800;
-            color: var(--on-card);
-            letter-spacing: -0.5px;
-        }
-
-        .info-card {
-            background: rgba(212, 175, 55, 0.05);
-            border: 1px dashed var(--primary);
-            border-radius: 32px;
-            padding: 28px;
-            margin: 0 24px 32px;
-            display: flex;
-            gap: 16px;
-        }
-
-        .info-text {
-            font-size: 14px;
-            line-height: 1.6;
-            font-weight: 600;
-            color: var(--on-card);
-        }
-
-        .section-title {
-            padding: 0 24px;
-            font-size: 13px;
-            font-weight: 800;
-            color: var(--text-dim);
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 16px;
-        }
-
-        .routine-item {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 28px;
-            padding: 24px;
-            margin: 0 24px 12px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: var(--shadow);
-        }
-
-        .routine-time {
-            font-size: 20px;
-            font-weight: 800;
-            color: var(--primary);
-            font-family: 'Space Grotesk', sans-serif;
-        }
-
-        .routine-name {
-            font-size: 15px;
-            font-weight: 600;
-            color: var(--on-card);
-            margin-top: 2px;
-        }
-
-        .btn-delete {
-            background: rgba(255, 110, 132, 0.1);
-            border: 1px solid rgba(255, 110, 132, 0.2);
-            color: #ff6e84;
-            border-radius: 14px;
-            width: 40px;
-            height: 40px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .add-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 32px;
-            padding: 32px;
-            margin: 16px 24px 32px;
-            box-shadow: var(--shadow);
-        }
-
-        .btn-save {
-            position: fixed;
-            bottom: 40px;
-            left: 24px;
-            right: 24px;
-            background: var(--primary);
-            color: #fff;
-            border: none;
-            border-radius: 24px;
-            padding: 24px;
-            font-weight: 800;
-            font-size: 17px;
-            cursor: pointer;
-            box-shadow: 0 15px 40px var(--primary-glow);
-            z-index: 1000;
-        }
+        body { background: var(--bg-main); color: var(--on-bg); padding-bottom: 40px; }
+        .header { padding: 32px 24px; display: flex; align-items: center; gap: 16px; }
+        .btn-back { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; color: var(--on-card); cursor: pointer; box-shadow: var(--shadow); }
+        .header-title { font-size: 24px; font-weight: 800; color: var(--on-card); letter-spacing: -0.5px; }
+        .info-card { background: rgba(212,175,55,0.05); border: 1px dashed var(--primary); border-radius: 32px; padding: 28px; margin: 0 24px 32px; }
+        .info-text { font-size: 14px; line-height: 1.6; font-weight: 600; color: var(--on-card); }
+        .section-title { padding: 0 24px; font-size: 13px; font-weight: 800; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 16px; }
+        .routine-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: 28px; padding: 24px; margin: 0 24px 12px; display: flex; align-items: center; justify-content: space-between; box-shadow: var(--shadow); }
+        .routine-time { font-size: 20px; font-weight: 800; color: var(--primary); font-family: 'Space Grotesk', sans-serif; }
+        .routine-name { font-size: 15px; font-weight: 600; color: var(--on-card); margin-top: 2px; }
+        .btn-delete { background: rgba(255,110,132,0.1); border: 1px solid rgba(255,110,132,0.2); color: #ff6e84; border-radius: 14px; width: 40px; height: 40px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .add-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 32px; padding: 32px; margin: 16px 24px; box-shadow: var(--shadow); }
+        .toast { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%); background: var(--primary); color: #000; padding: 14px 28px; border-radius: 20px; font-weight: 800; font-size: 15px; z-index: 9999; display: none; }
     </style>
 </head>
 <body>
@@ -142,6 +30,7 @@
             if (theme === 'light') document.body.classList.add('light-mode');
         })();
     </script>
+
     <div class="header">
         <button class="btn-back" onclick="location.href='dashboard.html'">
             <span class="material-icons-round">arrow_back</span>
@@ -156,67 +45,69 @@
     <div class="section-title">현재 설정된 시간</div>
     <div id="routine-list"></div>
 
-        
-        <div class="add-card">
-            <div style="margin-bottom: 16px;">
-                <label style="font-size: 12px; font-weight: 800; color: var(--primary); display: block; margin-bottom: 8px; text-transform: uppercase;">복용 시간 ⏰</label>
-                <div style="display:flex; gap:8px; margin-bottom:12px;">
-                  <button onclick="setPreset('08:00')" id="preset-morning" style="flex:1; padding:12px 8px; border-radius:16px; border:2px solid var(--border); background:transparent; color:var(--on-card); font-size:13px; font-weight:800; cursor:pointer; transition:all 0.2s;">🌅 아침</button>
-                  <button onclick="setPreset('13:00')" id="preset-lunch" style="flex:1; padding:12px 8px; border-radius:16px; border:2px solid var(--border); background:transparent; color:var(--on-card); font-size:13px; font-weight:800; cursor:pointer; transition:all 0.2s;">☀️ 점심</button>
-                  <button onclick="setPreset('19:00')" id="preset-dinner" style="flex:1; padding:12px 8px; border-radius:16px; border:2px solid var(--border); background:transparent; color:var(--on-card); font-size:13px; font-weight:800; cursor:pointer; transition:all 0.2s;">🌙 저녁</button>
-                </div>
-                <input type="time" id="new-time" style="width:100%; background:var(--bg-float); border:1px solid var(--border); border-radius:18px; padding:20px; color:var(--on-card); font-size:24px; font-weight:800; text-align:center; outline:none;" value="08:00">
+    <div class="add-card">
+        <div style="margin-bottom:16px;">
+            <label style="font-size:12px;font-weight:800;color:var(--primary);display:block;margin-bottom:8px;text-transform:uppercase;">복용 시간 ⏰</label>
+            <div style="display:flex;gap:8px;margin-bottom:12px;">
+                <button onclick="setPreset('08:00')" id="preset-morning" style="flex:1;padding:12px 8px;border-radius:16px;border:2px solid var(--border);background:transparent;color:var(--on-card);font-size:13px;font-weight:800;cursor:pointer;transition:all 0.2s;">🌅 아침</button>
+                <button onclick="setPreset('13:00')" id="preset-lunch" style="flex:1;padding:12px 8px;border-radius:16px;border:2px solid var(--border);background:transparent;color:var(--on-card);font-size:13px;font-weight:800;cursor:pointer;transition:all 0.2s;">☀️ 점심</button>
+                <button onclick="setPreset('19:00')" id="preset-dinner" style="flex:1;padding:12px 8px;border-radius:16px;border:2px solid var(--border);background:transparent;color:var(--on-card);font-size:13px;font-weight:800;cursor:pointer;transition:all 0.2s;">🌙 저녁</button>
             </div>
-            <div style="margin-bottom: 16px;">
-                <label style="font-size: 12px; font-weight: 800; color: var(--primary); display: block; margin-bottom: 8px; text-transform: uppercase;">약 이름 🔍 <span style="font-weight:400;opacity:0.5;font-size:11px;">(선택사항)</span></label>
-                <div style="display:flex; gap:8px;">
-                    <input type="text" id="new-name" placeholder="약 이름 입력 — 비워도 됩니다" style="flex:1; background:var(--bg-float); border:1px solid var(--border); border-radius:18px; padding:16px 20px; color:var(--on-card); font-size:16px; font-weight:600; outline:none;">
-                    <button onclick="searchDrug()" style="padding:16px 20px; background:var(--primary); border:none; border-radius:18px; color:#000; font-weight:800; cursor:pointer; white-space:nowrap;">검색</button>
-                </div>
-                <div id="drug-result" style="margin-top:12px; display:none; background:var(--bg-float); border:1px solid var(--border); border-radius:16px; padding:16px;"></div>
-            </div>
-            <button id="btn-add" style="width:100%; padding:18px; background:var(--bg-float); border:1px solid var(--border); border-radius:18px; color: var(--on-card); font-weight:800; cursor:pointer;">+ 약 추가하기 💊</button>
+            <input type="time" id="new-time" style="width:100%;background:var(--bg-float);border:1px solid var(--border);border-radius:18px;padding:20px;color:var(--on-card);font-size:24px;font-weight:800;text-align:center;outline:none;" value="08:00">
         </div>
+        <div style="margin-bottom:16px;">
+            <label style="font-size:12px;font-weight:800;color:var(--primary);display:block;margin-bottom:8px;text-transform:uppercase;">약 이름 🔍 <span style="font-weight:400;opacity:0.5;font-size:11px;">(선택사항)</span></label>
+            <div style="display:flex;gap:8px;">
+                <input type="text" id="new-name" placeholder="약 이름 입력 — 비워도 됩니다" style="flex:1;background:var(--bg-float);border:1px solid var(--border);border-radius:18px;padding:16px 20px;color:var(--on-card);font-size:16px;font-weight:600;outline:none;">
+                <button onclick="searchDrug()" style="padding:16px 20px;background:var(--primary);border:none;border-radius:18px;color:#000;font-weight:800;cursor:pointer;">검색</button>
+            </div>
+            <div id="drug-result" style="margin-top:12px;display:none;background:var(--bg-float);border:1px solid var(--border);border-radius:16px;padding:16px;"></div>
+        </div>
+        <button id="btn-add" style="width:100%;padding:18px;background:var(--primary);border:none;border-radius:18px;color:#000;font-weight:800;font-size:16px;cursor:pointer;">+ 약 추가하기 💊</button>
+    </div>
+
+    <div class="toast" id="toast">✅ 저장됐어요!</div>
 
 <script type="module">
-import{initializeApp}from"https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
-import{getAuth,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
-import{getFirestore,doc,getDoc,setDoc}from"https://www.gstatic.com/firebasejs/9.17.2/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-firestore.js";
 
-const config={apiKey:"AIzaSyDpnPJnErnrTloHk3HFrsXHORUMvAiOq5w",authDomain:"pill-sajangnim.firebaseapp.com",projectId:"pill-sajangnim",storageBucket:"pill-sajangnim.firebasestorage.app",messagingSenderId:"648268791992",appId:"1:648268791992:web:41a92580aa1a58ae6bb44d"};
-const app=initializeApp(config);
-const auth=getAuth(app);
-const db=getFirestore(app);
+const app = initializeApp({
+    apiKey: "AIzaSyDpnPJnErnrTloHk3HFrsXHORUMvAiOq5w",
+    authDomain: "pill-sajangnim.firebaseapp.com",
+    projectId: "pill-sajangnim",
+    storageBucket: "pill-sajangnim.firebasestorage.app",
+    messagingSenderId: "648268791992",
+    appId: "1:648268791992:web:41a92580aa1a58ae6bb44d"
+});
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-let currentUser = null;
+let currentUid = null;
 let routine = [];
 
-onAuthStateChanged(auth, async user => {
-    let u = user;
-    if(!u){
-        const kakaoData = localStorage.getItem('yakmate_kakao_user');
-        if(kakaoData) u = JSON.parse(kakaoData);
-    }
-    var storedUser = JSON.parse(localStorage.getItem('yakmate_user') || 'null'); if(!u && !storedUser){ window.location.href='./index.html'; return; } if(!u && storedUser) u = storedUser;
-    currentUser = u;
-    
-    // 기본 루틴 불러오기
-    const snap = await getDoc(doc(db, 'users', u.uid, 'settings', 'routine'));
-    if(snap.exists() && snap.data().meds) {
-        routine = snap.data().meds;
-    } else {
-        routine = [
-            {id:'m1', name:'아침 약', time:'08:00'},
-            {id:'m2', name:'점심 약', time:'13:00'},
-            {id:'m3', name:'저녁 약', time:'19:00'}
-        ];
-    }
-    renderRoutine();
-});
+function getToday() {
+    return new Date(Date.now() + 9*60*60*1000).toISOString().split('T')[0];
+}
+
+async function saveRoutine() {
+    if (!currentUid) return;
+    const today = getToday();
+    await setDoc(doc(db, 'users', currentUid, 'settings', 'routine'), { meds: routine, updatedAt: new Date() });
+    await setDoc(doc(db, 'users', currentUid, 'daily', today), { meds: routine.map(m => ({...m, taken: false})), date: today, updatedAt: new Date() });
+    showToast();
+}
+
+function showToast() {
+    const t = document.getElementById('toast');
+    t.style.display = 'block';
+    setTimeout(() => { t.style.display = 'none'; }, 2000);
+}
 
 function renderRoutine() {
     const list = document.getElementById('routine-list');
-    if(routine.length === 0) {
+    if (routine.length === 0) {
         list.innerHTML = '<div style="text-align:center;padding:60px 20px;color:var(--text-dim);font-size:15px;">설정된 시간표가 없습니다.<br>사장님만의 건강 루틴을 만들어보세요! ✨</div>';
         return;
     }
@@ -224,9 +115,11 @@ function renderRoutine() {
         <div class="routine-item">
             <div>
                 <div class="routine-time">${m.time}</div>
-                <div class="routine-name">약속 시간</div>
+                <div class="routine-name">${m.name}</div>
             </div>
-            <button class="btn-delete" onclick="deleteItem(${i})"><span class="material-icons-round">close</span></button>
+            <button class="btn-delete" onclick="window.deleteItem(${i})">
+                <span class="material-icons-round">close</span>
+            </button>
         </div>
     `).join('');
 }
@@ -234,190 +127,91 @@ function renderRoutine() {
 window.deleteItem = async (idx) => {
     routine.splice(idx, 1);
     renderRoutine();
-    try {
-      const uid = currentUser?.uid || (JSON.parse(localStorage.getItem('yakmate_user')||'{}')).uid;
-      if (uid) {
-        const ref = doc(db, 'users', uid, 'settings', 'routine');
-        await setDoc(ref, { meds: routine, updatedAt: new Date() });
-        const today = new Date(Date.now()+9*60*60*1000).toISOString().split('T')[0];
-        await setDoc(doc(db,'users',uid,'daily',today), {meds:routine.map(m=>({...m,taken:false})),date:today,updatedAt:new Date()});
-      }
-    } catch(e) { console.error(e); }
+    await saveRoutine();
 };
 
 document.getElementById('btn-add').addEventListener('click', async () => {
     const timeEl = document.getElementById('new-time');
     const time = timeEl ? timeEl.value : '';
-    if(!time) { alert('시간을 선택해주세요!'); return; }
-    const nameEl = document.getElementById('new-name');
-    const nameInput = nameEl ? nameEl.value.trim() : '';
-    const presetNames = {'08:00':'아침 💊','13:00':'점심 💊','19:00':'저녁 💊'};
+    if (!time) { alert('시간을 선택해주세요!'); return; }
+    const nameInput = (document.getElementById('new-name')?.value || '').trim();
+    const presetNames = {'08:00':'아침 💊', '13:00':'점심 💊', '19:00':'저녁 💊'};
     const name = nameInput || presetNames[time] || '약 복용';
-
-    routine.push({ id: 'm'+Date.now(), name: name, time });
+    routine.push({ id: 'm' + Date.now(), name, time });
     routine.sort((a, b) => a.time.localeCompare(b.time));
     renderRoutine();
-
-    try {
-      const uid = currentUser?.uid || (JSON.parse(localStorage.getItem('yakmate_user')||'{}')).uid;
-      if (uid) {
-        const ref = doc(db, 'users', uid, 'settings', 'routine');
-        await setDoc(ref, { meds: routine, updatedAt: new Date() });
-        const today = new Date(Date.now()+9*60*60*1000).toISOString().split('T')[0];
-        await setDoc(doc(db,'users',uid,'daily',today), {meds:routine.map(m=>({...m,taken:false})),date:today,updatedAt:new Date()});
-      }
-    } catch(e) { console.error(e); }
+    await saveRoutine();
 });
 
-document.getElementById('btn-save').addEventListener('click', async () => {
-    if(routine.length === 0) {
-        if(!confirm('시간표가 하나도 없습니다. 그래도 저장할까요?')) return;
-    }
-    
-    try {
-        const ref = doc(db, 'users', currentUser.uid, 'settings', 'routine');
-        await setDoc(ref, { meds: routine, updatedAt: new Date() });
-      const today = new Date(Date.now()+9*60*60*1000).toISOString().split("T")[0];
-      const dRef2 = doc(db,"users",uid,"daily",today);
-      await setDoc(dRef2, {meds:routine.map(m=>({...m,taken:false})),date:today,updatedAt:new Date()});
-        
-        // 오늘 날짜 데이터도 즉시 갱신할지 확인
-        if(confirm('저장되었습니다! 오늘 남은 일정도 이 시간표대로 즉시 변경할까요?')) {
-            const offset = 9 * 60 * 60 * 1000;
-            const kst = new Date(new Date().getTime() + offset);
-            const today = kst.toISOString().split('T')[0];
-            
-            // 기존 daily 데이터 가져오기 (이미 먹은 약 체크 상태 보존을 위해)
-            const dRef = doc(db, 'users', currentUser.uid, 'daily', today);
-            const dSnap = await getDoc(dRef);
-            let dailyMeds = routine.map(r => ({...r, taken: false}));
-            
-            if(dSnap.exists() && dSnap.data().meds) {
-                const existing = dSnap.data().meds;
-                dailyMeds = routine.map(r => {
-                    const match = existing.find(e => e.name === r.name && e.time === r.time);
-                    return { ...r, taken: match ? match.taken : false };
-                });
-            }
-            
-            await setDoc(dRef, { meds: dailyMeds, updatedAt: new Date() });
-        }
-        
-        window.location.href = 'dashboard.html';
-    } catch(e) {
-        alert('저장 중 오류가 발생했습니다: ' + e.message);
-    }
-});
-
-const DRUG_DB = [
-  {name:'아스피린', desc:'혈전 예방 / 해열·진통·소염', time:'식후'},
-  {name:'노바스크', desc:'고혈압·협심증 치료 (칼슘길항제)', time:'식전/식후 무관'},
-  {name:'리피토', desc:'고콜레스테롤 치료 (스타틴)', time:'식전/식후 무관'},
-  {name:'플라빅스', desc:'혈전 예방 (항혈소판제)', time:'식후'},
-  {name:'메트포르민', desc:'당뇨병 치료 (혈당강하제)', time:'식사 중'},
-  {name:'암로디핀', desc:'고혈압 치료 (칼슘길항제)', time:'식전/식후 무관'},
-  {name:'아토르바스타틴', desc:'고콜레스테롤 치료', time:'저녁 식후'},
-  {name:'리바록사반', desc:'혈전·색전증 예방 (항응고제)', time:'식사 중'},
-  {name:'와파린', desc:'혈전 예방 (항응고제)', time:'일정한 시간'},
-  {name:'오메프라졸', desc:'위산 억제·위궤양 치료', time:'식전 30분'},
-  {name:'에소메프라졸', desc:'위식도역류 치료', time:'식전 1시간'},
-  {name:'메토프롤롤', desc:'고혈압·부정맥 치료 (베타차단제)', time:'식사 중'},
-  {name:'클로피도그렐', desc:'혈전 예방 (항혈소판제)', time:'식후'},
-  {name:'심바스타틴', desc:'고콜레스테롤 치료', time:'저녁 식후'},
-  {name:'가바펜틴', desc:'신경통·뇌전증 치료', time:'식사 무관'},
-  {name:'프레드니솔론', desc:'염증·자가면역 치료 (스테로이드)', time:'식후'},
-  {name:'레보티록신', desc:'갑상선 호르몬 보충', time:'아침 공복'},
-  {name:'알로퓨리놀', desc:'통풍 치료 (요산 감소)', time:'식후'},
-  {name:'딜티아젬', desc:'부정맥·협심증 치료', time:'식전/식후 무관'},
-  {name:'실로스타졸', desc:'혈전 예방·말초혈관질환', time:'식전 30분'},
-];
-
-window.searchDrug = function() {
-  const name = document.getElementById('new-name').value.trim().toLowerCase();
-  if (!name) { alert('약 이름을 입력해주세요'); return; }
-  const resultDiv = document.getElementById('drug-result');
-  resultDiv.style.display = 'block';
-  const matches = DRUG_DB.filter(d => d.name.toLowerCase().includes(name) || name.includes(d.name.toLowerCase()));
-  if (matches.length === 0) {
-    resultDiv.innerHTML = '<p style="color:var(--on-card);opacity:0.6;font-size:13px;">검색 결과가 없어요. 약 이름을 직접 입력하고 추가하세요 💊</p>';
-    return;
-  }
-  resultDiv.innerHTML = matches.map(d => `
-    <div onclick="selectDrug('${d.name}')" style="padding:12px 8px;border-bottom:1px solid var(--border);cursor:pointer;">
-      <div style="font-weight:700;color:var(--on-card);font-size:14px;">${d.name}</div>
-      <div style="font-size:12px;color:var(--on-card);opacity:0.6;margin-top:2px;">${d.desc} · ${d.time}</div>
-    </div>`).join('');
-}
-
-window.selectDrug = function(name) {
-  document.getElementById('new-name').value = name;
-  document.getElementById('drug-result').style.display = 'none';
-}
-</script><script>
-const DRUG_DB = [
-  {name:'아스피린', desc:'혈전 예방 / 해열·진통·소염', time:'식후'},
-  {name:'노바스크', desc:'고혈압·협심증 치료 (칼슘길항제)', time:'식전/식후 무관'},
-  {name:'암로디핀', desc:'고혈압 치료 (칼슘길항제)', time:'식전/식후 무관'},
-  {name:'리피토', desc:'고콜레스테롤 치료 (스타틴)', time:'식전/식후 무관'},
-  {name:'플라빅스', desc:'혈전 예방 (항혈소판제)', time:'식후'},
-  {name:'클로피도그렐', desc:'혈전 예방 (항혈소판제)', time:'식후'},
-  {name:'메트포르민', desc:'당뇨병 치료 (혈당강하제)', time:'식사 중'},
-  {name:'오메프라졸', desc:'위산 억제·위궤양 치료', time:'식전 30분'},
-  {name:'리바록사반', desc:'혈전·색전증 예방 (항응고제)', time:'식사 중'},
-  {name:'실로스타졸', desc:'혈전 예방·말초혈관질환', time:'식전 30분'},
-  {name:'와파린', desc:'혈전 예방 (항응고제)', time:'일정한 시간'},
-];
-function toggleAddForm() {
-  const form = document.getElementById('add-form');
-  const btn = document.getElementById('btn-open-add');
-  if (form.style.display === 'none') {
-    form.style.display = 'block';
-    btn.textContent = '✕ 닫기';
-    btn.style.background = 'var(--border)';
-  } else {
-    form.style.display = 'none';
-    btn.textContent = '+ 약 추가하기 💊';
-    btn.style.background = 'var(--primary)';
-  }
-}
-
-function setPreset(time) {
-  document.getElementById('new-time').value = time;
-  const ids = ['preset-morning','preset-lunch','preset-dinner'];
-  const times = ['08:00','13:00','19:00'];
-  ids.forEach((id, i) => {
-    const btn = document.getElementById(id);
-    if (times[i] === time) {
-      btn.style.background = 'var(--primary)';
-      btn.style.color = '#000';
-      btn.style.borderColor = 'var(--primary)';
+onAuthStateChanged(auth, async (user) => {
+    const stored = JSON.parse(localStorage.getItem('yakmate_user') || 'null');
+    const u = user || stored;
+    if (!u) { location.href = './index.html'; return; }
+    currentUid = u.uid;
+    const snap = await getDoc(doc(db, 'users', currentUid, 'settings', 'routine'));
+    if (snap.exists() && snap.data().meds && snap.data().meds.length > 0) {
+        routine = snap.data().meds;
     } else {
-      btn.style.background = 'transparent';
-      btn.style.color = 'var(--on-card)';
-      btn.style.borderColor = 'var(--border)';
+        routine = [];
     }
-  });
+    renderRoutine();
+});
+</script>
+
+<script>
+function setPreset(time) {
+    document.getElementById('new-time').value = time;
+    ['preset-morning','preset-lunch','preset-dinner'].forEach((id, i) => {
+        const t = ['08:00','13:00','19:00'][i];
+        const btn = document.getElementById(id);
+        if (t === time) {
+            btn.style.background = 'var(--primary)';
+            btn.style.color = '#000';
+            btn.style.borderColor = 'var(--primary)';
+        } else {
+            btn.style.background = 'transparent';
+            btn.style.color = 'var(--on-card)';
+            btn.style.borderColor = 'var(--border)';
+        }
+    });
 }
+
+const DRUG_DB = [
+    {name:'아스피린', desc:'혈전 예방 / 해열·진통·소염', time:'식후'},
+    {name:'노바스크', desc:'고혈압·협심증 치료', time:'식전/식후 무관'},
+    {name:'리피토', desc:'고콜레스테롤 치료', time:'식전/식후 무관'},
+    {name:'플라빅스', desc:'혈전 예방', time:'식후'},
+    {name:'메트포르민', desc:'당뇨병 치료', time:'식사 중'},
+    {name:'암로디핀', desc:'고혈압 치료', time:'식전/식후 무관'},
+    {name:'오메프라졸', desc:'위산 억제·위궤양 치료', time:'식전 30분'},
+    {name:'리바록사반', desc:'혈전·색전증 예방', time:'식사 중'},
+    {name:'와파린', desc:'혈전 예방', time:'일정한 시간'},
+    {name:'실로스타졸', desc:'혈전 예방·말초혈관질환', time:'식전 30분'},
+    {name:'레보티록신', desc:'갑상선 호르몬 보충', time:'아침 공복'},
+    {name:'클로피도그렐', desc:'혈전 예방', time:'식후'},
+];
 
 function searchDrug() {
-  var input = document.getElementById('new-name');
-  if (!input) return;
-  var name = input.value.trim().toLowerCase();
-  if (!name) { alert('약 이름을 입력해주세요'); return; }
-  var resultDiv = document.getElementById('drug-result');
-  if (!resultDiv) return;
-  resultDiv.style.display = 'block';
-  var matches = DRUG_DB.filter(function(d){ return d.name.toLowerCase().includes(name); });
-  if (matches.length === 0) {
-    resultDiv.innerHTML = '<p style="color:#666;font-size:13px;padding:8px;">검색 결과가 없어요. 직접 입력하고 추가하세요 💊</p>';
-    return;
-  }
-  resultDiv.innerHTML = matches.map(function(d){
-    return '<div onclick="selectDrug(\'' + d.name + '\')" style="padding:12px 8px;border-bottom:1px solid #eee;cursor:pointer;"><div style="font-weight:700;font-size:14px;">' + d.name + '</div><div style="font-size:12px;opacity:0.6;margin-top:2px;">' + d.desc + ' · ' + d.time + '</div></div>';
-  }).join('');
+    const name = (document.getElementById('new-name')?.value || '').trim().toLowerCase();
+    if (!name) { alert('약 이름을 입력해주세요'); return; }
+    const resultDiv = document.getElementById('drug-result');
+    resultDiv.style.display = 'block';
+    const matches = DRUG_DB.filter(d => d.name.toLowerCase().includes(name));
+    if (matches.length === 0) {
+        resultDiv.innerHTML = '<p style="color:var(--on-card);opacity:0.6;font-size:13px;">검색 결과가 없어요. 직접 입력하세요 💊</p>';
+        return;
+    }
+    resultDiv.innerHTML = matches.map(d => `
+        <div onclick="selectDrug('${d.name}')" style="padding:12px 8px;border-bottom:1px solid var(--border);cursor:pointer;">
+            <div style="font-weight:700;color:var(--on-card);font-size:14px;">${d.name}</div>
+            <div style="font-size:12px;color:var(--on-card);opacity:0.6;margin-top:2px;">${d.desc} · ${d.time}</div>
+        </div>`).join('');
 }
+
 function selectDrug(name) {
-  document.getElementById('new-name').value = name;
-  document.getElementById('drug-result').style.display = 'none';
+    document.getElementById('new-name').value = name;
+    document.getElementById('drug-result').style.display = 'none';
 }
 </script>
+</body>
+</html>
