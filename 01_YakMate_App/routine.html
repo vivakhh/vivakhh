@@ -251,7 +251,7 @@ document.getElementById('btn-add').addEventListener('click', async () => {
 
     // 자동 저장 (Firestore + daily 리셋)
     try {
-      const uid = currentUser?.uid;
+      const uid = currentUser?.uid || (JSON.parse(localStorage.getItem('yakmate_user')||'{}')).uid;
       if (uid) {
         const ref = doc(db, 'users', uid, 'settings', 'routine');
         await setDoc(ref, { meds: routine, updatedAt: new Date() });
