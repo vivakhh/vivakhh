@@ -238,7 +238,9 @@ window.deleteItem = (idx) => {
 
 document.getElementById('btn-add').addEventListener('click', () => {
     const nameEl = document.getElementById('new-name');
-        const name = nameEl ? (nameEl.value.trim() || '약 복용') : '약 복용';
+      const nameInput = nameEl ? nameEl.value.trim() : '';
+      const presetNames = {'08:00':'아침 💊','13:00':'점심 💊','19:00':'저녁 💊'};
+      const name = nameInput || presetNames[time] || '약 복용';
         const time = document.getElementById('new-time').value;
     if(!time) { alert('시간을 선택해주세요!'); return; }
     
