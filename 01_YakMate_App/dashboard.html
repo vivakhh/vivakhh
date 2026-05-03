@@ -216,7 +216,7 @@ function renderMeds() {
       row.className = 'med-row';
       row.innerHTML =
         '<div class="med-info"><span style="font-size:20px">' + todayIcon + '</span>' +
-        '<span class="med-name' + (med.taken?' taken':'') + '">' + med.name + '</span></div>' +
+        '<span class="med-name' + (med.taken?' taken':'') + '">' + med.name.replace(/^\d{2}:\d{2}[·\s]+/, '') + '</span></div>' +
         '<button class="check-btn' + (med.taken?' checked':'') + '" onclick="handleTaken(' + med.idx + ')">' +
         '' + '</button>';
       group.appendChild(row);
