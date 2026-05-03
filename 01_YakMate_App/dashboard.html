@@ -151,20 +151,17 @@ onAuthStateChanged(auth, async (fbUser) => {
   const uid = fbUser?.uid || storedUser?.uid;
   try {
       const dailyRef = doc(db,'users',uid,'daily',today);
-      const [dailySnap, routineSnap] = await Promise.all([
-        getDoc(dailyRef),
-        getDoc(doc(db,'users',uid,'settings','routine'))
-      ]);
-      const savedMeds = (dailySnap.exists() && dailySnap.data().meds) ? dailySnap.data().meds : [];
+      const routineSnap = await getDoc(doc(db,'users',uid,'settings','routine'));
 
       if (routineSnap.exists() && routineSnap.data().meds && routineSnap.data().meds.length > 0) {
+        // routine 있으면 routine 기준으로만 표시, taken은 항상 false로 리셋
+        const dailySnap = await getDoc(dailyRef);
+        const savedMeds = (dailySnap.exists() && dailySnap.data().meds) ? dailySnap.data().meds : [];
         const routineMeds = routineSnap.data().meds;
         meds = routineMeds.map(rm => {
-          const found = savedMeds.find(sm => sm.time === rm.time && sm.id === rm.id);
+          const found = savedMeds.find(sm => sm.time === rm.time);
           return {...rm, taken: found ? found.taken : false};
         });
-      } else if (savedMeds.length > 0) {
-        meds = savedMeds;
       } else {
         meds = JSON.parse(JSON.stringify(DEFAULT_MEDS));
       }
