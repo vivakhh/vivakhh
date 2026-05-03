@@ -237,19 +237,18 @@ window.deleteItem = (idx) => {
 };
 
 document.getElementById('btn-add').addEventListener('click', async () => {
-    const nameEl = document.getElementById('new-name');
-      const nameInput = nameEl ? nameEl.value.trim() : '';
-      const presetNames = {'08:00':'아침 💊','13:00':'점심 💊','19:00':'저녁 💊'};
-      const name = nameInput || presetNames[time] || '약 복용';
-        const time = document.getElementById('new-time').value;
+    const timeEl = document.getElementById('new-time');
+    const time = timeEl ? timeEl.value : '';
     if(!time) { alert('시간을 선택해주세요!'); return; }
-    
+    const nameEl = document.getElementById('new-name');
+    const nameInput = nameEl ? nameEl.value.trim() : '';
+    const presetNames = {'08:00':'아침 💊','13:00':'점심 💊','19:00':'저녁 💊'};
+    const name = nameInput || presetNames[time] || '약 복용';
+
     routine.push({ id: 'm'+Date.now(), name: name, time });
     routine.sort((a, b) => a.time.localeCompare(b.time));
-    
     renderRoutine();
 
-    // 자동 저장 (Firestore + daily 리셋)
     try {
       const uid = currentUser?.uid || (JSON.parse(localStorage.getItem('yakmate_user')||'{}')).uid;
       if (uid) {
