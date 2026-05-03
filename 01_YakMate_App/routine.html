@@ -135,7 +135,7 @@ document.getElementById('btn-add').addEventListener('click', async () => {
     const time = timeEl ? timeEl.value : '';
     if (!time) { alert('시간을 선택해주세요!'); return; }
     const nameInput = (document.getElementById('new-name')?.value || '').trim();
-    const presetNames = {'08:00':'아침 💊', '13:00':'점심 💊', '19:00':'저녁 💊'};
+    const presetNames = {'08:00':'아침', '13:00':'점심', '19:00':'저녁'};
     const name = nameInput || presetNames[time] || '약 복용';
     routine.push({ id: 'm' + Date.now(), name, time });
     routine.sort((a, b) => a.time.localeCompare(b.time));
