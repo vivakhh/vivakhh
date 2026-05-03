@@ -4,7 +4,6 @@
       "site": "yakmate-app",
       "public": "01_YakMate_App",
       "cleanUrls": true,
-      "trailingSlash": false,
       "ignore": [
         "firebase.json",
         "**/.*",
@@ -14,8 +13,8 @@
       ],
       "rewrites": [
         {
-          "source": "**",
-          "destination": "/404.html"
+          "source": "/",
+          "destination": "/landing.html"
         }
       ]
     }
