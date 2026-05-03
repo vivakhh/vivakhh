@@ -256,6 +256,9 @@ document.getElementById('btn-save').addEventListener('click', async () => {
     try {
         const ref = doc(db, 'users', currentUser.uid, 'settings', 'routine');
         await setDoc(ref, { meds: routine, updatedAt: new Date() });
+      const today = new Date(Date.now()+9*60*60*1000).toISOString().split("T")[0];
+      const dRef2 = doc(db,"users",uid,"daily",today);
+      await setDoc(dRef2, {meds:routine.map(m=>({...m,taken:false})),date:today,updatedAt:new Date()});
         
         // 오늘 날짜 데이터도 즉시 갱신할지 확인
         if(confirm('저장되었습니다! 오늘 남은 일정도 이 시간표대로 즉시 변경할까요?')) {
