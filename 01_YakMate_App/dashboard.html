@@ -44,7 +44,7 @@
   .empty-msg { text-align: center; opacity: 0.4; font-size: 14px; padding: 20px 0; }
 </style>
 </head>
-<body>
+<body style="visibility:hidden;" id="app-body">
 <div class="header">
   <div>
     <div class="header-sub" id="user-greeting">안녕하세요</div>
@@ -135,6 +135,7 @@ let meds = [];
 const today = new Date(Date.now() + 9*60*60*1000).toISOString().split('T')[0];
 
 onAuthStateChanged(auth, async (fbUser) => {
+  document.getElementById("app-body").style.visibility="visible";
   const stored = localStorage.getItem('yakmate_user');
   const storedUser = stored ? JSON.parse(stored) : null;
   if (!fbUser && !storedUser) { location.href='./index.html'; return; }
