@@ -4,9 +4,10 @@
       "site": "yakmate-app",
       "public": "01_YakMate_App",
       "cleanUrls": true,
+      "404": "404.html",
       "ignore": [
         "firebase.json",
-        "**/.* ",
+        "**/.*",
         "**/node_modules/**",
         "*.zip",
         "*.sh"
