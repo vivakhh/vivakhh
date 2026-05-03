@@ -161,7 +161,7 @@
 
 
 </head>
-<body>
+<body style="visibility:hidden;" id="app-body">
 <div class="header">
     <div class="header-title">
         <span class="material-icons-round" style="color:var(--primary); font-size: 32px;">person</span>
@@ -302,6 +302,8 @@ const app=initializeApp(config);
 const auth=getAuth(app);
 
 onAuthStateChanged(auth,(u)=>{
+    document.getElementById("app-body").style.visibility="visible";
+    document.getElementById("app-body").style.visibility="visible";
   let user = u;
   if(!user){
     const storedUser = localStorage.getItem('yakmate_user');
