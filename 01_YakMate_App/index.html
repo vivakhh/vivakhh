@@ -4,377 +4,141 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>YakMate 약메이트 — 천천히 가도 괜찮아. 같이 가자.</title>
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js';
+    import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js';
+    const config = {
+      apiKey: 'AIzaSyDpnPJnErnrTloHk3HFrsXHORUMvAiOq5w',
+      authDomain: 'pill-sajangnim.firebaseapp.com',
+      projectId: 'pill-sajangnim'
+    };
+    const app = initializeApp(config);
+    const auth = getAuth(app);
+    onAuthStateChanged(auth, (user) => {
+      if (user) window.location.href = '/dashboard';
+    });
+  </script>
   <style>
-    :root {
-      --primary: #B8963E;
-      --primary-light: #D4AF6A;
-      --bg: #F5F3EF;
-      --card: #FFFFFF;
-      --text: #1a1a1a;
-      --text-dim: #888;
-      --border: #E8E4DC;
-      --warm: #FDF8F0;
-    }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    body {
-      background: var(--bg);
-      font-family: 'Apple SD Gothic Neo', -apple-system, BlinkMacSystemFont, sans-serif;
-      color: var(--text);
-      overflow-x: hidden;
-    }
-
-    /* 헤더 */
-    .header {
-      padding: 20px 24px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: sticky;
-      top: 0;
-      background: rgba(245,243,239,0.95);
-      backdrop-filter: blur(10px);
-      z-index: 100;
-      border-bottom: 1px solid var(--border);
-    }
-    .logo {
-      font-size: 18px;
-      font-weight: 800;
-      color: var(--primary);
-      letter-spacing: -0.5px;
-    }
-    .logo span { color: var(--text); }
-    .header-btn {
-      background: var(--primary);
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 50px;
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-      text-decoration: none;
-    }
-
-    /* 히어로 섹션 */
-    .hero {
-      padding: 60px 24px 40px;
-      text-align: center;
-      animation: fadeUp 0.8s ease both;
-    }
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .hero-badge {
-      display: inline-block;
-      background: var(--warm);
-      border: 1px solid var(--border);
-      color: var(--primary);
-      font-size: 12px;
-      font-weight: 700;
-      padding: 6px 16px;
-      border-radius: 50px;
-      margin-bottom: 24px;
-      letter-spacing: 0.5px;
-    }
-    .hero h1 {
-      font-size: 32px;
-      font-weight: 900;
-      line-height: 1.3;
-      margin-bottom: 16px;
-      letter-spacing: -1px;
-    }
-    .hero h1 em {
-      font-style: normal;
-      color: var(--primary);
-    }
-    .hero p {
-      font-size: 16px;
-      color: var(--text-dim);
-      line-height: 1.7;
-      margin-bottom: 32px;
-    }
-    .hero-emoji {
-      font-size: 64px;
-      margin-bottom: 24px;
-      display: block;
-      animation: float 4s ease-in-out infinite;
-    }
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
-    }
-
-    /* 스토리 섹션 */
-    .story {
-      padding: 0 24px 40px;
-      animation: fadeUp 0.8s 0.2s ease both;
-    }
-    .story-card {
-      background: var(--card);
-      border-radius: 24px;
-      padding: 32px 24px;
-      box-shadow: 0 2px 20px rgba(0,0,0,0.06);
-    }
-    .story-label {
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--primary);
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      margin-bottom: 20px;
-    }
-    .story-text {
-      font-size: 17px;
-      line-height: 1.9;
-      color: var(--text);
-      word-break: keep-all;
-    }
-    .story-text strong {
-      color: var(--primary);
-      font-weight: 800;
-    }
-    .divider {
-      border: none;
-      border-top: 1px solid var(--border);
-      margin: 24px 0;
-    }
-    .wife-section {
-      display: flex;
-      align-items: flex-start;
-      gap: 16px;
-    }
-    .wife-avatar {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #FFD4D4, #FFB8B8);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-      flex-shrink: 0;
-    }
-    .wife-text {
-      font-size: 15px;
-      line-height: 1.7;
-      color: var(--text-dim);
-    }
-    .wife-text strong {
-      color: var(--text);
-      font-weight: 700;
-    }
-
-    /* 기능 섹션 */
-    .features {
-      padding: 0 24px 40px;
-      animation: fadeUp 0.8s 0.3s ease both;
-    }
-    .section-title {
-      font-size: 20px;
-      font-weight: 800;
-      margin-bottom: 16px;
-      letter-spacing: -0.5px;
-    }
-    .feature-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-    .feature-item {
-      background: var(--card);
-      border-radius: 20px;
-      padding: 20px 16px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.05);
-    }
-    .feature-icon { font-size: 28px; margin-bottom: 10px; }
-    .feature-title {
-      font-size: 14px;
-      font-weight: 800;
-      margin-bottom: 6px;
-    }
-    .feature-desc {
-      font-size: 12px;
-      color: var(--text-dim);
-      line-height: 1.5;
-    }
-
-    /* 넛지 섹션 */
-    .nudge-section {
-      padding: 0 24px 40px;
-      animation: fadeUp 0.8s 0.4s ease both;
-    }
-    .nudge-card {
-      background: linear-gradient(135deg, #FDF6E8, #FFF9F0);
-      border: 1px solid #F0E4C8;
-      border-radius: 20px;
-      padding: 24px;
-    }
-    .nudge-quote {
-      font-size: 16px;
-      font-weight: 700;
-      line-height: 1.6;
-      color: var(--text);
-      margin-bottom: 8px;
-    }
-    .nudge-quote::before { content: '"'; color: var(--primary); font-size: 24px; }
-    .nudge-quote::after { content: '"'; color: var(--primary); font-size: 24px; }
-    .nudge-from {
-      font-size: 13px;
-      color: var(--text-dim);
-    }
-
-    /* CTA 섹션 */
-    .cta {
-      padding: 0 24px 60px;
-      text-align: center;
-      animation: fadeUp 0.8s 0.5s ease both;
-    }
-    .cta h2 {
-      font-size: 24px;
-      font-weight: 900;
-      margin-bottom: 8px;
-      letter-spacing: -0.5px;
-    }
-    .cta p {
-      font-size: 15px;
-      color: var(--text-dim);
-      margin-bottom: 28px;
-      line-height: 1.6;
-    }
-    .cta-btn {
-      display: block;
-      background: var(--primary);
-      color: white;
-      font-size: 17px;
-      font-weight: 800;
-      padding: 18px 24px;
-      border-radius: 16px;
-      text-decoration: none;
-      margin-bottom: 12px;
-      transition: transform 0.15s, opacity 0.15s;
-    }
-    .cta-btn:active { transform: scale(0.97); opacity: 0.9; }
-    .cta-sub {
-      font-size: 13px;
-      color: var(--text-dim);
-    }
-
-    /* 푸터 */
-    .footer {
-      padding: 24px;
-      text-align: center;
-      border-top: 1px solid var(--border);
-    }
-    .footer-logo {
-      font-size: 16px;
-      font-weight: 800;
-      color: var(--primary);
-      margin-bottom: 8px;
-    }
-    .footer-text {
-      font-size: 12px;
-      color: var(--text-dim);
-      line-height: 1.6;
-    }
+    :root { --primary:#B8963E; --bg:#F5F3EF; --card:#FFFFFF; --text:#1a1a1a; --text-dim:#888; --border:#E8E4DC; --warm:#FDF8F0; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { background:var(--bg); font-family:'Apple SD Gothic Neo',-apple-system,BlinkMacSystemFont,sans-serif; color:var(--text); overflow-x:hidden; }
+    .header { padding:20px 24px; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; background:rgba(245,243,239,0.95); backdrop-filter:blur(10px); z-index:100; border-bottom:1px solid var(--border); }
+    .logo { font-size:18px; font-weight:800; color:var(--primary); }
+    .logo span { color:var(--text); }
+    .header-btn { background:var(--primary); color:white; padding:10px 20px; border-radius:50px; font-size:14px; font-weight:700; text-decoration:none; }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+    .hero { padding:52px 24px 28px; text-align:center; animation:fadeUp 0.7s ease both; }
+    .hero-badge { display:inline-block; background:var(--warm); border:1px solid var(--border); color:var(--primary); font-size:12px; font-weight:700; padding:6px 16px; border-radius:50px; margin-bottom:18px; }
+    .hero h1 { font-size:30px; font-weight:900; line-height:1.35; margin-bottom:12px; letter-spacing:-1px; }
+    .hero h1 em { font-style:normal; color:var(--primary); }
+    .hero p { font-size:15px; color:var(--text-dim); line-height:1.7; word-break:keep-all; }
+    .sec { padding:20px 24px 0; animation:fadeUp 0.7s ease both; }
+    .story-card { background:var(--card); border-radius:24px; padding:28px 22px; box-shadow:0 2px 20px rgba(0,0,0,0.06); }
+    .story-label { font-size:11px; font-weight:700; color:var(--primary); letter-spacing:1.5px; text-transform:uppercase; margin-bottom:16px; }
+    .story-text { font-size:16px; line-height:2; color:var(--text); word-break:keep-all; }
+    .story-text strong { color:var(--primary); font-weight:800; }
+    .divider { border:none; border-top:1px solid var(--border); margin:20px 0; }
+    .wife-row { display:flex; align-items:center; gap:14px; }
+    .wife-avatar { width:44px; height:44px; border-radius:50%; background:linear-gradient(135deg,#FFE4E4,#FFD0D0); display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
+    .wife-text { font-size:14px; line-height:1.7; color:var(--text-dim); word-break:keep-all; }
+    .wife-text strong { color:var(--text); font-weight:700; }
+    .youtube-card { background:var(--card); border-radius:20px; overflow:hidden; box-shadow:0 2px 16px rgba(0,0,0,0.07); text-decoration:none; display:block; }
+    .youtube-thumb { width:100%; aspect-ratio:16/9; background:linear-gradient(135deg,#0f0f1a,#1a1a2e); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; position:relative; }
+    .youtube-thumb::after { content:''; position:absolute; inset:0; background:radial-gradient(ellipse at center,rgba(255,40,40,0.18) 0%,transparent 65%); }
+    .play-wrap { position:relative; z-index:1; text-align:center; }
+    .play-btn { width:52px; height:52px; background:#FF0000; border-radius:12px; margin:0 auto 12px; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 20px rgba(255,0,0,0.5); }
+    .play-btn::after { content:''; border-left:18px solid white; border-top:11px solid transparent; border-bottom:11px solid transparent; margin-left:4px; }
+    .yt-channel { color:white; font-size:15px; font-weight:800; }
+    .yt-sub { color:rgba(255,255,255,0.5); font-size:12px; margin-top:4px; }
+    .yt-bottom { padding:14px 18px; display:flex; align-items:center; gap:12px; }
+    .yt-dot { width:8px; height:8px; background:#FF0000; border-radius:50%; flex-shrink:0; }
+    .yt-title { font-size:14px; font-weight:700; color:var(--text); }
+    .yt-desc { font-size:12px; color:var(--text-dim); margin-top:2px; }
+    .yt-arr { margin-left:auto; color:var(--text-dim); font-size:20px; }
+    .sec-title { font-size:17px; font-weight:800; margin-bottom:14px; letter-spacing:-0.5px; }
+    .feature-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .feature-item { background:var(--card); border-radius:18px; padding:18px 14px; box-shadow:0 2px 10px rgba(0,0,0,0.05); }
+    .feature-icon { font-size:24px; margin-bottom:8px; }
+    .feature-title { font-size:13px; font-weight:800; margin-bottom:4px; }
+    .feature-desc { font-size:11px; color:var(--text-dim); line-height:1.5; }
+    .nudge-card { background:linear-gradient(135deg,#FDF6E8,#FFF9F0); border:1px solid #F0E4C8; border-radius:18px; padding:20px; }
+    .nudge-quote { font-size:15px; font-weight:700; line-height:1.7; color:var(--text); margin-bottom:8px; }
+    .nudge-quote::before { content:'"'; color:var(--primary); }
+    .nudge-quote::after { content:'"'; color:var(--primary); }
+    .nudge-from { font-size:12px; color:var(--text-dim); }
+    .cta { padding:28px 24px 52px; text-align:center; }
+    .cta h2 { font-size:22px; font-weight:900; margin-bottom:6px; letter-spacing:-0.5px; }
+    .cta p { font-size:14px; color:var(--text-dim); margin-bottom:22px; line-height:1.6; }
+    .cta-btn { display:block; background:var(--primary); color:white; font-size:16px; font-weight:800; padding:17px 24px; border-radius:14px; text-decoration:none; margin-bottom:10px; }
+    .cta-sub { font-size:12px; color:var(--text-dim); }
+    .footer { padding:22px 24px; text-align:center; border-top:1px solid var(--border); }
+    .footer-logo { font-size:14px; font-weight:800; color:var(--primary); margin-bottom:6px; }
+    .footer-text { font-size:12px; color:var(--text-dim); line-height:1.7; }
   </style>
 </head>
 <body>
-
-  <!-- 헤더 -->
   <header class="header">
     <div class="logo">약<span>메이트</span></div>
     <a href="/dashboard" class="header-btn">시작하기</a>
   </header>
-
-  <!-- 히어로 -->
   <section class="hero">
-    <span class="hero-emoji">🌿</span>
-    <div class="hero-badge">✨ 무료 · 광고 없음</div>
+    <div class="hero-badge">무료 · 광고 없음</div>
     <h1>약을 <em>함께</em> 챙기는<br>따뜻한 습관</h1>
     <p>혼자 챙기기 힘드셨죠?<br>저도 그랬어요. 그래서 만들었어요.</p>
   </section>
-
-  <!-- 스토리 -->
-  <section class="story">
+  <section class="sec" style="padding-top:28px;">
     <div class="story-card">
       <div class="story-label">🫀 만든 이유</div>
-      <p class="story-text">
-        저는 <strong>뇌졸중으로 쓰러졌어요.</strong><br>
-        그리고 암 진단도 받았어요.<br><br>
-        평생 약을 먹어야 하는 사람이 됐어요.<br>
-        매일 약을 챙기는 게 생각보다<br>
-        너무 힘들었어요.<br><br>
-        <strong>혼자 하기 힘들어서 — 같이 하려고 만들었어요.</strong><br>
-        나처럼 힘든 분들이랑, 그 곁의 가족들이랑.
-      </p>
-
+      <p class="story-text">저는 <strong>뇌졸중으로 쓰러졌어요.</strong><br>그리고 암 진단도 받았어요.<br>평생 약을 먹어야 하는 사람이 됐어요.<br><br><strong>혼자 하기 힘들어서 — 같이 하려고 만들었어요.</strong></p>
       <hr class="divider">
-
-      <div class="wife-section">
+      <div class="wife-row">
         <div class="wife-avatar">👩‍⚕️</div>
-        <div class="wife-text">
-          <strong>아내는 언어재활 전문가예요.</strong><br>
-          아내가 없었으면 지금의 저도 없었어요.<br>
-          그 따뜻함을 앱에 담았어요.
+        <div class="wife-text"><strong>아내는 언어재활 전문가예요.</strong><br>그 따뜻함을 앱에 담았어요.</div>
+      </div>
+    </div>
+  </section>
+  <section class="sec" style="padding-top:28px;">
+    <div class="sec-title">회복 여정을 담은 채널 📺</div>
+    <a href="https://www.youtube.com/@Re_David" target="_blank" class="youtube-card">
+      <div class="youtube-thumb">
+        <div class="play-wrap">
+          <div class="play-btn"></div>
+          <div class="yt-channel">다시, 데이빗 — Again, David</div>
+          <div class="yt-sub">뇌졸중 회복 2.5년의 기록</div>
         </div>
       </div>
-    </div>
+      <div class="yt-bottom">
+        <div class="yt-dot"></div>
+        <div><div class="yt-title">다시, 데이빗</div><div class="yt-desc">뇌졸중 생존자의 진짜 회복 이야기</div></div>
+        <div class="yt-arr">›</div>
+      </div>
+    </a>
   </section>
-
-  <!-- 기능 -->
-  <section class="features">
-    <div class="section-title">약메이트가 하는 것 💊</div>
+  <section class="sec" style="padding-top:28px;">
+    <div class="sec-title">약메이트가 하는 것 💊</div>
     <div class="feature-grid">
-      <div class="feature-item">
-        <div class="feature-icon">⏰</div>
-        <div class="feature-title">약 복용 알림</div>
-        <div class="feature-desc">정성껏 시간에 맞춰 알려드려요</div>
-      </div>
-      <div class="feature-item">
-        <div class="feature-icon">❤️</div>
-        <div class="feature-title">가족 넛지</div>
-        <div class="feature-desc">가족이 함께 응원해요</div>
-      </div>
-      <div class="feature-item">
-        <div class="feature-icon">🏆</div>
-        <div class="feature-title">Health Promise</div>
-        <div class="feature-desc">약속을 지킬 때마다 기록돼요</div>
-      </div>
-      <div class="feature-item">
-        <div class="feature-icon">💬</div>
-        <div class="feature-title">Story Nudge</div>
-        <div class="feature-desc">같은 상황의 분들과 함께해요</div>
-      </div>
+      <div class="feature-item"><div class="feature-icon">⏰</div><div class="feature-title">약 복용 알림</div><div class="feature-desc">시간에 맞춰 정성껏 알려드려요</div></div>
+      <div class="feature-item"><div class="feature-icon">❤️</div><div class="feature-title">가족 케어</div><div class="feature-desc">가족이 함께 응원해요</div></div>
+      <div class="feature-item"><div class="feature-icon">🏆</div><div class="feature-title">Health Promise</div><div class="feature-desc">약속을 지킬 때마다 기록돼요</div></div>
+      <div class="feature-item"><div class="feature-icon">💬</div><div class="feature-title">Story Nudge</div><div class="feature-desc">같은 상황의 분들과 함께해요</div></div>
     </div>
   </section>
-
-  <!-- 넛지 -->
-  <section class="nudge-section">
-    <div class="section-title">따뜻한 한마디 🌸</div>
+  <section class="sec" style="padding-top:28px;">
+    <div class="sec-title">따뜻한 한마디 🌸</div>
     <div class="nudge-card">
       <div class="nudge-quote">오늘 아빠랑 목욕탕에 갔다왔어. 그래서 약을 먹었어</div>
-      <div class="nudge-from">— YakMate 사장님</div>
+      <div class="nudge-from">— YakMate 사장님, 8일 전</div>
     </div>
   </section>
-
-  <!-- CTA -->
   <section class="cta">
-    <h2>천천히 가도 괜찮아요 🌿</h2>
-    <p>같이 가요.<br>완전 무료예요. 지금 바로 시작해요.</p>
-    <a href="/dashboard" class="cta-btn">🌿 같이 시작하기</a>
+    <h2>천천히 가도 괜찮아요</h2>
+    <p>같이 가요. 완전 무료예요.</p>
+    <a href="/dashboard" class="cta-btn">같이 시작하기</a>
     <div class="cta-sub">Google 로그인으로 10초 만에 시작</div>
   </section>
-
-  <!-- 푸터 -->
   <footer class="footer">
     <div class="footer-logo">약메이트 YakMate</div>
-    <div class="footer-text">
-      천천히 가도 괜찮아. 같이 가자.<br>
-      📧 hello.redavid@gmail.com
-    </div>
+    <div class="footer-text">천천히 가도 괜찮아. 같이 가자.<br>📧 hello.redavid@gmail.com</div>
   </footer>
-
 </body>
 </html>
